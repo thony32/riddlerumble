@@ -7,7 +7,7 @@
 
 .word {
     position: absolute;
-    width: 100vw;
+    width: 90vw;
     left: 0;
     opacity: 0;
 }

@@ -1,6 +1,5 @@
 import {
 	createRootRouteWithContext,
-	Link,
 	Outlet,
 	ScrollRestoration,
 } from "@tanstack/react-router";
@@ -13,23 +12,10 @@ export const Route = createRootRouteWithContext<{
 function RootComponent() {
 	return (
 		<>
-			<div className="p-2 flex gap-2">
-				<Link
-					to="/"
-					className="[&.active]:font-bold"
-				>
-					Home
-				</Link>{" "}
-				<Link
-					to="/about"
-					className="[&.active]:font-bold"
-				>
-					About
-				</Link>
-			</div>
-			<hr />
 			<ScrollRestoration />
-			<Outlet />
+			<div className="px-[3%]">
+				<Outlet />
+			</div>
 		</>
 	);
 }
