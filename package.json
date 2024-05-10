@@ -18,6 +18,7 @@
     "@tanstack/react-router": "^1.31.26",
     "@tanstack/router-vite-plugin": "^1.31.18",
     "@tanstack/zod-form-adapter": "^0.19.4",
+    "animejs": "^3.2.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.1.9",
@@ -32,6 +33,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@types/animejs": "^3.1.12",
     "@types/node": "^20.12.11",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",

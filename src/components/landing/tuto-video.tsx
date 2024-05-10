@@ -2,6 +2,8 @@ import ReactPlayer from "react-player"
 import Plyr from "plyr-react"
 import "plyr-react/plyr.css"
 
+
+
 const TutoVideo = () => {
     return (
         <div>
@@ -24,6 +26,7 @@ const TutoVideo = () => {
                         }}
                     />
                 </div>
+                
             </div>
         </div>
     )
