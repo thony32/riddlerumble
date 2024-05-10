@@ -10,10 +10,6 @@
         src: url("/assets/fonts/Super Senior Personal Use.ttf") format("truetype");
     }
 
-    * {
-        @apply border-border;
-    }
-
     body {
         @apply bg-background text-foreground;
         font-family: "Poetsen One", sans-serif;
