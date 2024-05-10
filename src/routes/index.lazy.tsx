@@ -1,3 +1,4 @@
+import Wordz from "@/components/Wordz"
 import { Button } from "@nextui-org/button"
 import { Chip } from "@nextui-org/react"
 import { createLazyFileRoute } from "@tanstack/react-router"
@@ -8,17 +9,20 @@ export const Route = createLazyFileRoute("/")({
 
 function Index() {
     return (
-        <div className="h-[90dvh] flex justify-center items-center">
+        <div className="h-[90dvh] flex justify-center items-center relative">
             <div className="w-1/2 text-center space-y-5">
+                <Wordz />
+                <div>
+                    <h1 className="text-9xl font-super">Enigmap</h1>
+                </div>
                 <Chip
                     color="success"
                     variant="dot"
                     size="lg"
                 >
-                    world tournament
+                    World tournament
                 </Chip>
-                <h1 className="text-7xl font-super">Enigmap</h1>
-                <p className="text-center text-2xl max-w-3xl m-auto">
+                <p className="text-center text-3xl max-w-3xl m-auto mt-10">
                     Embark on a mysterious journey through an interactive map, where each location holds a cryptic puzzle waiting to be solved in our enigma-filled gaming experience!
                 </p>
                 <div className="flex justify-center">
