@@ -13,6 +13,7 @@ function Index() {
                 <Chip
                     color="success"
                     variant="dot"
+                    size="lg"
                 >
                     world tournament
                 </Chip>
@@ -24,6 +25,7 @@ function Index() {
                     <Button
                         className="flex items-center gap-2"
                         color="success"
+                        size="lg"
                     >
                         <span className="font-bold">Get Started</span>
                         <svg
