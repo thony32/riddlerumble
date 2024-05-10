@@ -29,7 +29,9 @@ function RootComponent() {
 			</div>
 			<hr />
 			<ScrollRestoration />
-			<Outlet />
+			<div className="px-[3%]">
+				<Outlet />
+			</div>
 		</>
 	);
 }
