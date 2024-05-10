@@ -2,6 +2,8 @@ import Wordz from "@/components/Wordz"
 import { Button } from "@nextui-org/button"
 import { Chip } from "@nextui-org/react"
 import { createLazyFileRoute } from "@tanstack/react-router"
+import Plyr from "plyr-react"
+import "plyr-react/plyr.css"
 
 export const Route = createLazyFileRoute("/")({
     component: Index,
@@ -9,7 +11,7 @@ export const Route = createLazyFileRoute("/")({
 
 function Index() {
     return (
-        <div className="h-[90dvh] flex justify-center items-center relative">
+        <div className="h-screen flex flex-col justify-center items-center relative">
             <div className="w-1/2 text-center space-y-5">
                 <Wordz />
                 <div className="translate-y-10 space-y-5">
@@ -50,6 +52,12 @@ function Index() {
                     </div>
                 </div>
             </div>
+            <Plyr
+                source={{
+                    type: "video",
+                    sources: [{ src: "/public/assets/videos/Jasmine Thompson   Mad World karaoké.mp4" }],
+                }} autoPlay
+            />
         </div>
     )
 }
