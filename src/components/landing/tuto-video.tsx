@@ -14,8 +14,8 @@ const TutoVideo = () => {
                 <Plyr
                     source={{
                         type: "video",
-                        sources: [{ src: "https://www.youtube.com/watch?v=KhjTa_7Nq6Y&list=RDKhjTa_7Nq6Y&start_radio=1", provider: "youtube" }],
-                    }} className="rounded-xl"
+                        sources: [{ src: "KhjTa_7Nq6Y", provider: "youtube" }],
+                    }}
                 />
             </div>
         </div>
