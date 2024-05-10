@@ -3,27 +3,28 @@ import Wordz from "../Wordz"
 
 const Heading = () => {
     return (
-        <div className="h-[90dvh] flex justify-center items-center relative">
+        <div className="h-screen flex justify-center items-center relative">
+            <div className="absolute right-0 bottom-4">
+                <Chip
+                    color="success"
+                    variant="dot"
+                    size="lg"
+                >
+                    World tournament
+                </Chip>
+            </div>
             <div className="w-1/2 text-center space-y-5">
                 <Wordz />
                 <div className="translate-y-10 space-y-5">
                     <div>
                         <h1 className="text-9xl font-super">Enigmap</h1>
                     </div>
-                    <Chip
-                        color="success"
-                        variant="dot"
-                        size="lg"
-                    >
-                        World tournament
-                    </Chip>
                     <p className="text-center text-3xl max-w-3xl m-auto">
                         Embark on a mysterious journey through an interactive map, where each location holds a cryptic puzzle waiting to be solved in our enigma-filled gaming experience!
                     </p>
                     <div className="flex justify-center">
                         <Button
-                            className="flex items-center gap-2"
-                            color="success"
+                            className="flex items-center gap-2 bg-blue-500 text-white"
                             size="lg"
                         >
                             <span className="font-bold">Get Started</span>
