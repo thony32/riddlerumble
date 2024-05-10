@@ -1,25 +1,26 @@
-import ReactPlayer from "react-player"
-import Plyr from "plyr-react"
-import "plyr-react/plyr.css";
+import ReactPlayer from 'react-player';
 
 const TutoVideo = () => {
-    return (
-        <div>
-            <div className="flex flex-col justify-center">
-                <ReactPlayer
-                    width="75%"
-                    height="75dvh"
-                    url="https://www.youtube.com/watch?v=6y9rMxzu-HY&pp=ygUSZGFucyB0b24gY3VsIGphbWVs"
-                />
-                <Plyr
-                    source={{
-                        type: "video",
-                        sources: [{ src: "KhjTa_7Nq6Y", provider: "youtube" }],
-                    }}
-                />
-            </div>
+  return (
+    <div className="flex justify-center">
+      <div className="stack">
+        <div className="card shadow-md bg-primary text-primary-content">
+          <ReactPlayer url='https://www.youtube.com/watch?v=6y9rMxzu-HY' />
         </div>
-    )
+        <div className="card shadow bg-primary text-primary-content">
+          <div className="card-body">
+            <h2 className="card-title">Notification 2</h2>
+          </div>
+        </div>
+        <div className="card shadow-sm bg-primary text-primary-content">
+          <div className="card-body">
+            <h2 className="card-title">Notification 3</h2>
+            <p>You have 3 unread messages. Tap here to see.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default TutoVideo
