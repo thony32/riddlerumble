@@ -1,15 +1,10 @@
 import type { Config } from "tailwindcss"
 
-const { nextui } = require("@nextui-org/react");
+import { nextui } from "@nextui-org/react"
 
 const config = {
     darkMode: ["class"],
-    content: [
-        "./pages/**/*.{ts,tsx}",
-        "./components/**/*.{ts,tsx}",
-        "./app/**/*.{ts,tsx}",
-        "./src/**/*.{ts,tsx}",
-        "./node_modules/@nextui-org/**/*.{js,ts,jsx,tsx}"],
+    content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}", "./node_modules/@nextui-org/**/*.{js,ts,jsx,tsx}"],
     prefix: "",
     theme: {
         container: {
@@ -69,6 +64,9 @@ const config = {
                     from: { height: "var(--radix-accordion-content-height)" },
                     to: { height: "0" },
                 },
+            },
+            fontFamily: {
+                super: ["super", "sans-serif"],
             },
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
