@@ -16,7 +16,7 @@ function Index() {
     useEffect(() => {
         const fetch = async () => {
             const result = await client.querySingle(`select Room { * }`)
-            console.log(result)
+            console.log( "Fucxk enao eeee...." , result)
         }
         fetch()
     }, [])
