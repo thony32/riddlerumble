@@ -1,3 +1,4 @@
+using extension edgeql_http;
 module default {
     type Post {
         required property content: std::str {
