@@ -1,6 +1,7 @@
 import { Button } from "@nextui-org/button"
 import { Chip } from "@nextui-org/react"
-import Wordz from "../Wordz"
+import Wordz from "../Misc/Wordz"
+import SvgMapDraw from "../Misc/SvgMapDraw"
 
 const Heading = () => {
     return (
@@ -13,6 +14,9 @@ const Heading = () => {
                 >
                     World tournament
                 </Chip>
+            </div>
+            <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+                <SvgMapDraw />
             </div>
             <div className="w-1/2 text-center space-y-5">
                 <Wordz />
