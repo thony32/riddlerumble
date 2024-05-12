@@ -1,57 +1,29 @@
 {
-  "name": "enigmap",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite --host",
-    "build": "vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@nextui-org/button": "^2.0.31",
-    "@nextui-org/modal": "^2.0.33",
-    "@nextui-org/react": "^2.3.6",
-    "@tanstack/react-form": "^0.19.4",
-    "@tanstack/react-query": "^5.35.1",
-    "@tanstack/react-router": "^1.31.26",
-    "@tanstack/router-vite-plugin": "^1.31.18",
-    "@tanstack/zod-form-adapter": "^0.19.4",
-    "animejs": "^3.2.2",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.1",
-    "edgedb": "^1.5.6",
-    "framer-motion": "^11.1.9",
-    "plyr-react": "^5.3.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-helmet-async": "^2.0.5",
-    "react-player": "^2.16.0",
-    "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.23.8",
-    "zustand": "^4.5.2"
-  },
-  "devDependencies": {
-    "@edgedb/generate": "^0.5.3",
-    "@types/animejs": "^3.1.12",
-    "@types/node": "^20.12.11",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^7.8.0",
-    "@typescript-eslint/parser": "^7.8.0",
-    "@vitejs/plugin-react-swc": "^3.6.0",
-    "autoprefixer": "^10.4.19",
-    "daisyui": "^4.11.1",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.7",
-    "postcss": "^8.4.38",
-    "prop-types": "^15.8.1",
-    "tailwindcss": "^3.4.3",
-    "tsx": "^4.10.0",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.11"
-  }
+    "name": "enigmap",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "prebuild": "npx @edgedb/generate edgeql-js"
+    },
+    "dependencies": {
+        "@edgedb/generate": "^0.5.3",
+        "edgedb": "^1.5.6",
+        "next": "14.2.3",
+        "react": "^18",
+        "react-dom": "^18"
+    },
+    "devDependencies": {
+        "typescript": "^5",
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "postcss": "^8",
+        "tailwindcss": "^3.4.1",
+        "eslint": "^8",
+        "eslint-config-next": "14.2.3"
+    }
 }

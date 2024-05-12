@@ -1,8 +1,8 @@
 module default {
     type Post {
-        required property title -> str;
-        required property content -> str {
-            default := ""
+        required property content: std::str {
+            default := ('');
         };
-    }
+        required property title: std::str;
+    };
 }

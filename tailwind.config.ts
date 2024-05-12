@@ -1,12 +1,20 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
-import { nextui } from "@nextui-org/react"
-
-const config = {
-    content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}", "./node_modules/@nextui-org/**/*.{js,ts,jsx,tsx}"],
-    prefix: "",
-    theme: {},
-    plugins: [require("tailwindcss-animate"), nextui(), require('daisyui')],
-} satisfies Config
-
-export default config
+const config: Config = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+    },
+  },
+  plugins: [],
+};
+export default config;
