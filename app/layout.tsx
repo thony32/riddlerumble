@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { NextUIProvider } from '@nextui-org/react'
 import "./globals.css";
 import Footer from "@/components/landing/Footer";
+import ThemeHandler from "@/components/ThemeHandler";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,10 @@ export default function RootLayout({
         <footer>
           <Footer />
         </footer>
+        {/* theme handler */}
+        <div className="fixed z-50 bottom-0 left-[47%] py-1 px-3">
+          <ThemeHandler />
+        </div>
       </NextUIProvider>
     </html>
   );
