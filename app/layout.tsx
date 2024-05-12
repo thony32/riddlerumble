@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NextUIProvider } from '@nextui-org/react'
 import "./globals.css";
+import Footer from "@/components/landing/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,13 +18,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="light">
-      <body className={inter.className}>
-        <NextUIProvider>
-          <div className="px-[2%] py-3">
+      <NextUIProvider>
+        <body className={inter.className}>
+          <main className="px-[2%] py-3">
             {children}
-          </div>
-        </NextUIProvider>
-      </body>
+          </main>
+        </body>
+        <footer>
+          <Footer />
+        </footer>
+      </NextUIProvider>
     </html>
   );
 }

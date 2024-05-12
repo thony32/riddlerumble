@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: "Title";
+    src: url("/fonts/title.otf") format("opentype");
+}
+
+.font-title {
+    font-family: "Title", sans-serif;
+    font-weight: 900;
+}
+
+* {
+    font-family: "Title", sans-serif;
+    font-weight: 100;
+}

@@ -86,10 +86,10 @@ export default function Wordz() {
             <div className="relative h-[100%] flex items-center">
                 <div className="bannertxt text-[18rem] opacity-5">
                     <label>
-                        <span className="word">Mysteries</span>
-                        <span className="word">Challenges</span>
-                        <span className="word">Adventures</span>
-                        <span className="word">Discover.</span>
+                        <span className="word font-title">Mysteries</span>
+                        <span className="word font-title">Challenges</span>
+                        <span className="word font-title">Adventures</span>
+                        <span className="word font-title">Discover</span>
                     </label>
                 </div>
             </div>

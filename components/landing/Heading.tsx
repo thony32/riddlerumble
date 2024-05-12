@@ -18,14 +18,14 @@ const Heading = () => {
                 <Wordz />
                 <div className="translate-y-10 space-y-5">
                     <div>
-                        <h1 className="text-9xl font-super">Enigmap</h1>
+                        <h1 className="text-[9rem] font-title">Enigmap</h1>
                     </div>
                     <p className="text-center text-3xl max-w-3xl m-auto">
                         Embark on a mysterious journey through an interactive map, where each location holds a cryptic puzzle waiting to be solved in our enigma-filled gaming experience!
                     </p>
                     <div className="flex justify-center">
                         <Button
-                            className="flex items-center gap-2 bg-blue-500 text-white"
+                            className="flex items-center gap-2 bg-blue-500 text-white tracking-wider font-title"
                             size="lg"
                         >
                             <span className="font-bold">Get Started</span>
