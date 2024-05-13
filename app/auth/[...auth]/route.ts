@@ -3,7 +3,7 @@ import { auth } from "@/edgedb";
 import { createUser } from "@/services/edgedb-action";
 
 const { GET, POST } = auth.createAuthRouteHandlers({
-    async onOAuthCallback({ error, tokenData, provider, isSignUp }) {
+    async onOAuthCallback({ error, tokenData, isSignUp }) {
         if (error) {
             return redirect(
                 `?oauth_error=${encodeURIComponent(
@@ -12,7 +12,7 @@ const { GET, POST } = auth.createAuthRouteHandlers({
             );
         }
         if (isSignUp) {
-            await createUser(tokenData, provider);
+            await createUser(tokenData);
         }
         redirect("/");
     },
