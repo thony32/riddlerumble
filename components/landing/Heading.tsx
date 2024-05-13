@@ -5,7 +5,7 @@ import Wordz from "../Misc/Wordz"
 import SvgMapDraw from "../Misc/SvgMapDraw"
 import { auth } from "@/edgedb";
 
-const Heading = () => {
+const Heading = async () => {
     return (
         <div className="h-screen flex justify-center items-center relative">
             <div className="absolute right-0 bottom-4">

@@ -15,6 +15,7 @@
         "@edgedb/generate": "^0.5.3",
         "@nextui-org/button": "^2.0.31",
         "@nextui-org/react": "^2.3.6",
+        "@octokit/core": "^6.1.2",
         "animejs": "^3.2.2",
         "edgedb": "^1.5.6",
         "framer-motion": "^11.1.9",
