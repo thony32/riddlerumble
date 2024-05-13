@@ -16,3 +16,20 @@
     font-family: "Title", sans-serif;
     font-weight: 100;
 }
+
+/* NOTE: Scrollbar style */
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-gray-500;
+}
+
+::-webkit-resizer {
+    display: none;
+}
