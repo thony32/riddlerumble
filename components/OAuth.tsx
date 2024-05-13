@@ -1,7 +1,6 @@
 'use client'
 
 import { auth } from "@/edgedb";
-import IsSigned from "./isSigned";
 
 const OAuth = () => {
     const generatePKCE = async () => {

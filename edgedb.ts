@@ -1,4 +1,3 @@
-'use server'
 import { createClient } from "edgedb";
 import createAuth from "@edgedb/auth-nextjs/app";
 
