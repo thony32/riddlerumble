@@ -8,7 +8,7 @@
         "start": "next start",
         "lint": "next lint",
         "auth:setup": "pnpm esr auth-setup.ts",
-        "build:vercel": "pnpm dlx @edgedb/generate edgeql-js && next build"
+        "build:vercel": "npx @edgedb/generate edgeql-js && next build"
     },
     "dependencies": {
         "@edgedb/auth-nextjs": "^0.3.1",
