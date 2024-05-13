@@ -2,6 +2,13 @@ using extension pgcrypto;
 using extension auth;
 
 module default {
+  global current_user := (
+    assert_single((
+      select Users
+      filter .identity = global ext::auth::ClientTokenIdentity
+    ))
+  );
+  
   type Temp_room {
     required property id_room -> uuid;
     required property id_user -> uuid;
