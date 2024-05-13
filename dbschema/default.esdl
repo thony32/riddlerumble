@@ -21,12 +21,12 @@ module default {
     required identity: ext::auth::Identity {
       constraint exclusive;
     };
-    required property avatar -> str;
-    required property email -> str;
-    required property full_name -> str;
-    required property nationality -> str;
-    required property pseudo -> str;
-    required property score -> int16;
+    property avatar -> str;
+    property email -> str;
+    property full_name -> str;
+    property nationality -> str;
+    property pseudo -> str;
+    property score -> int16;
   };
 
   type Room {
