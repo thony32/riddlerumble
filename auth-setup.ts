@@ -1,29 +1,29 @@
-import process from "node:process";
-import crypto from "node:crypto";
-import { createClient } from "edgedb";
+import process from "node:process"
+import crypto from "node:crypto"
+import { createClient } from "edgedb"
 
-const client = createClient();
+const client = createClient()
 
 type AuthConfig = {
-    token_time_to_live: string;
+    token_time_to_live: string
     providers: {
-        name: string;
-        url: string | null;
-        secret: string | null;
-        client_id: string | null;
-    }[];
+        name: string
+        url: string | null
+        secret: string | null
+        client_id: string | null
+    }[]
     ui: {
-        redirect_to: string;
-        redirect_to_on_signup: string;
-        app_name: string;
-        logo_url: string;
-        dark_logo_url: string;
-        brand_color: string;
-    } | null;
-};
+        redirect_to: string
+        redirect_to_on_signup: string
+        app_name: string
+        logo_url: string
+        dark_logo_url: string
+        brand_color: string
+    } | null
+}
 
 async function main() {
-    const inquirer = (await import("inquirer")).default;
+    const inquirer = (await import("inquirer")).default
     const existingConfig = await client.queryRequiredSingle<AuthConfig>(`
 SELECT cfg::Config.extensions[is ext::auth::AuthConfig] {
   *,
@@ -33,13 +33,13 @@ SELECT cfg::Config.extensions[is ext::auth::AuthConfig] {
   },
   ui: { * },
 } limit 1
-  `);
+  `)
 
     if (existingConfig.providers.length > 0) {
         console.warn(
             `Auth is already configured with the following values:
-${JSON.stringify(existingConfig, null, 2)}`,
-        );
+${JSON.stringify(existingConfig, null, 2)}`
+        )
     }
 
     const questions = [
@@ -53,8 +53,7 @@ ${JSON.stringify(existingConfig, null, 2)}`,
             name: "authSigningKey",
             message: "Enter the signing key:",
             default: crypto.randomBytes(32).toString("hex"),
-            validate: (val: string) =>
-                val.length >= 32 || "The key must be at least 32 bytes long",
+            validate: (val: string) => val.length >= 32 || "The key must be at least 32 bytes long",
         },
         {
             type: "input",
@@ -67,10 +66,7 @@ ${JSON.stringify(existingConfig, null, 2)}`,
             name: "providers",
             message: "Would you like to enable any of the following OAuth providers?",
             choices: ["github", "google", "azure", "apple", "discord", "slack"],
-            default:
-                existingConfig.providers.map(
-                    (provider) => provider.name.split("::")[1] ?? null,
-                ) ?? [],
+            default: existingConfig.providers.map((provider) => provider.name.split("::")[1] ?? null) ?? [],
         },
         {
             type: "confirm",
@@ -97,15 +93,13 @@ ${JSON.stringify(existingConfig, null, 2)}`,
             name: "enableSmtp",
             message: "Would you like to enable SMTP?",
         },
-    ];
+    ]
 
-    const answers = await inquirer.prompt(questions);
+    const answers = await inquirer.prompt(questions)
 
-    const providersDetails: [string, any][] = [];
+    const providersDetails: [string, any][] = []
     for (const provider of answers.providers) {
-        const existingProvider = existingConfig.providers.find(
-            (p) => p.name === provider,
-        );
+        const existingProvider = existingConfig.providers.find((p) => p.name === provider)
         const providerDetails = await inquirer.prompt([
             {
                 type: "input",
@@ -119,8 +113,8 @@ ${JSON.stringify(existingConfig, null, 2)}`,
                 message: `Enter the ${provider} secret:`,
                 default: existingProvider?.secret,
             },
-        ]);
-        providersDetails.push([provider, providerDetails]);
+        ])
+        providersDetails.push([provider, providerDetails])
     }
 
     let query = `
@@ -138,13 +132,13 @@ ${JSON.stringify(existingConfig, null, 2)}`,
 
     CONFIGURE CURRENT DATABASE SET
     ext::auth::AuthConfig::auth_signing_key := '${answers.authSigningKey}';
-  `;
+  `
 
     if (answers.tokenTTL) {
         query += `
       CONFIGURE CURRENT DATABASE SET
       ext::auth::AuthConfig::token_time_to_live := <duration>'${answers.tokenTTL}';
-    `;
+    `
     }
 
     const PROVIDER_MAP: Record<string, string> = {
@@ -154,17 +148,17 @@ ${JSON.stringify(existingConfig, null, 2)}`,
         azure: "AzureOAuthProvider",
         discord: "DiscordOAuthProvider",
         slack: "SlackOAuthProvider",
-    };
+    }
 
     for (const [provider, providerDetails] of providersDetails) {
-        const providerType = PROVIDER_MAP[provider];
+        const providerType = PROVIDER_MAP[provider]
         query += `
       CONFIGURE CURRENT DATABASE
       INSERT ext::auth::${providerType} {
         secret := '${providerDetails.secret}',
         client_id := '${providerDetails.clientId}'
       };
-    `;
+    `
     }
 
     if (answers.enablePasswordAuth) {
@@ -174,13 +168,13 @@ ${JSON.stringify(existingConfig, null, 2)}`,
                 name: "requireVerification",
                 message: "Should email/password require email verification?",
             },
-        ]);
+        ])
         query += `
       CONFIGURE CURRENT DATABASE
       INSERT ext::auth::EmailPasswordProviderConfig {
         require_verification := <bool>${passwordAuthConfig.requireVerification}
       };
-    `;
+    `
     }
 
     if (answers.enableMagicLink) {
@@ -188,17 +182,16 @@ ${JSON.stringify(existingConfig, null, 2)}`,
             {
                 type: "input",
                 name: "tokenTTL",
-                message:
-                    "How long should the email sign-in link be valid for? (ISO Duration format)?",
+                message: "How long should the email sign-in link be valid for? (ISO Duration format)?",
                 default: "PT10M",
             },
-        ]);
+        ])
         query += `
       CONFIGURE CURRENT DATABASE
       INSERT ext::auth::MagicLinkProviderConfig {
         token_time_to_live := <duration>'${magicLinkAuthConfig.tokenTTL}',
       };
-    `;
+    `
     }
 
     if (answers.enableWebAuthn) {
@@ -214,14 +207,14 @@ ${JSON.stringify(existingConfig, null, 2)}`,
                 message: "Enter the relying party origin:",
                 default: "http://localhost:3000",
             },
-        ]);
+        ])
         query += `
       CONFIGURE CURRENT DATABASE
       INSERT ext::auth::WebAuthnProviderConfig {
         relying_party_origin := '${webAuthnConfig.relyingPartyOrigin}',
         require_verification := <bool>${webAuthnConfig.requireVerification}
       };
-    `;
+    `
     }
 
     if (answers.enableHostedUI) {
@@ -230,18 +223,14 @@ ${JSON.stringify(existingConfig, null, 2)}`,
                 type: "input",
                 name: "redirectTo",
                 message: "Enter the redirect URL:",
-                default:
-                    existingConfig.ui?.redirect_to ??
-                    "http://localhost:3000/auth/builtin/callback",
+                default: existingConfig.ui?.redirect_to ?? "http://localhost:3000/auth/builtin/callback",
                 required: true,
             },
             {
                 type: "input",
                 name: "redirectToOnSignup",
                 message: "Enter the redirect URL on signup:",
-                default:
-                    existingConfig.ui?.redirect_to_on_signup ??
-                    "http://localhost:3000/auth/builtin/callback?isSignUp=true",
+                default: existingConfig.ui?.redirect_to_on_signup ?? "http://localhost:3000/auth/builtin/callback?isSignUp=true",
                 required: false,
             },
             {
@@ -255,11 +244,9 @@ ${JSON.stringify(existingConfig, null, 2)}`,
                 type: "input",
                 name: "logo_url",
                 message: "Enter the brand logo",
-                default:
-                    existingConfig.ui?.logo_url ??
-                    "https://avatars.githubusercontent.com/u/14262913",
+                default: existingConfig.ui?.logo_url ?? "https://avatars.githubusercontent.com/u/14262913",
             },
-        ]);
+        ])
 
         query += `
       CONFIGURE CURRENT DATABASE
@@ -270,7 +257,7 @@ ${JSON.stringify(existingConfig, null, 2)}`,
         brand_color := '${hostedUi.brandColor}',
         logo_url := '${hostedUi.logo_url}',
       };
-    `;
+    `
     }
 
     if (answers.enableSmtp) {
@@ -318,7 +305,7 @@ ${JSON.stringify(existingConfig, null, 2)}`,
                 message: "Should we validate SMTP certificates?",
                 default: false,
             },
-        ]);
+        ])
         query += `
       CONFIGURE CURRENT DATABASE SET
       ext::auth::SMTPConfig::sender := '${smtpConfig.sender}';
@@ -340,26 +327,26 @@ ${JSON.stringify(existingConfig, null, 2)}`,
 
       CONFIGURE CURRENT DATABASE SET
       ext::auth::SMTPConfig::validate_certs := <bool>${smtpConfig.validate_certs};
-    `;
+    `
     }
 
-    console.log("The following query will be executed:\n", query);
+    console.log("The following query will be executed:\n", query)
     const confirm = await inquirer.prompt({
         type: "confirm",
         name: "execute",
         message: "Do you want to execute this query?",
-    });
+    })
 
     if (confirm.execute) {
-        await client.execute(query);
+        await client.execute(query)
     } else {
-        return;
+        return
     }
 }
 
 main()
     .then(() => process.exit(0))
     .catch((err: Error) => {
-        console.error(err);
-        process.exit(1);
-    });
+        console.error(err)
+        process.exit(1)
+    })
