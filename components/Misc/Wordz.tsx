@@ -58,12 +58,9 @@ export default function Wordz() {
     }
 
     function animateLetterIn(nw: HTMLElement[], i: number) {
-        setTimeout(
-            () => {
-                nw[i].className = "letter in"
-            },
-            340 + i * 80
-        )
+        setTimeout(() => {
+            nw[i].className = "letter in"
+        }, 340 + i * 80)
     }
 
     function splitLetters(word: HTMLElement) {
