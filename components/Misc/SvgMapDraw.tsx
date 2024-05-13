@@ -1,4 +1,5 @@
 "use client"
+
 import anime from "animejs"
 import { useEffect } from "react"
 
