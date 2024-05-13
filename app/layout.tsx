@@ -19,20 +19,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="light">
-      <NextUIProvider>
-        <body className={inter.className}>
+      <body className={inter.className}>
+        <NextUIProvider>
           <main className="px-[2%] py-3">
             {children}
           </main>
-        </body>
-        <footer>
-          <Footer />
-        </footer>
-        {/* theme handler */}
-        <div className="fixed z-50 bottom-0 left-[47%] py-1 px-3">
-          <ThemeHandler />
-        </div>
-      </NextUIProvider>
+          <footer>
+            <Footer />
+          </footer>
+          {/* theme handler */}
+          <div className="fixed z-50 bottom-0 left-[47%] py-1 px-3">
+            <ThemeHandler />
+          </div>
+        </NextUIProvider>
+      </body>
     </html>
   );
 }

@@ -3,6 +3,7 @@ import { auth } from "@/edgedb";
 
 const { GET, POST } = auth.createAuthRouteHandlers({
     onOAuthCallback({ error, tokenData, isSignUp }) {
+        localStorage.setItem("token", JSON.stringify(tokenData));
         redirect("/");
     },
     onSignout() {
