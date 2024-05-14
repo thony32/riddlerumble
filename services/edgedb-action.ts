@@ -13,13 +13,13 @@ export async function createUser(tokenData: TokenData, nationality: string, prov
     let email: string | null = null;
     let avatar: string | null = null;
 
-    if (tokenData.provider_token && provider === "builtin::oauth_google") {
-        const { data } = await new Octokit({
-            auth: tokenData.provider_token,
-        }).request("get /user");
+    // if (tokenData.provider_token && provider === "builtin::oauth_google") {
+    //     const { data } = await new Octokit({
+    //         auth: tokenData.provider_token,
+    //     }).request("get /user");
 
-        fullname = data.login;
-    }
+    //     fullname = data.login;
+    // }
     await client.query(
         `
         with identity := (select ext::auth::Identity filter .id = <uuid>$identity_id),
