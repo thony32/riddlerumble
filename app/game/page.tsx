@@ -1,3 +1,4 @@
+import Navbar from "@/components/game/Navbar";
 import { auth } from "@/edgedb"
 import { redirect } from "next/navigation";
 export default async function Game() {
@@ -6,8 +7,8 @@ export default async function Game() {
         redirect('/')
     }
     return (
-        <div className="space-y-5">
-            Game here
+        <div>
+            <Navbar />
         </div>
     )
 }
