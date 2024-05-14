@@ -1,16 +1,29 @@
 export default async function handler(req: any, res: any) {
-    const response = await fetch('https://api.ipify.org');
-    const publicIP = await response.text();
+    try {
+        const [ipResponse, locationResponse] = await Promise.all([
+            fetch('https://api.ipify.org').then(response => response.text()),
+            fetch('http://ip-api.com/json/').then(response => response.json())
+        ]);
 
-    const ip_localisation_response = await fetch(`http://ip-api.com/json/${publicIP}`);
-    const ip_localisation = await ip_localisation_response.json();
+        const { countryCode } = locationResponse;
 
-    const flag_respone = await fetch(`https://flagsapi.com/${ip_localisation.countryCode}/flat/64.png`);
-    const flag = flag_respone.url;
+        if (!countryCode) {
+            throw new Error('Country code not found');
+        }
 
-    res.status(200).json({
-        ip: publicIP,
-        localisation: ip_localisation,
-        flag: flag
-    });
+        const flagResponse = await fetch(`https://flagsapi.com/${countryCode}/flat/64.png`);
+        if (!flagResponse.ok) {
+            throw new Error('Failed to fetch flag');
+        }
+
+        const flagUrl = flagResponse.url;
+
+        res.status(200).json({
+            ip: ipResponse,
+            localisation: locationResponse,
+            flag: flagUrl
+        });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
 }
