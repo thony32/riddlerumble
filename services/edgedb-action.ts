@@ -20,6 +20,17 @@ export async function createUser(tokenData: TokenData, nationality: string, prov
 
     //     fullname = data.login;
     // }
+
+    // * for google
+    if (tokenData.provider_token && provider === "builtin::oauth_google") {
+        const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${tokenData.provider_token}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch IP info');
+        }
+        const data = await response.json();
+        avatar = data.picture;
+    }
+
     await client.query(
         `
         with identity := (select ext::auth::Identity filter .id = <uuid>$identity_id),
@@ -27,10 +38,12 @@ export async function createUser(tokenData: TokenData, nationality: string, prov
           identity := identity,
           nationality := <str>$nationality,
           score := 0,
+          avatar := <str>$avatar,
         };`,
         {
             identity_id: tokenData.identity_id,
-            nationality: nationality
+            nationality: nationality,
+            avatar: avatar,
         }
     )
 }
