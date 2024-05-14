@@ -1,9 +1,10 @@
 import { auth } from "@/edgedb"
+import getInitial from "@/utils/getInitials"
 import { Avatar } from "@nextui-org/avatar"
 import { Button } from "@nextui-org/button"
 import Link from "next/link"
 
-const Navbar = () => {
+const Navbar = async ({ user }: any) => {
     return (
         <div className="flex justify-between items-center">
             <div>
@@ -11,10 +12,10 @@ const Navbar = () => {
             </div>
             <div className="flex gap-8 items-center">
                 <div className="flex items-center gap-2">
-                    <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+                    <Avatar showFallback name={getInitial(user.full_name)} src={user.avatar} />
                     <div className="flex flex-col text-right">
-                        <span>Full name</span>
-                        <span>#pseudo</span>
+                        <span>{user.full_name}</span>
+                        <span className="font-sans text-xs font-semibold">{user.pseudo}</span>
                     </div>
                 </div>
                 <Link href={auth.getSignoutUrl()}>
@@ -30,3 +31,4 @@ const Navbar = () => {
 }
 
 export default Navbar
+export const useClient = true;
