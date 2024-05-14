@@ -28,6 +28,9 @@ export async function createUser(tokenData: TokenData, nationality: string, prov
             throw new Error('Failed to fetch IP info');
         }
         const data = await response.json();
+        pseudo = data.name.toLowerCase().replace(/\s/g, '') + Math.floor(1000 + Math.random() * 9000);
+        fullname = data.name;
+        email = data.email;
         avatar = data.picture;
     }
 
@@ -39,11 +42,17 @@ export async function createUser(tokenData: TokenData, nationality: string, prov
           nationality := <str>$nationality,
           score := 0,
           avatar := <str>$avatar,
+          pseudo := <str>$pseudo,
+          full_name := <str>$fullname,
+          email := <str>$email,
         };`,
         {
             identity_id: tokenData.identity_id,
             nationality: nationality,
             avatar: avatar,
+            pseudo: pseudo,
+            fullname: fullname,
+            email: email,
         }
     )
 }
