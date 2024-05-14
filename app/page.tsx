@@ -1,4 +1,3 @@
-
 import Heading from "@/components/landing/Heading";
 import Ranking from "@/components/landing/Ranking";
 import TutoVideo from "@/components/landing/TutoVideo";

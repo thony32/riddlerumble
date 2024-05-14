@@ -15,7 +15,7 @@ const { GET, POST } = auth.createAuthRouteHandlers({
             const data = await response.json();
             await createUser(tokenData, data.localisation.country, provider);
         }
-        redirect("/")
+        redirect("/game")
     },
     onSignout() {
         redirect("/")
