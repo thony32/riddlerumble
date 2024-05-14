@@ -3,7 +3,7 @@ import { auth } from "@/edgedb"
 import { createUser } from "@/services/edgedb-action"
 
 const { GET, POST } = auth.createAuthRouteHandlers({
-    async onOAuthCallback({ error, tokenData, isSignUp }) {
+    async onOAuthCallback({ error, tokenData, provider, isSignUp }) {
         if (error) {
             return redirect(`?oauth_error=${encodeURIComponent(`OAuth sign in failed: ${error.message}`)}`)
         }
@@ -13,7 +13,7 @@ const { GET, POST } = auth.createAuthRouteHandlers({
                 throw new Error('Failed to fetch IP info');
             }
             const data = await response.json();
-            await createUser(tokenData, data.localisation.country);
+            await createUser(tokenData, data.localisation.country, provider);
         }
         redirect("/")
     },
