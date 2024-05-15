@@ -67,7 +67,7 @@ const ProfilSetting = ({ user }: any) => {
                                                         </svg>
                                                     </div>
                                                     :
-                                                    <Input value={user.pseudo} onBlur={savePseudoEdit} type="text" variant="underlined" label="Pseudo" />
+                                                    <Input autoFocus value={user.pseudo} onBlur={savePseudoEdit} type="text" variant="underlined" label="Pseudo" />
                                             }
                                             <h2 className="text-xl">{user.full_name}</h2>
                                             <h2 className="text-sm font-sans">{user.email}</h2>
