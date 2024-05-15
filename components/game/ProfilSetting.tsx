@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 const ProfilSetting = ({ user }: any) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [ipInfo,setIpInfo] = useState(null) as any;
+    const [ipInfo, setIpInfo] = useState(null) as any;
 
     useEffect(() => {
         const getIpInformation = async () => {
@@ -14,7 +14,6 @@ const ProfilSetting = ({ user }: any) => {
                 throw new Error('Failed to fetch IP info');
             }
             const data = await response.json();
-            console.log(data);
             setIpInfo(data);
         }
         getIpInformation();
@@ -26,6 +25,8 @@ const ProfilSetting = ({ user }: any) => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
             </svg>
             <Modal
+                backdrop="blur"
+                size="xl"
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 placement="top-center"
@@ -40,21 +41,38 @@ const ProfilSetting = ({ user }: any) => {
                                             <div className="top-0 left-0">
                                                 <img src={ipInfo.flag} alt={ipInfo.localisation.country} className="w-10 h-10" />
                                             </div>
-                                            <Avatar showFallback name="Enigmap" src={user.avatar} className="w-32 h-32 text-large" />
+                                            <div className="relative">
+                                                <Avatar showFallback name="Enigmap" src={user.avatar} className="w-32 h-32 text-large" />
+                                                <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 rotate-6 absolute top-0 -right-3 cursor-pointer hover:scale-125 duration-200 ease-soft-spring">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                                </svg>
+                                            </div>
                                             <div className="text-center">
                                                 <h1 className="text-2xl font-sans font-semibold">{user.score} Pts</h1>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="text-right font-sans">
-                                        <h1 className="text-3xl font-sans font-bold">{user.pseudo}</h1>
-                                        <h2 className="text-xl">{user.full_name}</h2>
-                                        <h2 className="text-sm font-sans">{user.email}</h2>
+                                    <div className="flex items-center">
+                                        <div className="text-right font-sans space-y-3">
+                                            <div className="relative">
+                                                <h1 className="text-3xl font-sans font-bold">{user.pseudo}</h1>
+                                                <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 absolute -top-3 -right-3 cursor-pointer hover:scale-125 duration-200 ease-soft-spring">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                                </svg>
+                                            </div>
+                                            <h2 className="text-xl">{user.full_name}</h2>
+                                            <h2 className="text-sm font-sans">{user.email}</h2>
+                                        </div>
                                     </div>
                                 </div>
                                 <hr />
                                 <div>
-                                    <h1>Last game</h1>
+                                    <div className="flex justify-between items-center">
+                                        <h1 className="text-xl">Last games</h1>
+                                        <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="m6.115 5.19.319 1.913A6 6 0 0 0 8.11 10.36L9.75 12l-.387.775c-.217.433-.132.956.21 1.298l1.348 1.348c.21.21.329.497.329.795v1.089c0 .426.24.815.622 1.006l.153.076c.433.217.956.132 1.298-.21l.723-.723a8.7 8.7 0 0 0 2.288-4.042 1.087 1.087 0 0 0-.358-1.099l-1.33-1.108c-.251-.21-.582-.299-.905-.245l-1.17.195a1.125 1.125 0 0 1-.98-.314l-.295-.295a1.125 1.125 0 0 1 0-1.591l.13-.132a1.125 1.125 0 0 1 1.3-.21l.603.302a.809.809 0 0 0 1.086-1.086L14.25 7.5l1.256-.837a4.5 4.5 0 0 0 1.528-1.732l.146-.292M6.115 5.19A9 9 0 1 0 17.18 4.64M6.115 5.19A8.965 8.965 0 0 1 12 3c1.929 0 3.716.607 5.18 1.64" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </ModalBody>
                             <ModalFooter>
