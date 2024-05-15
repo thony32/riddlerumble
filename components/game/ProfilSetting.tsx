@@ -1,11 +1,15 @@
 "use client"
-import { Modal, ModalContent, ModalBody, ModalFooter, Button, useDisclosure, Avatar } from "@nextui-org/react";
-import { set } from "animejs";
+import { Modal, ModalContent, ModalBody, ModalFooter, Button, useDisclosure, Avatar, Input } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 
 const ProfilSetting = ({ user }: any) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [ipInfo, setIpInfo] = useState(null) as any;
+    const [editPsedo, setEditPseudo] = useState(false);
+
+    const savePseudoEdit = () => {
+        setEditPseudo(false);
+    }
 
     useEffect(() => {
         const getIpInformation = async () => {
@@ -54,12 +58,17 @@ const ProfilSetting = ({ user }: any) => {
                                     </div>
                                     <div className="flex items-center">
                                         <div className="text-right font-sans space-y-3">
-                                            <div className="relative">
-                                                <h1 className="text-3xl font-sans font-bold">{user.pseudo}</h1>
-                                                <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 absolute -top-3 -right-3 cursor-pointer hover:scale-125 duration-200 ease-soft-spring">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-                                                </svg>
-                                            </div>
+                                            {
+                                                !editPsedo ?
+                                                    <div className="relative">
+                                                        <h1 className="text-3xl font-sans font-bold">{user.pseudo}</h1>
+                                                        <svg onClick={() => setEditPseudo(true)} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 absolute -top-3 -right-3 cursor-pointer hover:scale-125 duration-200 ease-soft-spring">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                                        </svg>
+                                                    </div>
+                                                    :
+                                                    <Input value={user.pseudo} onBlur={savePseudoEdit} type="text" variant="underlined" label="Pseudo" />
+                                            }
                                             <h2 className="text-xl">{user.full_name}</h2>
                                             <h2 className="text-sm font-sans">{user.email}</h2>
                                         </div>
