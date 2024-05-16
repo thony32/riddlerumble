@@ -2,6 +2,7 @@ import getInitial from "@/utils/getInitials"
 import { Avatar } from "@nextui-org/avatar"
 import BtnLogout from "./BtnLogout"
 import ProfilSetting from "./ProfilSetting"
+
 const Navbar = async ({ user }: any) => {
     return (
         <div className="flex justify-between items-center">
