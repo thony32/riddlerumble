@@ -1,10 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { client } from "@/edgedb"
+import { createClient } from "edgedb"
 import e from "@/dbschema/edgeql-js"
+
+const client = createClient({
+    instanceName: process.env.EDGEDB_INSTANCE,
+    secretKey: process.env.EDGEDB_SECRET_KEY,
+})
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { identity, pseudo } = req.body
-    await e
+    const user = await e
         .update(e.Users, (user) => ({
             filter_single: e.op(user.identity.id, "=", e.uuid(identity)),
             set: {
