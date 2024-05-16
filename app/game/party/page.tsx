@@ -26,7 +26,7 @@ function Party() {
         <div className="w-full h-screen py-6 relative overflow-hidden">
             <Head>
                 <link
-                    href="https://api.tiles.mapbox.com/mapbox-gl-js/v<YOUR_MAPBOX_VERSION>/mapbox-gl.css"
+                    href="https://api.tiles.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css"
                     rel="stylesheet"
                 />
             </Head>
