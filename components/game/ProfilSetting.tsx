@@ -1,5 +1,7 @@
 "use client"
 import getIpInformation from "@/services/getIpInformation"
+import { useUser } from "@/store/useUser"
+import getInitial from "@/utils/getInitials"
 import { Modal, ModalContent, ModalBody, ModalFooter, Button, useDisclosure, Avatar, Input } from "@nextui-org/react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
@@ -11,6 +13,7 @@ const getIpInfo = async () => {
 
 const ProfilSetting = ({ user }: any) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure()
+    const setUser = useUser((state: any) => state.setUser)
     const [editPsedo, setEditPseudo] = useState(false)
     const [newPseudo, setNewPseudo] = useState(user.pseudo)
 
@@ -36,6 +39,7 @@ const ProfilSetting = ({ user }: any) => {
         },
         onSuccess: () => {
             setEditPseudo(false)
+            setUser({ ...user, pseudo: newPseudo })
         },
     })
 
@@ -101,7 +105,7 @@ const ProfilSetting = ({ user }: any) => {
                                             <div className="relative">
                                                 <Avatar
                                                     showFallback
-                                                    name="Enigmap"
+                                                    name={getInitial(user.full_name)}
                                                     src={user.avatar}
                                                     className="w-32 h-32 text-large"
                                                 />

@@ -1,11 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import e, { createClient } from "@/dbschema/edgeql-js"
 
-const client = createClient({
-    instanceName: process.env.EDGEDB_INSTANCE,
-    secretKey: process.env.EDGEDB_SECRET_KEY,
-})
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const client = createClient({
         instanceName: process.env.EDGEDB_INSTANCE,
