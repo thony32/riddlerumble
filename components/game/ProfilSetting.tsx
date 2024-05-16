@@ -35,7 +35,6 @@ const ProfilSetting = ({ user }: any) => {
             console.error("Tsy tafa", error)
         },
         onSuccess: ({ success }) => {
-            console.log(success)
             setEditPseudo(false)
         },
     })
