@@ -18,7 +18,7 @@ function Party() {
                     latitude: 37.8,
                     zoom: 4,
                 }}
-                mapboxAccessToken="pk.eyJ1IjoidGhvbnkzMiIsImEiOiJjbHVuNXA2Nm0xYWJpMm1uMjkwb3hndGM4In0.cORWr8oFGZpc9okOvVCKXQ"
+                mapboxAccessToken="pk.eyJ1IjoidGhvbnkzMiIsImEiOiJjbHc5azQ5bWQwNWhjMmtxa2Q5dTcyNWxhIn0.pXpGUWi_9wWY3zwfflmzSQ"
                 mapStyle="mapbox://styles/mapbox/streets-v9"
                 style={{ width: "100%", height: "90vh", margin: 0, padding: 0 }}
             ></Map>
