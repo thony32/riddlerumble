@@ -1,9 +1,13 @@
 "use client"
 
 import anime from "animejs"
-import { useEffect } from "react"
+import { ReactNode, useEffect } from "react"
 
-const Drawer = ({ children }: any) => {
+interface DrawerProps {
+    children: ReactNode
+}
+
+const Drawer = ({ children }: DrawerProps) => {
     function animation() {
         anime({
             targets: ".st0",
@@ -17,8 +21,8 @@ const Drawer = ({ children }: any) => {
         })
     }
     useEffect(() => {
-        document.querySelectorAll(".path-drawer svg path").forEach((path: any) => {
-            path.classList.add("st0")
+        document.querySelectorAll(".path-drawer svg path").forEach((path) => {
+            ;(path as SVGPathElement).classList.add("st0")
         })
         animation()
     }, [])

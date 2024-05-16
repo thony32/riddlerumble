@@ -16,8 +16,8 @@ const OAuth = () => {
         return { verifier, challenge }
     }
 
-    function base64URLEncode(array: any) {
-        return btoa(String.fromCharCode.apply(null, array)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "")
+    function base64URLEncode(array: Uint8Array) {
+        return btoa(String.fromCharCode.apply(null, Array.from(array))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "")
     }
 
     const handleAuthorize = async () => {

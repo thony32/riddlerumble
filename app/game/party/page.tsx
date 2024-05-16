@@ -1,24 +1,27 @@
 "use client"
 import Head from "next/head"
 import React, { useCallback, useState } from "react"
-import Map, { Marker } from "react-map-gl"
-import "mapbox-gl/dist/mapbox-gl.css";
+import Map, { Marker, MarkerDragEvent } from "react-map-gl"
+import "mapbox-gl/dist/mapbox-gl.css"
 
 function Party() {
+
     const [marker, setMarker] = useState({
         latitude: 40,
-        longitude: -100
-    });
-    const onMarkerDrag = useCallback((event: any) => {
+        longitude: -100,
+    })
+
+    const onMarkerDrag = useCallback((event: MarkerDragEvent) => {
         setMarker({
             longitude: event.lngLat.lng,
-            latitude: event.lngLat.lat
-        });
-    }, []);
+            latitude: event.lngLat.lat,
+        })
+    }, [])
 
-    const onMarkerDragEnd = useCallback((event: any) => {
+    const onMarkerDragEnd = useCallback((event: MarkerDragEvent) => {
         console.log(event.lngLat)
-    }, []);
+    }, [])
+
     return (
         <div className="w-full h-screen py-6 relative overflow-hidden">
             <Head>
@@ -50,7 +53,10 @@ function Party() {
                             onDrag={onMarkerDrag}
                             onDragEnd={onMarkerDragEnd}
                         >
-                            <svg className="w-10 fill-black" viewBox="0 0 24 24">
+                            <svg
+                                className="w-10 fill-black"
+                                viewBox="0 0 24 24"
+                            >
                                 <path d="M12 22s8.029-5.56 8-12c0-4.411-3.589-8-8-8S4 5.589 4 9.995C3.971 16.44 11.696 21.784 12 22zM8 9h3V6h2v3h3v2h-3v3h-2v-3H8V9z"></path>
                             </svg>
                         </Marker>
