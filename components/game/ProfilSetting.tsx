@@ -35,7 +35,7 @@ const ProfilSetting = ({ user }: any) => {
             return response.json()
         },
         onError: (error) => {
-            console.error("Error", error)
+            console.error(error)
         },
         onSuccess: () => {
             setEditPseudo(false)

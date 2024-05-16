@@ -4,7 +4,7 @@ import BtnLogout from "./BtnLogout"
 import ProfilSetting from "./ProfilSetting"
 import { useUser } from "@/store/useUser"
 
-const Navbar = async () => {
+const Navbar = () => {
     const user = useUser.getState().user
 
     return (
@@ -23,7 +23,7 @@ const Navbar = async () => {
                         <span>{user.full_name}</span>
                         <span className="font-sans text-xs font-semibold">{user.pseudo}</span>
                     </div>
-                    <div className="absolute -top-2 -left-3 z-50">{user && <ProfilSetting user={user} />}</div>
+                    <div className="absolute -top-2 -left-3 z-50">{user != null && <ProfilSetting user={user} />}</div>
                 </div>
                 <BtnLogout />
             </div>
