@@ -3,7 +3,6 @@ import { auth } from "@/edgedb"
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import UserAction from "@/services/user-action"
-import MapGame from "@/components/game/MapGame"
 
 export default async function Game() {
     const session = auth.getSession()
@@ -17,7 +16,6 @@ export default async function Game() {
     return (
         <div>
             <Navbar user={{ id: identity, ...user }} />
-            <MapGame />
         </div>
     )
 }

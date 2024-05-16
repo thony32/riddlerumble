@@ -1,9 +1,8 @@
 "use client"
 import getIpInformation from "@/services/getIpInformation"
 import { Modal, ModalContent, ModalBody, ModalFooter, Button, useDisclosure, Avatar, Input } from "@nextui-org/react"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
-import UserAction from "@/services/user-action"
 
 const getIpInfo = async () => {
     const ipInfo = await getIpInformation()
@@ -13,12 +12,37 @@ const getIpInfo = async () => {
 const ProfilSetting = ({ user }: any) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure()
     const [editPsedo, setEditPseudo] = useState(false)
+    const [newPseudo, setNewPseudo] = useState(user.pseudo)
+
+    const pseudoMutation = useMutation({
+        mutationKey: ["pseudo"],
+        mutationFn: async () => {
+            const response = await fetch("/api/me", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ identity: user.id, pseudo: newPseudo }),
+            })
+
+            if (!response.ok) {
+                throw new Error("Failed to update pseudo")
+            }
+
+            return response.json()
+        },
+        onError: (error) => {
+            console.error("Tsy tafa", error)
+        },
+        onSuccess: ({ success }) => {
+            console.log(success)
+            setEditPseudo(false)
+        },
+    })
 
     const savePseudoEdit = () => {
-        setEditPseudo(false)
-        const identity = user.id as string
-        const pseudoValue = user.pseudo.toString()
-        UserAction.updatePseudo(identity, pseudoValue)
+        // setEditPseudo(false)
+        pseudoMutation.mutate()
     }
 
     const {
@@ -125,7 +149,8 @@ const ProfilSetting = ({ user }: any) => {
                                             ) : (
                                                 <Input
                                                     autoFocus
-                                                    value={user.pseudo}
+                                                    value={newPseudo}
+                                                    onChange={(e) => setNewPseudo(e.target.value)}
                                                     onBlur={savePseudoEdit}
                                                     type="text"
                                                     variant="underlined"
