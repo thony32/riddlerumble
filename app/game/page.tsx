@@ -16,7 +16,7 @@ export default async function Game() {
     const user = await UserAction.getData(identity)
     return (
         <div>
-            <Navbar user={user} />
+            <Navbar user={{ id: identity, ...user }} />
             <MapGame />
         </div>
     )
