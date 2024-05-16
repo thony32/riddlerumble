@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
 
     const { identity, pseudo } = req.body
-    await e
+    const user = await e
         .update(e.Users, (user) => ({
             filter_single: e.op(user.identity.id, "=", e.uuid(identity)),
             set: {

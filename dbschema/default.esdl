@@ -35,6 +35,7 @@ module default {
     required property longitude -> float32;
     required property nb_players -> int16;
     required property prompt -> str;
+    required property user_pseudo -> str;
   };
 
   type Player_stats {
