@@ -1,4 +1,6 @@
 "use client"
+import getInitial from '@/utils/getInitials';
+import { Avatar } from '@nextui-org/avatar';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 
@@ -69,11 +71,11 @@ const Ranking = () => {
                                     <td className="px-4 py-2 flex justify-center">
                                         <div className="avatar">
                                             <div className="w-8 rounded-full">
-                                                <Image
+                                                <Avatar
+                                                    showFallback
+                                                    name={getInitial(player.full_name)}
                                                     src={player.avatar}
                                                     alt="Avatar"
-                                                    width={50}
-                                                    height={50}
                                                 />
                                             </div>
                                         </div>
