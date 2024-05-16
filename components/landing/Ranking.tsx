@@ -41,7 +41,7 @@ const Ranking = () => {
                                 <div className="avatar">
                                     <div className="w-8 rounded-full">
                                         <Image
-                                            src="/images/pegi.png"
+                                            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
                                             alt="Avatar"
                                             width={50}
                                             height={50}
