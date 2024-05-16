@@ -11,7 +11,11 @@ const Navbar = async ({ user }: any) => {
             </div>
             <div className="flex gap-8 items-center">
                 <div className="flex items-center gap-2 relative">
-                    <Avatar showFallback name={getInitial(user.full_name)} src={user.avatar} />
+                    <Avatar
+                        showFallback
+                        name={getInitial(user.full_name)}
+                        src={user.avatar}
+                    />
                     <div className="flex flex-col text-right">
                         <span>{user.full_name}</span>
                         <span className="font-sans text-xs font-semibold">{user.pseudo}</span>
