@@ -17,7 +17,7 @@ const ProfilSetting = ({ user }: any) => {
     const pseudoMutation = useMutation({
         mutationKey: ["pseudo"],
         mutationFn: async () => {
-            const response = await fetch("/api/me", {
+            const response = await fetch("/api/updatePseudo", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -32,15 +32,14 @@ const ProfilSetting = ({ user }: any) => {
             return response.json()
         },
         onError: (error) => {
-            console.error("Tsy tafa", error)
+            console.error("Error", error)
         },
-        onSuccess: ({ success }) => {
+        onSuccess: () => {
             setEditPseudo(false)
         },
     })
 
     const savePseudoEdit = () => {
-        // setEditPseudo(false)
         pseudoMutation.mutate()
     }
 
