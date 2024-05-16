@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
+
 import { useEffect, useRef } from "react"
 
 import "@/styles/Wordz.css"

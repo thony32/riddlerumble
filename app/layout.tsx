@@ -4,6 +4,7 @@ import { NextUIProvider } from "@nextui-org/react"
 import "./globals.css"
 import Footer from "@/components/landing/Footer"
 import ThemeHandler from "@/components/Misc/ThemeHandler"
+import ReactQueryProvider from "@/utils/ReactQueryProvider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -24,7 +25,11 @@ export default function RootLayout({
         >
             <body className={inter.className}>
                 <NextUIProvider>
-                    <main className="px-[2%] py-3">{children}</main>
+                    <main className="px-[2%] py-3">
+                        <ReactQueryProvider>
+                            {children}
+                        </ReactQueryProvider>
+                    </main>
                     <footer>
                         <Footer />
                     </footer>

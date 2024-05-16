@@ -1,26 +1,41 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import { useEffect, useState } from "react"
 
 const ThemeHandler = () => {
-    
-    const html = document.querySelector("html")
-
     const changeTheme = (value: string) => {
-        html?.setAttribute("data-theme", value)
-        localStorage.setItem("theme", value)
-        window.dispatchEvent(new Event("themeChange"))
+        if (typeof window !== "undefined") {
+            const html = document.querySelector("html")
+            html?.setAttribute("data-theme", value)
+            localStorage.setItem("theme", value)
+            window.dispatchEvent(new Event("themeChange"))
+        }
     }
 
-    const [currentTheme, setCurrentTheme] = useState(localStorage.getItem("theme"))
+    const [currentTheme, setCurrentTheme] = useState("")
 
     useEffect(() => {
-        currentTheme ? html?.setAttribute("data-theme", currentTheme) : html?.setAttribute("data-theme", "light")
-        const onThemeChange = () => {
-            setCurrentTheme(localStorage.getItem("theme") as string)
+        if (typeof window !== "undefined") {
+            const theme = localStorage.getItem("theme")
+            const html = document.querySelector("html")
+
+            if (theme) {
+                html?.setAttribute("data-theme", theme)
+                setCurrentTheme(theme)
+            } else {
+                html?.setAttribute("data-theme", "light")
+                setCurrentTheme("light")
+            }
+
+            const onThemeChange = () => {
+                setCurrentTheme(localStorage.getItem("theme") as string)
+            }
+
+            window.addEventListener("themeChange", onThemeChange)
+
+            return () => window.removeEventListener("themeChange", onThemeChange)
         }
-        window.addEventListener("themeChange", onThemeChange)
-        return () => window.removeEventListener("themeChange", onThemeChange)
     }, [])
 
     return (
