@@ -16,7 +16,9 @@ export const {
 
 export async function createUser(
     tokenData: TokenData,
+    // provider?: BuiltinProviderNames
 ) {
+    
 
     await client.query(
         `
@@ -26,6 +28,7 @@ export async function createUser(
         };`,
         {
             identity_id: tokenData.identity_id,
+            // username: username
         }
     );
 }

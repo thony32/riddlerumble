@@ -8,6 +8,12 @@ import ButtonTest from "../button"
 
 const Heading = async () => {
     const getUrl = await auth.getSignoutUrl()
+    const session = auth.getSession()
+
+    if (await session.isSignedIn()) {
+        return <div>Poinsa</div>
+    }
+
     return (
         <div className="h-screen flex justify-center items-center relative">
             <div className="absolute right-0 bottom-4">
