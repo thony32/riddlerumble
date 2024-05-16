@@ -49,7 +49,9 @@ function RoomList({ room_list }: Props) {
                     ))}
                 </div>
             </div>
-            <div className="">Trouver room</div>
+            <div className="p-5 space-y-10">
+                <h1 className="text-3xl text-center">Vos Statistiques</h1>
+            </div>
         </div>
     )
 }
