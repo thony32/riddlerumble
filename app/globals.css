@@ -4,7 +4,7 @@
 
 @font-face {
     font-family: "Title";
-    src: url("/fonts/title.otf") format("opentype");
+    src: url("/fonts/Jaro.ttf") format("truetype");
 }
 
 .font-title {
@@ -33,3 +33,4 @@
 ::-webkit-resizer {
     display: none;
 }
+
