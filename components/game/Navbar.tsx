@@ -2,8 +2,11 @@ import getInitial from "@/utils/getInitials"
 import { Avatar } from "@nextui-org/avatar"
 import BtnLogout from "./BtnLogout"
 import ProfilSetting from "./ProfilSetting"
+import { useUser } from "@/store/useUser"
 
-const Navbar = async ({ user }: any) => {
+const Navbar = () => {
+    const user = useUser.getState().user
+
     return (
         <div className="flex justify-between items-center">
             <div>
@@ -20,9 +23,7 @@ const Navbar = async ({ user }: any) => {
                         <span>{user.full_name}</span>
                         <span className="font-sans text-xs font-semibold">{user.pseudo}</span>
                     </div>
-                    <div className="absolute -top-2 -left-3 z-50">
-                        <ProfilSetting user={user} />
-                    </div>
+                    <div className="absolute -top-2 -left-3 z-50">{user != null && <ProfilSetting user={user} />}</div>
                 </div>
                 <BtnLogout />
             </div>
