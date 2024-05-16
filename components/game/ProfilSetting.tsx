@@ -1,27 +1,31 @@
 "use client"
+import getIpInformation from "@/services/getIpInformation";
 import { Modal, ModalContent, ModalBody, ModalFooter, Button, useDisclosure, Avatar, Input } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+
+const getIpInfo = async () => {
+    const ipInfo = await getIpInformation();
+    return ipInfo;
+}
 
 const ProfilSetting = ({ user }: any) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [ipInfo, setIpInfo] = useState(null) as any;
     const [editPsedo, setEditPseudo] = useState(false);
 
     const savePseudoEdit = () => {
         setEditPseudo(false);
     }
 
-    useEffect(() => {
-        const getIpInformation = async () => {
-            const response = await fetch('http://localhost:3000/api/getClientNationality');
-            if (!response.ok) {
-                throw new Error('Failed to fetch IP info');
-            }
-            const data = await response.json();
-            setIpInfo(data);
-        }
-        getIpInformation();
-    }, [])
+    const {
+        isPending: isIpInfoPending,
+        error: ipInfoError,
+        data: ipInfoData,
+    } = useQuery({
+        queryKey: ["ipInfo"],
+        queryFn: () => getIpInfo(),
+        staleTime: 1000 * 60 * 60 * 24,
+    })
     return (
         <div>
             <svg onClick={onOpen} className="w-6 cursor-pointer hover:rotate-180 duration-700 ease-soft-spring" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -43,7 +47,12 @@ const ProfilSetting = ({ user }: any) => {
                                     <div className="flex items-center h-full">
                                         <div className="space-y-5 relative">
                                             <div className="top-0 left-0">
-                                                <img src={ipInfo.flag} alt={ipInfo.localisation.country} className="w-10 h-10" />
+                                                {
+                                                    isIpInfoPending ?
+                                                        <span className="loading loading-dots loading-md"></span>
+                                                        :
+                                                        <img src={ipInfoData?.flag} alt={ipInfoData?.localisation.country} className="w-10 h-10" />
+                                                }
                                             </div>
                                             <div className="relative">
                                                 <Avatar showFallback name="Enigmap" src={user.avatar} className="w-32 h-32 text-large" />
