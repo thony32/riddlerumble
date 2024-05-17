@@ -1,8 +1,9 @@
 "use client"
-import Head from "next/head"
 import React, { useCallback, useState } from "react"
 import Map, { Marker, MarkerDragEvent } from "react-map-gl"
+import * as turf from '@turf/turf'
 import "mapbox-gl/dist/mapbox-gl.css"
+import { Button } from "@nextui-org/button"
 
 function Party() {
 
@@ -10,6 +11,7 @@ function Party() {
         latitude: 40,
         longitude: -100,
     })
+    const [distance, setDistance] = useState(0)
 
     const onMarkerDrag = useCallback((event: MarkerDragEvent) => {
         setMarker({
@@ -19,20 +21,33 @@ function Party() {
     }, [])
 
     const onMarkerDragEnd = useCallback((event: MarkerDragEvent) => {
-        console.log(event.lngLat)
+        //  * marker player
+        var from = turf.point([event.lngLat.lng, event.lngLat.lat]);
+        // TODO marker goal (fetch from enigma API)
+        var to = turf.point([-100, 40]);
+        var options = { units: 'kilometers' };
+        // * distance between player and goal
+        var distance = turf.distance(from, to, options);
+        setDistance(distance)
     }, [])
+
+    // * scoring system
+    const calculateScoreDistance = (distance: number, maxDistance: number = 10000) => {
+        distance = Math.min(distance, maxDistance);
+        let score = 100 - (distance / maxDistance * 100);
+        score = Math.max(0, Math.min(100, score));
+
+        return Math.round(score);
+    }
 
     return (
         <div className="w-full h-screen py-6 relative overflow-hidden">
-            <Head>
-                <link
-                    href="https://api.tiles.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css"
-                    rel="stylesheet"
-                />
-            </Head>
             <div className="grid grid-cols-12 gap-3">
-                <div className="col-span-2">
+                <div className="col-span-2 bg-gray-600 relative">
                     <h1>Find the place</h1>
+                    <div className="absolute bottom-0 w-full py-2 flex justify-center">
+                        <Button className="bg-green-500 text-white font-semibold">Submit</Button>
+                    </div>
                 </div>
                 <div className="col-span-10 rounded-2xl">
                     <Map
