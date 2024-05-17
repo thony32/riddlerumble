@@ -33,7 +33,7 @@ module default {
     required property delay -> int64;
     required property latitude -> float32;
     required property longitude -> float32;
-    required property nb_players -> int16;
+    required property nb_players -> int32;
     required property prompt -> str;
     required property user_pseudo -> str;
     required property level -> str;
