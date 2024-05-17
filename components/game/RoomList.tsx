@@ -12,6 +12,7 @@ interface Room {
     longitude: string
     nb_players: number
     prompt: string
+    user_pseudo: string
 }
 
 interface Props {

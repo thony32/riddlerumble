@@ -15,34 +15,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         instanceName: process.env.EDGEDB_INSTANCE,
         secretKey: process.env.EDGEDB_SECRET_KEY,
     })
-    const delay_party = 300000
     const { level, user_pseudo  } = req.body
-    room_api(level).then( async (room_data) => {
-        const room = await client.query(
-            `
-            insert Room {
-                delay := ${delay_party},
-                latitude := ${room_data.response.lat},
-                longitude := ${room_data.response.lng},
-                nb_players := 1,
-                prompt := ${room_data.response.enigm},
-                user_pseudo := ${user_pseudo}
-            }`
-        )    
+    const room_data = await room_api(level)
 
-    }).catch((error) => {
-        console.log(error)
-        throw error
-    })
-    // const room = await e
-    //     .insert(e.Room,{
-    //         delay: delay_party,
-    //         latitude: e.float32(room_data.response.lat),
-    //         longitude: e.float32(room_data.response.lng),
-    //         nb_players: 1,
-    //         prompt: e.str(room_data.response.enigm),
-    //         user_pseudo: e.str(user_pseudo),
-    //     })
-    //     .run(client)
-    res.status(200).json({ success: true })
+    const delay_party = level == "high-level" ? 420000 : 300000
+
+        const latitude = parseFloat(room_data.response.lat)
+        const longitude = parseFloat(room_data.response.lng)
+
+        const room = await client.querySingle(`
+            insert Room {
+                delay := <int32>$delay_party,
+                latitude := <float32>$latitude,
+                longitude := <float32>$longitude,
+                nb_players := 1,
+                prompt := <str>$prompt,
+                user_pseudo := <str>$user_pseudo
+            }`,
+            {
+                delay_party: delay_party,
+                latitude: latitude,
+                longitude: longitude,
+                prompt: room_data.enigm,
+                user_pseudo: user_pseudo
+            }
+        )
+
+    res.status(200).json({ success: true, room_id : room })
 }

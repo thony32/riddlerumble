@@ -7,18 +7,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         secretKey: process.env.EDGEDB_SECRET_KEY,
     })
 
-    const getRoomData = e.select(e.Room, (room) => ({
-        delay: true,
-        latitude: true,
-        longitude: true,
-        nb_players: true,
-        prompt: true,
-        user_pseudo: true,
-        order_by: {
-            expression: room.delay,
-            direction: e.DESC,
-        },
-    }))
-    const room = await getRoomData.run(client)
-    res.status(200).json(room) 
+    // const getRoomData = e.select(e.Room, (room) => ({
+    //     id: true,
+    //     delay: true,
+    //     latitude: true,
+    //     longitude: true,
+    //     nb_players: true,
+    //     prompt: true,
+    //     user_pseudo: true,
+    // }))
+    // const room = await getRoomData.run(client)
+    const rooms = await client.query(`
+    select Room {
+        id,
+        delay,
+        latitude,
+        longitude,
+        nb_players,
+        prompt,
+        user_pseudo
+    }
+`)
+    res.status(200).json(rooms) 
 }

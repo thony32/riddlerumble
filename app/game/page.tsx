@@ -13,28 +13,17 @@ const getAllRoom = async () => {
 }
 
 const Game = () => {
-    // const {
-    //     isPending: isAllRoomPending,
-    //     error: allRoomError,
-    //     data: allRoomData,
-    // } = useQuery({
-    //     queryKey: ["allRoom"],
-    //     queryFn: () => getAllRoom(),
-    //     staleTime: 100 * 60 * 60 * 24,
-    // })
+    const {
+        isPending: isAllRoomPending,
+        error: allRoomError,
+        data: allRoomData,
+    } = useQuery({
+        queryKey: ["allRoom"],
+        queryFn: () => getAllRoom(),
+        staleTime: 100 * 60 * 60 * 24,
+    })
 
-    const room_list = [
-        { id: "1", delay: 2, latitude: "", longitude: "", nb_players: 2, prompt: "Resaka be" },
-        { id: "2", delay: 5, latitude: "", longitude: "", nb_players: 2, prompt: "Resaka be" },
-        { id: "3", delay: 2, latitude: "", longitude: "", nb_players: 2, prompt: "Resaka be" },
-        { id: "4", delay: 5, latitude: "", longitude: "", nb_players: 2, prompt: "Resaka be" },
-    ]
-
-    return (
-        <div className="py-6">
-            <RoomList room_list={room_list} />
-        </div>
-    )
+    return <div className="py-6">{!isAllRoomPending && <RoomList room_list={allRoomData} />}</div>
 }
 
 export default Game
