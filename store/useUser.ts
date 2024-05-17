@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-type User = {
+export type User = {
     id: string
     email: string
     full_name: string
@@ -12,10 +12,10 @@ type User = {
 
 type UserState = {
     user: User
-    setUser: (user: any) => void
+    setUser: (user: User) => void
 }
 
 export const useUser = create<UserState>((set) => ({
     user: null,
-    setUser: (user: any) => set({ user }),
+    setUser: (user: User) => set({ user }),
 }))
