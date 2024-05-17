@@ -5,6 +5,15 @@ import { Avatar } from '@nextui-org/avatar';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 
+type Player = {
+    avatar: string
+    email: string
+    full_name: string
+    pseudo: string
+    score: number
+    nationality: string
+}
+
 const getAllUser = async () => {
     const response = await fetch('/api/getAllUser');
     if (!response.ok) {
@@ -67,7 +76,7 @@ const Ranking = () => {
                                 </td>
                             </tr>
                             :
-                            allUserData.map((player: any, index: any) => (
+                            allUserData?.map((player: Player, index: number) => (
                                 <tr
                                     key={index}
                                     className="border-b border-current"
