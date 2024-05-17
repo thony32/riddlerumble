@@ -44,7 +44,7 @@ const Heading = () => {
                 <Wordz />
                 <div className="translate-y-10 space-y-5">
                     <div>
-                        <h1 className="text-[9rem] font-title">Enigmap</h1>
+                        <h1 className="text-[9rem] font-title tracking-wider">Enigmap</h1>
                     </div>
                     <p className="text-center text-3xl max-w-3xl m-auto">
                         Embark on a mysterious journey through an interactive map, where each location holds a cryptic puzzle waiting to be solved in our enigma-filled gaming experience!
