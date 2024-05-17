@@ -3,6 +3,7 @@ import React, { useCallback, useState } from "react"
 import Map, { Marker, MarkerDragEvent } from "react-map-gl"
 import * as turf from '@turf/turf'
 import "mapbox-gl/dist/mapbox-gl.css"
+import { Button } from "@nextui-org/button"
 
 function Party() {
 
@@ -42,8 +43,11 @@ function Party() {
     return (
         <div className="w-full h-screen py-6 relative overflow-hidden">
             <div className="grid grid-cols-12 gap-3">
-                <div className="col-span-2">
+                <div className="col-span-2 bg-gray-600 relative">
                     <h1>Find the place</h1>
+                    <div className="absolute bottom-0 w-full py-2 flex justify-center">
+                        <Button className="bg-green-500 text-white font-semibold">Submit</Button>
+                    </div>
                 </div>
                 <div className="col-span-10 rounded-2xl">
                     <Map
