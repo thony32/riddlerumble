@@ -1,7 +1,6 @@
 import { useUser } from "@/store/useUser"
 import { Button } from "@nextui-org/button"
-import { useMutation } from "@tanstack/react-query"
-import { error } from "console"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import React from "react"
 
 const create_room = async (level: string, pseudo: string) => {
@@ -16,6 +15,7 @@ const create_room = async (level: string, pseudo: string) => {
 
 function BtnCreateRoom() {
     const user = useUser((state) => state.user)
+    const queryClient = useQueryClient()
     const createRoomMutation = useMutation({
         mutationKey: ["createRoom"],
         mutationFn: async (level: string) => {
@@ -26,12 +26,25 @@ function BtnCreateRoom() {
         },
         onSuccess: (data) => {
             console.log("Room created successfully! ", data)
+            queryClient.invalidateQueries({ queryKey: ["allRoom"], exact: true, refetchType: "active" })
         },
     })
     return (
-        <div className="grid grid-cols-2">
-            <Button onClick={() => createRoomMutation.mutate("")}>Create Low Level Room</Button>
-            <Button onClick={() => createRoomMutation.mutate("high-level")}>Create High Level Room</Button>
+        <div className="grid grid-cols-2 w-full gap-2">
+            <Button
+                size="lg"
+                onClick={() => createRoomMutation.mutate("")}
+                className="py-10"
+            >
+                Create Low Level Room
+            </Button>
+            <Button
+                size="lg"
+                onClick={() => createRoomMutation.mutate("high-level")}
+                className="py-10"
+            >
+                Create High Level Room
+            </Button>
         </div>
     )
 }
