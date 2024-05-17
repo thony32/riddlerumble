@@ -1,10 +1,11 @@
 "use client"
-import React, { useCallback, useState, useEffect } from "react"
-import Map, { Marker, MarkerDragEvent } from "react-map-gl"
+import React, { useCallback, useState, useEffect, useRef } from "react"
+import Map, { MapRef, Marker, MarkerDragEvent } from "react-map-gl"
 import * as turf from '@turf/turf'
 import "mapbox-gl/dist/mapbox-gl.css"
 import Countdown from "react-countdown"
 import { Button } from "@nextui-org/react";
+import Link from "next/link"
 
 const PARTY_START_TIME_KEY = 'partyStartTime';
 
@@ -24,6 +25,13 @@ function Party() {
             return <span className="text-3xl bg-base-200 px-2 rounded-lg">{formattedMinutes}:{formattedSeconds}</span>;
         }
     };
+
+
+    const mapRef = useRef() as any;
+
+    const flyToTarget = () => {
+        mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 });
+    }
 
     const [marker, setMarker] = useState({
         latitude: 18,
@@ -199,10 +207,13 @@ function Party() {
                             <div className="flex justify-center">
                                 {
                                     showTarget ?
-                                        <Button>Finished</Button>
+                                        <Link href="/game/room">
+                                            <Button>Finished</Button>
+                                        </Link>
                                         :
                                         <Button onClick={submitResult} className="bg-green-500 text-white font-semibold">Submit</Button>
                                 }
+                                <Button onPress={flyToTarget}>Zoom to target</Button>
                             </div>
                         </div>
                     </div>
@@ -215,6 +226,7 @@ function Party() {
                         />
                     </div>
                     <Map
+                        ref={mapRef}
                         mapStyle="mapbox://styles/mapbox/streets-v12"
                         initialViewState={{
                             longitude: 46,
