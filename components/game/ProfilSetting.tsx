@@ -1,5 +1,6 @@
 "use client"
 import getIpInformation from "@/services/getIpInformation"
+import { updatePseudo } from "@/services/user-action"
 import { useUser } from "@/store/useUser"
 import getCountryCode from "@/utils/getCountryCode"
 import getInitial from "@/utils/getInitials"
@@ -13,35 +14,25 @@ const getIpInfo = async () => {
     return ipInfo
 }
 
-const ProfilSetting = ({ user }: any) => {
+const ProfilSetting = () => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure()
-    const setUser = useUser((state: any) => state.setUser)
+    const setUser = useUser((state) => state.setUser)
+    const user = useUser((state) => state.user!)
     const [editPsedo, setEditPseudo] = useState(false)
     const [newPseudo, setNewPseudo] = useState(user.pseudo)
 
     const pseudoMutation = useMutation({
         mutationKey: ["pseudo"],
         mutationFn: async () => {
-            const response = await fetch("/api/updatePseudo", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ identity: user.id, pseudo: newPseudo }),
-            })
-
-            if (!response.ok) {
-                throw new Error("Failed to update pseudo")
-            }
-
-            return response.json()
+            const response = await updatePseudo(user.id, newPseudo)
+            return response
         },
         onError: (error) => {
             console.error(error)
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
             setEditPseudo(false)
-            setUser({ ...user, pseudo: newPseudo })
+            if (data.status === "ok") setUser({ ...user, pseudo: newPseudo })
         },
     })
 
@@ -58,6 +49,7 @@ const ProfilSetting = ({ user }: any) => {
         queryFn: () => getIpInfo(),
         staleTime: 1000 * 60 * 60 * 24,
     })
+
     return (
         <div>
             <svg
@@ -110,7 +102,7 @@ const ProfilSetting = ({ user }: any) => {
                                                 <Avatar
                                                     showFallback
                                                     name={getInitial(user.full_name)}
-                                                    src={user.avatar}
+                                                    src={user.avatar!}
                                                     className="w-32 h-32 text-large"
                                                 />
                                             </div>

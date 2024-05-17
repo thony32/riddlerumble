@@ -1,26 +1,33 @@
+"use client"
 import Navbar from "@/components/game/Navbar"
-import { auth } from "@/edgedb"
 import { redirect } from "next/navigation"
-import { cookies } from "next/headers"
-import UserAction from "@/services/user-action"
+import { getData } from "@/services/user-action"
 import { useUser } from "@/store/useUser"
+import { useQuery } from "@tanstack/react-query"
 
-export default async function GameLayout({
+export default function GameLayout({
     children,
 }: Readonly<{
     children: React.ReactNode
 }>) {
-    const session = auth.getSession()
-    if ((await session.isSignedIn()) == false) {
-        redirect("/")
+    const setUser = useUser((state) => state.setUser)
+    const { data, isPending } = useQuery({
+        queryKey: ["session"],
+        queryFn: async () => {
+            const { user, isSignedIn } = await getData()
+
+            setUser(user)
+            return isSignedIn
+        },
+    })
+
+    if (isPending) {
+        return <div>Loading...</div>
     }
 
-    const identityCookie = cookies().get("identity")?.value as string
-    const identity = identityCookie.replace(/"/g, "")
-    const user = await UserAction.getData(identity)
-    const setUser = useUser.getState().setUser
-
-    setUser({ ...user, id: identity })
+    if (!data) {
+        redirect("/")
+    }
 
     return (
         <div>
