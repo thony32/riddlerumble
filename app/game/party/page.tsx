@@ -1,6 +1,7 @@
 "use client"
 import React, { useCallback, useState } from "react"
 import Map, { Marker, MarkerDragEvent } from "react-map-gl"
+import * as turf from '@turf/turf'
 import "mapbox-gl/dist/mapbox-gl.css"
 
 function Party() {
@@ -18,7 +19,15 @@ function Party() {
     }, [])
 
     const onMarkerDragEnd = useCallback((event: MarkerDragEvent) => {
-        console.log(event.lngLat)
+        //  * marker player
+        var from = turf.point([event.lngLat.lng, event.lngLat.lat]);
+        // * marker goal
+        var to = turf.point([-100, 40]);
+        var options = { units: 'kilometers' };
+        // * distance between player and goal
+        var distance = turf.distance(from, to, options);
+
+        console.log(distance);
     }, [])
 
     return (
