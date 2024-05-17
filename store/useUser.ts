@@ -1,7 +1,17 @@
 import { create } from "zustand"
 
+type User = {
+    id: string
+    email: string
+    full_name: string
+    nationality: string
+    pseudo: string
+    avatar: string | null
+    score: number | null
+} | null
+
 type UserState = {
-    user: any
+    user: User
     setUser: (user: any) => void
 }
 
