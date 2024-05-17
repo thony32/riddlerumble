@@ -4,6 +4,8 @@ import UsersSVG from "./UsersSVG"
 import Link from "next/link"
 import React from "react"
 import BtnCreateRoom from "./BtnCreateRoom"
+import { useUser } from "@/store/useUser"
+import { useMutation } from "@tanstack/react-query"
 
 interface Room {
     id: string
@@ -20,8 +22,10 @@ interface Props {
 }
 
 const update_room = async (room: Room, pseudo: string) => {
+    const nbPlayersInt32 = room.nb_players + 1
+
     const response = await fetch("/api/updateRoom", {
-        body: JSON.stringify({ ...room, nb_players: room.nb_players + 1, user_pseudo: `${room.user_pseudo}, ${pseudo}` }),
+        body: JSON.stringify({ ...room, nb_players: nbPlayersInt32, user_pseudo: `${room.user_pseudo}, ${pseudo}` }),
         method: "PUT",
         headers: { "Content-Type": "application/json" },
     })
@@ -34,6 +38,19 @@ const update_room = async (room: Room, pseudo: string) => {
 }
 
 function RoomList({ room_list }: Props) {
+    const user = useUser((state) => state.user)
+    const updateRoomMutation = useMutation({
+        mutationKey: ["updateRoom"],
+        mutationFn: async (room: Room) => {
+            return await update_room(room, user?.pseudo || "")
+        },
+        onError: (error) => {
+            console.log(error)
+        },
+        onSuccess: (data) => {
+            console.log("Room updated successfully! ", data)
+        },
+    })
     return (
         <div className="min-h-[100vh] grid grid-cols-3">
             <div className="col-span-2 p-5 space-y-10">
@@ -56,6 +73,7 @@ function RoomList({ room_list }: Props) {
                                     size="lg"
                                     variant="shadow"
                                     color="primary"
+                                    onClick={() => updateRoomMutation.mutate(room)}
                                 >
                                     Join
                                 </Button>
