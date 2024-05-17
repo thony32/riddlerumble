@@ -7,13 +7,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         secretKey: process.env.EDGEDB_SECRET_KEY,
     })
 
-    const getUserData = e.select(e.Users, () => ({
+    const getUserData = e.select(e.Users, (user) => ({
         avatar: true,
         email: true,
         full_name: true,
         pseudo: true,
         score: true,
         nationality: true,
+        order_by: {
+            expression: user.score,
+            direction: e.DESC,
+        },
     }))
     const user = await getUserData.run(client)
     res.status(200).json(user)
