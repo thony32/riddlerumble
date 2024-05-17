@@ -4,7 +4,6 @@ import { Button } from "@nextui-org/button"
 import { Chip } from "@nextui-org/react"
 import Wordz from "../Misc/Wordz"
 import SvgMapDraw from "../Misc/SvgMapDraw"
-import { auth } from "@/edgedb"
 import { useQuery } from "@tanstack/react-query"
 import { getOAuthUrl, getSession } from "@/services/user-action"
 
@@ -20,7 +19,6 @@ const Heading = () => {
         queryKey: ["oauth_url"],
         queryFn: async () => {
             const urls = await getOAuthUrl()
-
             return urls
         },
     })
