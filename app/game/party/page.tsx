@@ -10,6 +10,7 @@ function Party() {
         latitude: 40,
         longitude: -100,
     })
+    const [distance, setDistance] = useState(0)
 
     const onMarkerDrag = useCallback((event: MarkerDragEvent) => {
         setMarker({
@@ -21,14 +22,22 @@ function Party() {
     const onMarkerDragEnd = useCallback((event: MarkerDragEvent) => {
         //  * marker player
         var from = turf.point([event.lngLat.lng, event.lngLat.lat]);
-        // * marker goal
+        // TODO marker goal (fetch from enigma API)
         var to = turf.point([-100, 40]);
         var options = { units: 'kilometers' };
         // * distance between player and goal
         var distance = turf.distance(from, to, options);
-
-        console.log(distance);
+        setDistance(distance)
     }, [])
+
+    // * scoring system
+    const calculateScoreDistance = (distance: number, maxDistance: number = 10000) => {
+        distance = Math.min(distance, maxDistance);
+        let score = 100 - (distance / maxDistance * 100);
+        score = Math.max(0, Math.min(100, score));
+
+        return Math.round(score);
+    }
 
     return (
         <div className="w-full h-screen py-6 relative overflow-hidden">
