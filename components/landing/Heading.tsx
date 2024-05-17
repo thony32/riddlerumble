@@ -1,12 +1,28 @@
+"use client"
 import Link from "next/link"
 import { Button } from "@nextui-org/button"
 import { Chip } from "@nextui-org/react"
 import Wordz from "../Misc/Wordz"
 import SvgMapDraw from "../Misc/SvgMapDraw"
-import { auth } from "@/edgedb"
+import { useQuery } from "@tanstack/react-query"
+import { getOAuthUrl, getSession } from "@/services/user-action"
 
-const Heading = async () => {
-    const session = auth.getSession();
+const Heading = () => {
+    const { data: isSignedIn, isPending: sessionPending } = useQuery({
+        queryKey: ["session"],
+        queryFn: async () => {
+            return await getSession()
+        },
+    })
+
+    const { data: urlsData, isPending: urlsPending } = useQuery({
+        queryKey: ["oauth_url"],
+        queryFn: async () => {
+            const urls = await getOAuthUrl()
+            return urls
+        },
+    })
+
     return (
         <div className="h-screen flex justify-center items-center relative">
             <div className="absolute right-0 bottom-4">
@@ -31,11 +47,12 @@ const Heading = async () => {
                         Embark on a mysterious journey through an interactive map, where each location holds a cryptic puzzle waiting to be solved in our enigma-filled gaming experience!
                     </p>
                     <div className="flex justify-center">
-                        {await session.isSignedIn() ? (
+                        {sessionPending || isSignedIn ? (
                             <Link href="/game">
                                 <Button
                                     className="flex items-center gap-2 bg-blue-500 text-white tracking-wider font-title group"
                                     size="lg"
+                                    isLoading={sessionPending}
                                 >
                                     <span className="font-bold">Play Now</span>
                                     <svg
@@ -46,11 +63,14 @@ const Heading = async () => {
                                     </svg>
                                 </Button>
                             </Link>
-                        ) :
+                        ) : (
                             <div className="flex gap-5 items-center">
                                 <span className="font-bold text-2xl tracking-wide text-primary">Get Started</span>
-                                <Link href={auth.getOAuthUrl("builtin::oauth_google")}>
-                                    <Button className="bg-blue-500 text-white" size="lg">
+                                <Link href={urlsData?.googleUrl ?? ""}>
+                                    <Button
+                                        className="bg-blue-500 text-white"
+                                        size="lg"
+                                    >
                                         <svg
                                             className="w-7 fill-current group-hover:scale-125 duration-100"
                                             viewBox="0 0 24 24"
@@ -60,8 +80,11 @@ const Heading = async () => {
                                     </Button>
                                 </Link>
                                 <label className="">Or</label>
-                                <Link href={auth.getOAuthUrl("builtin::oauth_discord")}>
-                                    <Button className="bg-indigo-600 text-white hover" size="lg">
+                                <Link href={urlsData?.discordUrl ?? ""}>
+                                    <Button
+                                        className="bg-indigo-600 text-white hover"
+                                        size="lg"
+                                    >
                                         <svg
                                             className="w-7 fill-current group-hover:scale-125 duration-100"
                                             viewBox="0 0 24 24"
@@ -71,7 +94,7 @@ const Heading = async () => {
                                     </Button>
                                 </Link>
                             </div>
-                        }
+                        )}
                     </div>
                 </div>
             </div>
