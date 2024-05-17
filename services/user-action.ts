@@ -8,9 +8,13 @@ const client = createClient({
     secretKey: process.env.EDGEDB_SECRET_KEY,
 })
 
-export async function getData() {
+export async function getSession() {
     const session = auth.getSession()
-    const isSignedIn = await session.isSignedIn()
+    return await session.isSignedIn()
+}
+
+export async function getData() {
+    const isSignedIn = await getSession()
     const identityCookie = cookies().get("identity")?.value as string
     const identity = identityCookie.replace(/"/g, "")
     const getUserData = e.select(e.Users, (user) => ({
@@ -25,6 +29,13 @@ export async function getData() {
     }))
     const user = await getUserData.run(client)
     return { user, isSignedIn }
+}
+
+export async function getOAuthUrl() {
+    const googleUrl = auth.getOAuthUrl("builtin::oauth_google")
+    const discordUrl = auth.getOAuthUrl("builtin::oauth_discord")
+
+    return { googleUrl, discordUrl }
 }
 
 export async function getLogoutUrl() {
