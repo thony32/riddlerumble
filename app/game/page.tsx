@@ -1,8 +1,9 @@
 "use client"
 import BtnCreateRoom from "@/components/game/BtnCreateRoom"
-import RoomList from "@/components/game/RoomList"
+import RoomList, { Room } from "@/components/game/RoomList"
 import { Skeleton } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
+import { useRouter } from "next/navigation"
 import React from "react"
 
 const getAllRoom = async () => {
@@ -15,13 +16,24 @@ const getAllRoom = async () => {
 }
 
 const Game = () => {
+    const router = useRouter()
     const {
         isPending: isAllRoomPending,
         error: allRoomError,
         data: allRoomData,
     } = useQuery({
         queryKey: ["allRoom"],
-        queryFn: () => getAllRoom(),
+        queryFn: async () => {
+            const data: Room[] = await getAllRoom()
+
+            const roomSelected = data.find((room) => room.nb_players == 4)
+            if (roomSelected) {
+                router.push(`/game/${roomSelected.id}`)
+                return []
+            }
+
+            return data
+        },
         staleTime: 100 * 60 * 60 * 24,
     })
 
@@ -34,9 +46,11 @@ const Game = () => {
                     <BtnCreateRoom />
                     {isAllRoomPending ? (
                         <>
-                            <Skeleton className="rounded w-full h-32" />
-                            <Skeleton className="rounded w-full h-32" />
-                            <Skeleton className="rounded w-full h-32" />
+                            <Skeleton className="rounded w-full h-28" />
+                            <Skeleton className="rounded w-full h-28" />
+                            <Skeleton className="rounded w-full h-28" />
+                            <Skeleton className="rounded w-full h-28" />
+                            <Skeleton className="rounded w-full h-28" />
                         </>
                     ) : (
                         <RoomList room_list={allRoomData} />

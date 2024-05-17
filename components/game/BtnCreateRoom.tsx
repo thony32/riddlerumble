@@ -30,11 +30,12 @@ function BtnCreateRoom() {
         },
     })
     return (
-        <div className="grid grid-cols-2 w-full gap-2">
+        <div className="grid grid-cols-2 w-full gap-4">
             <Button
                 size="lg"
                 onClick={() => createRoomMutation.mutate("")}
                 className="py-10"
+                color="warning"
             >
                 Create Low Level Room
             </Button>
@@ -42,6 +43,7 @@ function BtnCreateRoom() {
                 size="lg"
                 onClick={() => createRoomMutation.mutate("high-level")}
                 className="py-10"
+                color="danger"
             >
                 Create High Level Room
             </Button>
