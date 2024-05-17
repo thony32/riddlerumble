@@ -19,6 +19,20 @@ interface Props {
     room_list: Room[]
 }
 
+const update_room = async (room: Room) => {
+    const response = await fetch("/api/updateRoom", {
+        body: JSON.stringify({ ...room, nb_players: room.nb_players + 1 }),
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) {
+        throw new Error("Failed to join the room")
+    }
+
+    const data = await response.json()
+    return data
+}
+
 function RoomList({ room_list }: Props) {
     return (
         <div className="min-h-[100vh] grid grid-cols-3">
@@ -38,15 +52,13 @@ function RoomList({ room_list }: Props) {
                                 <div className="flex gap-3 text-3xl items-center">
                                     <UsersSVG className="size-16" /> <span>{room.nb_players} / 4</span>
                                 </div>
-                                <Link href={"/game/party"}>
-                                    <Button
-                                        size="lg"
-                                        variant="shadow"
-                                        color="primary"
-                                    >
-                                        Join
-                                    </Button>
-                                </Link>
+                                <Button
+                                    size="lg"
+                                    variant="shadow"
+                                    color="primary"
+                                >
+                                    Join
+                                </Button>
                             </div>
                             <p className="absolute bottom-1 right-4 text-white text-xs">ID {room.id}</p>
                         </Card>
