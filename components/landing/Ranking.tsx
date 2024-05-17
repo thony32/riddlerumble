@@ -45,8 +45,23 @@ const Ranking = () => {
                     {
                         isAllUserPending ?
                             <tr className="border-b border-current w-full">
-                                <td colSpan={4} className='py-2'>
+                                <td colSpan={1} className='py-2'>
                                     <div className='flex justify-center'>
+                                        <span className="loading loading-dots loading-md"></span>
+                                    </div>
+                                </td>
+                                <td colSpan={1} className='py-2'>
+                                    <div className='flex justify-center'>
+                                        <span className="loading loading-dots loading-md"></span>
+                                    </div>
+                                </td>
+                                <td colSpan={1} className='py-2'>
+                                    <div className='flex justify-start px-4'>
+                                        <span className="loading loading-dots loading-md"></span>
+                                    </div>
+                                </td>
+                                <td colSpan={1} className='py-2'>
+                                    <div className='flex justify-end px-4'>
                                         <span className="loading loading-dots loading-md"></span>
                                     </div>
                                 </td>
@@ -88,6 +103,17 @@ const Ranking = () => {
                                     <td className="px-4 py-2 text-right">{player.score}</td>
                                 </tr>
                             ))}
+                    {
+                        allUserError && (
+                            <tr className="border-b border-current w-full">
+                                <td colSpan={4} className='py-2'>
+                                    <div className='flex justify-center'>
+                                        <span className="text-red-400">Failed to fetch data</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        )
+                    }
                 </tbody>
             </table>
         </div>
