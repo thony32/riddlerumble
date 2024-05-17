@@ -1,6 +1,7 @@
 "use client"
 import getIpInformation from "@/services/getIpInformation"
 import { useUser } from "@/store/useUser"
+import getCountryCode from "@/utils/getCountryCode"
 import getInitial from "@/utils/getInitials"
 import { Modal, ModalContent, ModalBody, ModalFooter, Button, useDisclosure, Avatar, Input } from "@nextui-org/react"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -96,7 +97,7 @@ const ProfilSetting = ({ user }: any) => {
                                                     <span className="loading loading-dots loading-md"></span>
                                                 ) : (
                                                     <img
-                                                        src={ipInfoData?.flag}
+                                                        src={`https://flagsapi.com/${ipInfoData?.localisation.countryCode}/shiny/64.png`}
                                                         alt={ipInfoData?.localisation.country}
                                                         className="w-10 h-10"
                                                     />
