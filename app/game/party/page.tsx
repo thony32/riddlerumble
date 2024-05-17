@@ -229,7 +229,7 @@ function Party() {
                         initialViewState={{
                             longitude: 46,
                             latitude: -18,
-                            zoom: 2,
+                            zoom: 4,
                         }}
                         onClick={clickPostion}
                         mapboxAccessToken="pk.eyJ1IjoidGhvbnkzMiIsImEiOiJjbHc5azQ5bWQwNWhjMmtxa2Q5dTcyNWxhIn0.pXpGUWi_9wWY3zwfflmzSQ"
