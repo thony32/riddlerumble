@@ -1,5 +1,4 @@
 "use client"
-import Head from "next/head"
 import React, { useCallback, useState } from "react"
 import Map, { Marker, MarkerDragEvent } from "react-map-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
@@ -24,12 +23,6 @@ function Party() {
 
     return (
         <div className="w-full h-screen py-6 relative overflow-hidden">
-            <Head>
-                <link
-                    href="https://api.tiles.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css"
-                    rel="stylesheet"
-                />
-            </Head>
             <div className="grid grid-cols-12 gap-3">
                 <div className="col-span-2">
                     <h1>Find the place</h1>
