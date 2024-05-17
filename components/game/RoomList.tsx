@@ -19,9 +19,9 @@ interface Props {
     room_list: Room[]
 }
 
-const update_room = async (room: Room) => {
+const update_room = async (room: Room, pseudo: string) => {
     const response = await fetch("/api/updateRoom", {
-        body: JSON.stringify({ ...room, nb_players: room.nb_players + 1 }),
+        body: JSON.stringify({ ...room, nb_players: room.nb_players + 1, user_pseudo: `${room.user_pseudo}, ${pseudo}` }),
         method: "PUT",
         headers: { "Content-Type": "application/json" },
     })
