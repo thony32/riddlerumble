@@ -5,6 +5,7 @@ import getCountryCode from "@/utils/getCountryCode"
 import getInitial from "@/utils/getInitials"
 import { Modal, ModalContent, ModalBody, ModalFooter, Button, useDisclosure, Avatar, Input } from "@nextui-org/react"
 import { useMutation, useQuery } from "@tanstack/react-query"
+import Image from "next/image"
 import { useState } from "react"
 
 const getIpInfo = async () => {
@@ -96,9 +97,11 @@ const ProfilSetting = ({ user }: any) => {
                                                 {isIpInfoPending ? (
                                                     <span className="loading loading-dots loading-md"></span>
                                                 ) : (
-                                                    <img
+                                                    <Image
+                                                        width={64}
+                                                        height={64}
                                                         src={`https://flagsapi.com/${ipInfoData?.localisation.countryCode}/shiny/64.png`}
-                                                        alt={ipInfoData?.localisation.country}
+                                                        alt={ipInfoData?.localisation.country as string}
                                                         className="w-10 h-10"
                                                     />
                                                 )}

@@ -3,6 +3,7 @@ import getCountryCode from '@/utils/getCountryCode';
 import getInitial from '@/utils/getInitials';
 import { Avatar } from '@nextui-org/avatar';
 import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 
 const getAllUser = async () => {
     const response = await fetch('/api/getAllUser');
@@ -71,7 +72,9 @@ const Ranking = () => {
                                     </td>
                                     <td className="px-4 py-2">
                                         <div className='flex gap-3 items-center'>
-                                            <img
+                                            <Image
+                                                width={64}
+                                                height={64}
                                                 src={`https://flagsapi.com/${getCountryCode(player.nationality)}/shiny/64.png`}
                                                 alt={getInitial(player.full_name)}
                                                 className="w-7 h-7"
