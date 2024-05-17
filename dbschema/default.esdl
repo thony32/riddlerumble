@@ -30,7 +30,7 @@ module default {
   };
 
   type Room {
-    required property delay -> int32;
+    required property delay -> int64;
     required property latitude -> float32;
     required property longitude -> float32;
     required property nb_players -> int16;
