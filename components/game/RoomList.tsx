@@ -3,6 +3,7 @@ import { Card } from "@nextui-org/react"
 import UsersSVG from "./UsersSVG"
 import Link from "next/link"
 import React from "react"
+import BtnCreateRoom from "./BtnCreateRoom"
 
 interface Room {
     id: string
@@ -22,7 +23,9 @@ function RoomList({ room_list }: Props) {
         <div className="min-h-[100vh] grid grid-cols-3">
             <div className="col-span-2 p-5 space-y-10">
                 <h1 className="text-3xl text-center">List of room</h1>
+
                 <div className="flex flex-col items-center w-full gap-4">
+                    <BtnCreateRoom />
                     {room_list.map((room: Room) => (
                         <Card
                             key={room.id}
