@@ -36,6 +36,7 @@ module default {
     required property nb_players -> int16;
     required property prompt -> str;
     required property user_pseudo -> str;
+    required property level -> str;
   };
 
   type Player_stats {
