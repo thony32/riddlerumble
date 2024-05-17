@@ -11,7 +11,9 @@ const PARTY_START_TIME_KEY = 'partyStartTime';
 
 function Party() {
     const Completionist = () => {
+        localStorage.removeItem(PARTY_START_TIME_KEY);
         setShowTarget(true);
+        mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 });
         return <span></span>
     };
 
@@ -28,11 +30,6 @@ function Party() {
 
 
     const mapRef = useRef() as any;
-
-    const flyToTarget = () => {
-        mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 });
-    }
-
     const [marker, setMarker] = useState({
         latitude: 18,
         longitude: 46,
@@ -120,7 +117,9 @@ function Party() {
         const totalScore = Math.round((scoreDistance * distanceWeight + timeScore * timeWeight) / (distanceWeight + timeWeight));
         setShowTarget(true);
         setTotalScore(totalScore);
+        mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 });
         setDelay(0);
+        localStorage.removeItem(PARTY_START_TIME_KEY);
     };
 
     if (startTime === null) {
@@ -213,7 +212,6 @@ function Party() {
                                         :
                                         <Button onClick={submitResult} className="bg-green-500 text-white font-semibold">Submit</Button>
                                 }
-                                <Button onPress={flyToTarget}>Zoom to target</Button>
                             </div>
                         </div>
                     </div>
