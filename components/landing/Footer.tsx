@@ -2,7 +2,7 @@ import Image from "next/image"
 
 const Footer = () => {
     return (
-        <div className="px-[10%] py-10">
+        <div className="px-[10%] py-10 bg-base-200/20">
             <div className="text-center my-20">
                 <h1 className="font-title text-7xl">Enigmap</h1>
             </div>

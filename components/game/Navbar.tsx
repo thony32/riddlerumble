@@ -8,7 +8,7 @@ const Navbar = () => {
     const user = useUser((state) => state.user)
 
     return (
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center border-b-1 border-current pb-4">
             <div>
                 <h1 className="text-2xl">Enigmap</h1>
             </div>

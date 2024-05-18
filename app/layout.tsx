@@ -30,7 +30,7 @@ export default function RootLayout({
                             {children}
                         </ReactQueryProvider>
                     </main>
-                    <footer>
+                    <footer className="mt-20">
                         <Footer />
                     </footer>
                     {/* theme handler */}
