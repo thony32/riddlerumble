@@ -6,10 +6,36 @@ import "mapbox-gl/dist/mapbox-gl.css"
 import Countdown, { CountdownRendererFn } from "react-countdown"
 import { Button } from "@nextui-org/react"
 import Link from "next/link"
+import { useQuery } from "@tanstack/react-query"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
+const fetchRoom = async (roomId: string) => {
+    const response = await fetch('/api/getRoom', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ room_id: roomId })
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch room data');
+    }
+    return response.json();
+};
+
 function Party({ params }: { params: { id: string } }) {
+    const {
+        isPending: isRoomPending,
+        data: roomData,
+    } = useQuery({
+        queryKey: ["roomData"],
+        queryFn: () => fetchRoom(params.id),
+        staleTime: 1000 * 60 * 60 * 24,
+    })
+
+    console.log(roomData);
+
     const Completionist = () => {
         localStorage.removeItem(PARTY_START_TIME_KEY)
         setShowTarget(true)
@@ -155,6 +181,8 @@ function Party({ params }: { params: { id: string } }) {
         )
     }
 
+
+
     return (
         <div className="w-full h-screen py-6 relative overflow-hidden">
             <div className="grid grid-cols-12 gap-10">
@@ -194,10 +222,14 @@ function Party({ params }: { params: { id: string } }) {
                                 />
                             </g>
                         </svg>
-                        <p>1- It is located in Europe.</p>
-                        <p>2- The city won 6 champions league titles in the UEFA football club competition.</p>
-                        <p>3- A place where Oktoberfest is a special party.</p>
-                        <p>4- The favorite drink here is Beer</p>
+                        {
+                            isRoomPending ?
+                                <span className="loading loading-bars loading-md"></span>
+                                :
+                                <>
+                                    {roomData.prompt}
+                                </>
+                        }
                         <svg
                             className="w-full rotate-180"
                             zoomAndPan="magnify"
