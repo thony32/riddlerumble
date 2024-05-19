@@ -1,5 +1,6 @@
 "use client"
 import BtnCreateRoom from "@/components/game/BtnCreateRoom"
+import PlayerProfil from "@/components/game/PlayerProfil"
 import RoomList, { Room } from "@/components/game/RoomList"
 import { Skeleton } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
@@ -59,6 +60,9 @@ const Game = () => {
             </div>
             <div className="p-5 space-y-10">
                 <h1 className="text-3xl text-center">Vos Statistiques</h1>
+                <div className="h-[80dvh] overflow-y-auto">
+                    <PlayerProfil />
+                </div>
             </div>
         </div>
     )

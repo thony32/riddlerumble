@@ -1,7 +1,6 @@
 import getInitial from "@/utils/getInitials"
 import { Avatar } from "@nextui-org/avatar"
 import BtnLogout from "./BtnLogout"
-import ProfilSetting from "./ProfilSetting"
 import { useUser } from "@/store/useUser"
 
 const Navbar = () => {
@@ -17,6 +16,7 @@ const Navbar = () => {
                     {user != null && (
                         <>
                             <Avatar
+                                isBordered color="primary"
                                 showFallback
                                 name={getInitial(user.full_name)}
                                 src={user.avatar!}
@@ -24,9 +24,6 @@ const Navbar = () => {
                             <div className="flex flex-col text-right">
                                 <span>{user.full_name}</span>
                                 <span className="font-sans text-xs font-semibold">{user.pseudo}</span>
-                            </div>
-                            <div className="absolute -top-2 -left-3 z-50">
-                                <ProfilSetting />
                             </div>
                         </>
                     )}
