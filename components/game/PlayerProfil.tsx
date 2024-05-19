@@ -3,10 +3,36 @@ import { useUser } from "@/store/useUser"
 import getCountryCode from "@/utils/getCountryCode"
 import getInitial from "@/utils/getInitials"
 import { Avatar } from "@nextui-org/avatar"
+import { useQuery } from "@tanstack/react-query"
 import Image from "next/image"
+
+const getAllUser = async () => {
+    const response = await fetch('/api/getAllUser');
+    if (!response.ok) {
+        throw new Error('Failed to fetch IP info');
+    }
+    const jsonData = await response.json();
+    return jsonData;
+}
 
 const PlayerProfil = () => {
     const user = useUser((state) => state.user)
+
+    const {
+        isPending: isAllUserPending,
+        data: allUserData,
+    } = useQuery({
+        queryKey: ["allUser"],
+        queryFn: () => getAllUser(),
+        staleTime: 1000 * 60 * 60 * 24,
+    })
+
+    const findUserIndex = (pseudo: string) => {
+        return allUserData.findIndex((user: any) => user.pseudo === pseudo);
+    };
+
+    const rank = findUserIndex(user?.pseudo as string) + 1;
+
     return (
         <>
             {
@@ -51,7 +77,14 @@ const PlayerProfil = () => {
                                         <path d="M20 17H15.33V22H22V19C22 17.9 21.1 17 20 17Z" stroke-width="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                     <span className="text-2xl text-primary">
-                                        1 / 10 players
+                                        {
+                                            isAllUserPending ?
+                                                <span className="loading loading-dots loading-md"></span>
+                                                :
+                                                <>
+                                                    {rank} / {allUserData.length} players
+                                                </>
+                                        }
                                     </span>
                                 </div>
                             </div>
