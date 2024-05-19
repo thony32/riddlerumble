@@ -1,11 +1,11 @@
 import { create } from "zustand"
 
 export type User = {
-    id: string
-    email: string
-    full_name: string
-    nationality: string
-    pseudo: string
+    id: string | null
+    email: string | null
+    full_name: string | null
+    nationality: string | null
+    pseudo: string | null
     avatar: string | null
     score: number | null
 } | null
