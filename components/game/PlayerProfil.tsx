@@ -5,6 +5,7 @@ import getInitial from "@/utils/getInitials"
 import { Avatar } from "@nextui-org/avatar"
 import { useQuery } from "@tanstack/react-query"
 import Image from "next/image"
+import { useEffect, useState } from "react"
 
 const getAllUser = async () => {
     const response = await fetch('/api/getAllUser');
@@ -26,13 +27,6 @@ const PlayerProfil = () => {
         queryFn: () => getAllUser(),
         staleTime: 1000 * 60 * 60 * 24,
     })
-
-    const findUserIndex = (pseudo: string) => {
-        return allUserData.findIndex((user: any) => user.pseudo === pseudo);
-    };
-
-    const rank = findUserIndex(user?.pseudo as string) + 1;
-
     return (
         <>
             {
@@ -74,7 +68,7 @@ const PlayerProfil = () => {
                                     <svg className="w-8 stroke-primary" viewBox="0 0 24 24" fill="none">
                                         <path d="M8.67 14H4C2.9 14 2 14.9 2 16V22H8.67V14Z" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                                         <path d="M13.33 10H10.66C9.56003 10 8.66003 10.9 8.66003 12V22H15.33V12C15.33 10.9 14.44 10 13.33 10Z" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M20 17H15.33V22H22V19C22 17.9 21.1 17 20 17Z" stroke-width="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M20 17H15.33V22H22V19C22 17.9 21.1 17 20 17Z" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                     <span className="text-2xl text-primary">
                                         {
@@ -82,7 +76,7 @@ const PlayerProfil = () => {
                                                 <span className="loading loading-dots loading-md"></span>
                                                 :
                                                 <>
-                                                    {rank} / {allUserData.length} players
+                                                    {allUserData.findIndex((user: any) => user.pseudo === user.pseudo) + 1} / {allUserData.length} players
                                                 </>
                                         }
                                     </span>
