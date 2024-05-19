@@ -11,7 +11,7 @@ export type User = {
 } | null
 
 type UserState = {
-    user: User
+    user: any
     setUser: (user: User) => void
 }
 
