@@ -49,6 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const result: any = await client.query(query, params)
 
         pusherServer.trigger(id, "join-room", {
+            id: id,
             nb_players: nb_players,
             user_pseudo: user_pseudo
         })

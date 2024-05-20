@@ -55,8 +55,10 @@ function RoomCard({ room: room_props }: { room: Room }) {
     })
 
     useEffect(() => {
-        const handleJoinRoom = ({ nb_players, user_pseudo }: { nb_players: number; user_pseudo: string }) => {
-            setRoom((prevRoom) => ({ ...prevRoom, nb_players, user_pseudo }))
+        const handleJoinRoom = ({ id, nb_players, user_pseudo }: { id: string; nb_players: number; user_pseudo: string }) => {
+            if (id == room_props.id) {
+                setRoom((prevRoom) => ({ ...prevRoom, nb_players, user_pseudo }))
+            }
         }
 
         pusherClient.subscribe(room_props.id)
