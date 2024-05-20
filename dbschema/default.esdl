@@ -10,8 +10,8 @@ module default {
   );
   
   type Temp_room {
-    required id_room: Room;
-    required id_user: Users;
+    id_room: Room;
+    id_user: Users;
     required property latitude -> float32;
     required property longitude -> float32;
     required property time -> str;
