@@ -7,10 +7,29 @@ import { Button } from "@nextui-org/button"
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/modal"
 import { Input, Select, SelectItem } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
+import { useFormik } from "formik"
 import Image from "next/image"
+import { useState } from "react"
+import * as Yup from "yup"
+
+const validationSchema = Yup.object({
+    pseudo: Yup.string().required("Pseudo is required"),
+    full_name: Yup.string().required("Full name is required"),
+    nationality: Yup.string().required("Nationality is required"),
+})
+
 
 const getAllUser = async () => {
     const response = await fetch('/api/getAllUser');
+    if (!response.ok) {
+        throw new Error('Failed to fetch IP info');
+    }
+    const jsonData = await response.json();
+    return jsonData;
+}
+
+const getAllCountry = async () => {
+    const response = await fetch('/api/getAllCountry');
     if (!response.ok) {
         throw new Error('Failed to fetch IP info');
     }
@@ -30,7 +49,54 @@ const PlayerProfil = () => {
         staleTime: 1000 * 60 * 60 * 24,
     })
 
+    const {
+        isPending: isCountryPending,
+        data: countryData,
+    } = useQuery({
+        queryKey: ["countryData"],
+        queryFn: () => getAllCountry(),
+        staleTime: 1000 * 60 * 60 * 24,
+    })
+
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [isUpdating, setIsUpdating] = useState(false)
+
+    const formik = useFormik({
+        initialValues: {
+            pseudo: user.pseudo,
+            full_name: user.full_name,
+            nationality: user.nationality
+        },
+        validationSchema: validationSchema,
+        onSubmit: async (values, { resetForm }) => {
+            try {
+                setIsUpdating(true);
+                const response = await fetch('/api/your-api-route', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: user.id,
+                        pseudo: user.pseudo,
+                        full_name: user.full_name,
+                        nationality: user.nationality
+                    })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    resetForm()
+                } else {
+                    console.error('Update failed:', result);
+                }
+            } catch (error) {
+                console.error('An error occurred:', error);
+            } finally {
+                setIsUpdating(false);
+            }
+            console.log(values);
+        }
+    })
     return (
         <>
             {
@@ -64,31 +130,45 @@ const PlayerProfil = () => {
                                         {(onClose) => (
                                             <>
                                                 <ModalHeader className="flex flex-col gap-1">Update profil info</ModalHeader>
-                                                <ModalBody>
-                                                    <div className="grid grid-cols-2 gap-5">
-                                                        <Input type="text" variant="underlined" label="Pseudo" />
-                                                        <Input type="text" variant="underlined" label="Full name" />
-                                                    </div>
-                                                    <div>
-                                                        <Select
-                                                            variant="underlined"
-                                                            label="Select country"
-                                                            className="max-w-xs"
-                                                        >
-                                                            <SelectItem key={"MG"} value={"MG"}>
-                                                                Madagascar, MG
-                                                            </SelectItem>
-                                                        </Select>
-                                                    </div>
-                                                </ModalBody>
-                                                <ModalFooter>
-                                                    <Button variant="light" onPress={onClose}>
-                                                        Close
-                                                    </Button>
-                                                    <Button color="primary" onPress={onClose}>
-                                                        Update
-                                                    </Button>
-                                                </ModalFooter>
+                                                <form onSubmit={formik.handleSubmit}>
+                                                    <ModalBody>
+                                                        <div className="grid grid-cols-2 gap-5">
+                                                            <Input type="text" variant="underlined" label="Pseudo" {...formik.getFieldProps("pseudo")} />
+                                                            <Input type="text" variant="underlined" label="Full name" {...formik.getFieldProps("full_name")} />
+                                                        </div>
+                                                        <div className="grid grid-cols-2 gap-5">
+                                                            <Input readOnly type="text" variant="underlined" label="Nationality" {...formik.getFieldProps("nationality")} />
+                                                            <Select
+                                                                variant="underlined"
+                                                                label="Select country"
+                                                                className="w-full"
+                                                                value={formik.values.nationality}
+                                                                onChange={(e) => formik.setFieldValue('nationality', e.target.value)}
+                                                            >
+                                                                {
+                                                                    isCountryPending ?
+                                                                        <SelectItem key={"0"}>
+                                                                            <span className="loading loading-dots loading-md"></span>
+                                                                        </SelectItem>
+                                                                        :
+                                                                        countryData && countryData.data.map((country: any) => (
+                                                                            <SelectItem className="flex justify-between" key={country.name + ', ' + country.Iso2} value={country.name + ', ' + country.Iso2}>
+                                                                                {country.name + ', ' + country.Iso2}
+                                                                            </SelectItem>
+                                                                        ))
+                                                                }
+                                                            </Select>
+                                                        </div>
+                                                    </ModalBody>
+                                                    <ModalFooter>
+                                                        <Button variant="light" onPress={onClose}>
+                                                            Close
+                                                        </Button>
+                                                        <Button type="submit" color="primary">
+                                                            Update
+                                                        </Button>
+                                                    </ModalFooter>
+                                                </form>
                                             </>
                                         )}
                                     </ModalContent>
