@@ -51,7 +51,7 @@ const create_player_stat = async (score: number, id_user: string, id_room: strin
 
 const getTempRoom = async (id_room: string) => {
     const response = await fetch("/api/getTempRoomPerRoom", {
-        body: JSON.stringify(id_room),
+        body: JSON.stringify({ id_room }),
         method: "POST",
         headers: { "Content-Type": "application/json" },
     })
@@ -157,7 +157,7 @@ function Party({ params }: { params: { id: string } }) {
                                                                 <Avatar
                                                                     className="w-5 h-5"
                                                                     showFallback
-                                                                    name={getInitial(tempRoom.id_user.full_name)}
+                                                                    name={tempRoom.id_user.pseudo}
                                                                     src={tempRoom.id_user.avatar}
                                                                     alt="Avatar"
                                                                 />
@@ -165,7 +165,7 @@ function Party({ params }: { params: { id: string } }) {
                                                                     width={64}
                                                                     height={64}
                                                                     src={`https://flagsapi.com/${getCountryCode(tempRoom.id_user.nationality)}/shiny/64.png`}
-                                                                    alt={getInitial(tempRoom.id_user.full_name)}
+                                                                    alt={tempRoom.id_user.pseudo}
                                                                     className="w-4"
                                                                 />
                                                             </div>
@@ -338,25 +338,25 @@ function Party({ params }: { params: { id: string } }) {
     }
 
     // NOTE: prevent dev tools and context menus
-    // useEffect(() => {
-    //     const handleContextMenu = (e: MouseEvent) => {
-    //         e.preventDefault()
-    //     }
+    useEffect(() => {
+        const handleContextMenu = (e: MouseEvent) => {
+            e.preventDefault()
+        }
 
-    //     const handleKeyDown = (e: KeyboardEvent) => {
-    //         if ((e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.key === "u") || e.key === "F12") {
-    //             e.preventDefault()
-    //         }
-    //     }
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.key === "u") || e.key === "F12") {
+                e.preventDefault()
+            }
+        }
 
-    //     document.addEventListener("contextmenu", handleContextMenu)
-    //     document.addEventListener("keydown", handleKeyDown)
+        document.addEventListener("contextmenu", handleContextMenu)
+        document.addEventListener("keydown", handleKeyDown)
 
-    //     return () => {
-    //         document.removeEventListener("contextmenu", handleContextMenu)
-    //         document.removeEventListener("keydown", handleKeyDown)
-    //     }
-    // }, [])
+        return () => {
+            document.removeEventListener("contextmenu", handleContextMenu)
+            document.removeEventListener("keydown", handleKeyDown)
+        }
+    }, [])
 
     if (startTime === null) {
         return (
