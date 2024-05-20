@@ -100,12 +100,17 @@ const Game = () => {
                             <Skeleton className="rounded-lg w-full h-44" />
                             <Skeleton className="rounded-lg w-full h-44" />
                             <Skeleton className="rounded-lg w-full h-44" />
-                            <Skeleton className="rounded-lg w-full h-44" />
-                            <Skeleton className="rounded-lg w-full h-44" />
                         </div>
                     ) : (
                         <RoomList room_list={allRooms} />
                     )}
+                    {
+                        allRooms.length == 0 && !isInitialRoomsPending && (
+                            <div className="text-center text-current/50 my-5 text-xl">
+                                No room available yet !
+                            </div>
+                        )
+                    }
                 </div>
             </div>
             <div className="p-5 space-y-10">
