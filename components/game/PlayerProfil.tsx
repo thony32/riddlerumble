@@ -176,7 +176,7 @@ const PlayerProfil = () => {
                             </div>
                             <h1 className="text-3xl">{user.pseudo}</h1>
                             <p>{user.full_name}</p>
-                            <p className="opacity-30">{user.email}</p>
+                            <p className="opacity-30 break-words">{user.email}</p>
                             <hr className="my-5" />
                             <div className="space-y-1">
                                 <div className="flex justify-between items-center">

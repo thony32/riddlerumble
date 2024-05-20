@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import React, { useCallback, useState, useEffect, useRef } from "react"
 import Map, { MapMouseEvent, MapRef, Marker, MarkerDragEvent } from "react-map-gl"
