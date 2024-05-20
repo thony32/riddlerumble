@@ -16,10 +16,22 @@ const create_room = async (level: string, pseudo: string) => {
 
 function BtnCreateRoom() {
     const user = useUser((state) => state.user)
-    const createRoomMutation = useMutation({
-        mutationKey: ["createRoom"],
-        mutationFn: async (level: string) => {
-            return await create_room(level, user?.pseudo || "")
+    const createLowMutation = useMutation({
+        mutationKey: ["createLow"],
+        mutationFn: async () => {
+            return await create_room("", user?.pseudo || "")
+        },
+        onError: (error) => {
+            console.log(error)
+        },
+        onSuccess: (data) => {
+            console.log("Room created successfully! ", data)
+        },
+    })
+    const createHighMutation = useMutation({
+        mutationKey: ["createHigh"],
+        mutationFn: async () => {
+            return await create_room("high-level", user?.pseudo || "")
         },
         onError: (error) => {
             console.log(error)
@@ -58,22 +70,34 @@ function BtnCreateRoom() {
                                 <div className="grid h-20 flex-grow card bg-base-300 rounded-box place-items-center">
                                     <Button
                                         size="lg"
-                                        onClick={() => createRoomMutation.mutate("")}
+                                        onClick={() => createLowMutation.mutate()}
                                         className="py-10"
                                         color="warning"
                                     >
-                                        <span>Low Level Room</span>
+                                        {createLowMutation.isPending ? (
+                                            <div className="flex justify-center">
+                                                <span className="loading loading-dots loading-md"></span>
+                                            </div>
+                                        ) : (
+                                            <span>Low Level Room</span>
+                                        )}
                                     </Button>
                                 </div>
                                 <div className="divider divider-horizontal">OR</div>
                                 <div className="grid h-20 flex-grow card bg-base-300 rounded-box place-items-center">
                                     <Button
                                         size="lg"
-                                        onClick={() => createRoomMutation.mutate("high-level")}
+                                        onClick={() => createHighMutation.mutate()}
                                         className="py-10"
                                         color="danger"
                                     >
-                                        High Level Room
+                                        {createHighMutation.isPending ? (
+                                            <div className="flex justify-center">
+                                                <span className="loading loading-dots loading-md"></span>
+                                            </div>
+                                        ) : (
+                                            <span>High Level Room</span>
+                                        )}
                                     </Button>
                                 </div>
                             </div>
