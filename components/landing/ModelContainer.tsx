@@ -32,7 +32,7 @@ const ModelContainer = () => {
         invokePlanet()
     }
     return (
-        <div className="h-screen">
+        <div className="h-screen max-md:-translate-y-16">
             <Suspense fallback={<Loading />}>
                 <Canvas>
                     <ambientLight

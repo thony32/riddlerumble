@@ -34,7 +34,7 @@ export default function RootLayout({
                         <Footer />
                     </footer>
                     {/* theme handler */}
-                    <div className="fixed z-50 bottom-0 left-[47%] py-1 px-3">
+                    <div className="fixed z-50 bottom-0 left-[50%] -translate-x-[50%] py-1 px-3">
                         <ThemeHandler />
                     </div>
                 </NextUIProvider>

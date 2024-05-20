@@ -36,11 +36,11 @@ const Ranking = () => {
     })
 
     return (
-        <div className="grid grid-cols-2 px-[10%] gap-10">
+        <div className="flex flex-col xl:grid xl:grid-cols-2 px-[10%] gap-10">
             <div>
-                <div className="px-4 py-2 flex items-center border-b border-current">
-                    <div className="flex-1 font-bold text-xl">ENIGMAP</div>
-                    <div className='text-xl'>INTERNATIONAL RANKING</div>
+                <div className="px-2 py-2 flex items-center border-b border-current">
+                    <div className="flex-1 font-bold text-lg xl:text-xl">ENIGMAP</div>
+                    <div className='text-lg xl:text-xl'>INTERNATIONAL RANKING</div>
                 </div>
                 <table className="w-full text-sm">
                     <thead>
@@ -128,7 +128,7 @@ const Ranking = () => {
                 </table>
             </div>
             <div className='flex items-center relative'>
-                <h1 className='text-right text-8xl'>
+                <h1 className='text-right text-4xl md:text-6xl xl:text-8xl'>
                     Player Rankings: Discover <span className='text-primary'>the top</span> scores in real time!
                 </h1>
             </div>
