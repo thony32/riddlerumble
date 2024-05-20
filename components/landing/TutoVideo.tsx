@@ -6,7 +6,7 @@ const TutoVideo = () => {
     return (
         <div className="flex flex-col justify-center gap-5 xl:grid xl:grid-cols-2 xl:gap-0 xl:h-screen">
             <div className="flex items-center">
-                <div className="px-2 space-y-5">
+                <div className="space-y-5">
                     <div className="flex flex-col items-center xl:items-start gap-4">                        
                         <h1 className="text-4xl md:text-7xl font-extrabold font-title">What is Enigmap ?</h1>
                         <p className="md:w-3/4 xl:w-2/3 md:text-lg">
