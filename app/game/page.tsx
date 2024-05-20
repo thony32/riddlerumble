@@ -37,7 +37,7 @@ const StatsDrawer = () => {
                     htmlFor="my-drawer-2"
                     className="btn btn-primary drawer-button lg:hidden"
                 >
-                    Open drawer
+                    Stats
                 </label>
             </div>
             <div className="drawer-side">
