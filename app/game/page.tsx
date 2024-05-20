@@ -1,7 +1,8 @@
 "use client"
 import BtnCreateRoom from "@/components/game/BtnCreateRoom"
 import PlayerProfil from "@/components/game/PlayerProfil"
-import RoomList, { Room } from "@/components/game/RoomList"
+import RoomCard from "@/components/game/RoomCard"
+import RoomList, { Room } from "@/components/game/RoomCard"
 import { pusherClient } from "@/lib/pusher"
 import { Skeleton } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
@@ -102,15 +103,17 @@ const Game = () => {
                             <Skeleton className="rounded-lg w-full h-44" />
                         </div>
                     ) : (
-                        <RoomList room_list={allRooms} />
+                        // <RoomList room_list={allRooms} />
+                        allRooms.map((room: Room) => {
+                            return (
+                                <RoomCard
+                                    room={room}
+                                    key={room.id}
+                                />
+                            )
+                        })
                     )}
-                    {
-                        allRooms.length == 0 && !isInitialRoomsPending && (
-                            <div className="text-center text-current/50 my-5 text-xl">
-                                No room available yet !
-                            </div>
-                        )
-                    }
+                    {allRooms.length == 0 && !isInitialRoomsPending && <div className="text-center text-current/50 my-5 text-xl">No room available yet !</div>}
                 </div>
             </div>
             <div className="p-5 space-y-10">

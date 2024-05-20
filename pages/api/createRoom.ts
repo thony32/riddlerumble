@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import e, { createClient } from "@/dbschema/edgeql-js"
 import { pusherServer } from "@/lib/pusher"
-import { Room } from "@/components/game/RoomList"
+import { Room } from "@/components/game/RoomCard"
 
 const room_api = async (level: string) => {
     const response = await fetch(`https://ia-codeipsum.vercel.app/${level}`, {

@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { createClient } from "@/dbschema/edgeql-js"
+import { pusherServer } from "@/lib/pusher"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'PUT') {
@@ -23,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Construction de la requête de mise à jour
         const query = `
-            update Room
+        update Room
             filter .id = <uuid>$id
             set {
                 delay := <int32>$delay,
@@ -45,7 +46,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             user_pseudo: user_pseudo ?? null
         }
 
-        const result = await client.query(query, params)
+        const result: any = await client.query(query, params)
+
+        pusherServer.trigger(id, "join-room", {
+            nb_players: nb_players,
+            user_pseudo: user_pseudo
+        })
 
         res.status(200).json({ success: true, result })
     } catch (error) {
