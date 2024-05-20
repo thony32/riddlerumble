@@ -10,28 +10,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         const tempRoomQuery =
             `
-                select Temp_room {
-                    id,
-                    latitude,
-                    longitude,
-                    time,
-                    id_user: {
-                        pseudo,
-                        nationality,
-                        avatar,
-                        full_name
-                    },
-                    id_room: {
-                    } filter .id = <uuid>$id_room
-                };
+            select Temp_room {
+                id,
+                latitude,
+                longitude,
+                time,
+                id_user: {
+                  pseudo,
+                  nationality,
+                  avatar
+                },
+              }filter .id_room.id = <uuid>$id_room;
             `
         const params = {
-            id_room: "20b56dc2-16ca-11ef-bb7b-9fefffc6af34"
+            id_room: req.body.id_room
         }
 
         const response = await client.query(tempRoomQuery, params)
         res.status(200).json(response)
     } catch (error) {
+        console.log(error);
         res.status(500).json({ success: false, error: error })
     }
 }
