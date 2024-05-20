@@ -67,33 +67,44 @@ const leave_room = async (room: Room, pseudo: string) => {
 function RoomCard({ room: room_props }: { room: Room }) {
     const router = useRouter()
     const user = useUser((state) => state.user)
+    const [action, setAction] = useState<"join" | "leave">()
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
     const [room, setRoom] = useState<Room>(room_props)
     const updateRoomMutation = useMutation({
         mutationKey: ["updateRoom"],
-        mutationFn: async ({ room, action }: { room: Room; action: "join" | "leave" }) => {
-            if (action == "join") return await update_room(room, user?.pseudo || "")
+        mutationFn: async ({ room, given_action }: { room: Room; given_action: "join" | "leave" }) => {
+            if (given_action == "join") return await update_room(room, user?.pseudo || "")
             else return await leave_room(room, user?.pseudo || "")
         },
         onError: (error) => {
             console.log(error)
         },
-        onSuccess: ({ result }) => {},
+        onSuccess: () => {
+            if (action == "join") {
+                setSelectedRoom(room.id)
+            } else {
+                setSelectedRoom(null)
+            }
+        },
     })
 
     const handleJoinRoom = useCallback(
         ({ id, nb_players, user_pseudo }: { id: string; nb_players: number; user_pseudo: string }) => {
             if (id == room_props.id) {
                 setRoom((prevRoom) => ({ ...prevRoom, nb_players, user_pseudo }))
-                setSelectedRoom(room_props.id)
                 if (nb_players == 3) {
                     router.push(`/game/${room_props.id}`)
                 }
             }
         },
-        [room_props, router, setSelectedRoom]
+        [room_props, router]
     )
+
+    const handleClick = (room: Room, given_action: "join" | "leave") => {
+        setAction(given_action)
+        updateRoomMutation.mutate({ room, given_action })
+    }
 
     useEffect(() => {
         pusherClient.subscribe(room_props.id)
@@ -130,26 +141,27 @@ function RoomCard({ room: room_props }: { room: Room }) {
                         <UsersSVG className="size-16" /> <span>{room.nb_players} / 4</span>
                     </div>
                 </div>
-                {!room.user_pseudo.split(", ").includes(user?.pseudo!, 0) ? (
+                {!selectedRoom ? (
                     <Button
                         size="lg"
                         variant="shadow"
                         color="primary"
-                        disabled={selectedRoom && selectedRoom != room.id ? true : false}
                         isLoading={updateRoomMutation.isPending}
-                        onClick={() => updateRoomMutation.mutate({ room, action: "join" })}
+                        onClick={() => handleClick(room, "join")}
                     >
                         Join
                     </Button>
-                ) : (
+                ) : room.id == selectedRoom ? (
                     <Button
                         size="lg"
                         variant="shadow"
                         isLoading={updateRoomMutation.isPending}
-                        onClick={() => updateRoomMutation.mutate({ room, action: "leave" })}
+                        onClick={() => handleClick(room, "leave")}
                     >
                         Leave
                     </Button>
+                ) : (
+                    <span className="w-20" />
                 )}
             </div>
 

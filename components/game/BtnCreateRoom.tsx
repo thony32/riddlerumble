@@ -26,8 +26,8 @@ function BtnCreateRoom() {
         onError: (error) => {
             console.log(error)
         },
-        onSuccess: (data) => {
-            console.log("Room created successfully! ", data)
+        onSuccess: ({ room }) => {
+            setSelectedRoom(room.id)
         },
     })
     const createHighMutation = useMutation({
