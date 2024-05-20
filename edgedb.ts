@@ -6,6 +6,8 @@ export const client = createClient({
     secretKey: process.env.EDGEDB_SECRET_KEY,
 })
 
+const authLink = process.env.NODE_ENV === "production" ? "https://enigmap.vercel.app" : "http://localhost:3000"
+
 export const auth = createAuth(client, {
-    baseUrl: "http://localhost:3000",
+    baseUrl: authLink,
 })

@@ -21,6 +21,8 @@ export interface Room {
     user_pseudo: string
 }
 
+const roomLink = process.env.NODE_ENV === "production" ? "https://enigmap.vercel.app" : "http://localhost:3000"
+
 const update_room = async (room: Room, pseudo: string) => {
     const nbPlayersInt32 = room.nb_players + 1
 
@@ -148,7 +150,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
                 <span>ID {room.id}</span>
                 <FacebookMessengerShareButton
                     appId={room.id}
-                    url={`http://localhost:3000/game/${room.id}`}
+                    url={`${roomLink}/game/${room.id}`}
                 >
                     <svg
                         className="w-4 fill-current mb-1 hover:scale-125 duration-150 ease-soft-spring"
