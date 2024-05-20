@@ -18,10 +18,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         user_pseudo: true,
         created_at: true,
         modified_at: true,
+        isActive: true,
         order_by: {
             expression: room.modified_at,
             direction: e.DESC,
         },
+        filter: e.op(room.isActive, '=', true)
     }));
     const rooms = await roomsQuery.run(client)
 
