@@ -20,7 +20,6 @@ const Game = () => {
     const router = useRouter()
     const {
         isPending: isAllRoomPending,
-        error: allRoomError,
         data: allRoomData,
     } = useQuery({
         queryKey: ["allRoom"],

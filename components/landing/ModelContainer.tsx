@@ -1,8 +1,7 @@
 "use client"
 import { Canvas } from "@react-three/fiber"
-import { Suspense, useEffect, useRef } from "react"
+import { Suspense, useRef } from "react"
 import { CuteModel } from "./CutePlanet"
-import { useProgress } from "@react-three/drei"
 import { useQuery } from "@tanstack/react-query"
 import { getSession } from "@/services/user-action"
 
@@ -15,7 +14,6 @@ const Loading = () => {
 }
 
 const ModelContainer = () => {
-  const { loaded, total } = useProgress()
   const planet_ref = useRef() as any
   const invokePlanet = () => {
     planet_ref.current?.invoke()
@@ -48,7 +46,6 @@ const ModelContainer = () => {
           <CuteModel ref={planet_ref} />
         </Canvas>
       </Suspense>
-
     </div>
   )
 }
