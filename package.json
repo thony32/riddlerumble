@@ -18,7 +18,6 @@
     "@nextui-org/dropdown": "^2.1.23",
     "@nextui-org/modal": "^2.0.33",
     "@nextui-org/react": "^2.3.6",
-    "@octokit/core": "^6.1.2",
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.6",
     "@tanstack/react-query": "^5.36.2",

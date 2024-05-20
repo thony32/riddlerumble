@@ -1,9 +1,6 @@
 "use server"
-import { Octokit } from "@octokit/core"
 import { BuiltinProviderNames, TokenData } from "@edgedb/auth-nextjs/app"
 import { auth, client } from "@/edgedb"
-
-// Auth actions
 
 export const { signout, emailPasswordSignIn, emailPasswordSignUp, emailPasswordSendPasswordResetEmail, emailPasswordResetPassword, emailPasswordResendVerificationEmail } = auth.createServerActions()
 
@@ -12,14 +9,6 @@ export async function createUser(tokenData: TokenData, nationality: string, prov
     let fullname: string | null = null;
     let email: string | null = null;
     let avatar: string | null = null;
-
-    // if (tokenData.provider_token && provider === "builtin::oauth_google") {
-    //     const { data } = await new Octokit({
-    //         auth: tokenData.provider_token,
-    //     }).request("get /user");
-
-    //     fullname = data.login;
-    // }
 
     // * for google
     if (tokenData.provider_token && provider === "builtin::oauth_google") {
