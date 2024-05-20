@@ -15,6 +15,12 @@ module default {
     required property latitude -> float32;
     required property longitude -> float32;
     required property time -> int16;
+    created_at: datetime {
+      rewrite insert using (datetime_of_statement())
+    }
+    modified_at: datetime {
+      rewrite update using (datetime_of_statement())
+    }
   };
 
   type Users {
@@ -27,6 +33,12 @@ module default {
     property nationality -> str;
     property pseudo -> str;
     property score -> int16;
+    created_at: datetime {
+      rewrite insert using (datetime_of_statement())
+    }
+    modified_at: datetime {
+      rewrite update using (datetime_of_statement())
+    }
   };
 
   type Room {
@@ -37,11 +49,23 @@ module default {
     required property prompt -> str;
     required property user_pseudo -> str;
     required property level -> str;
+    created_at: datetime {
+      rewrite insert using (datetime_of_statement())
+    }
+    modified_at: datetime {
+      rewrite update using (datetime_of_statement())
+    }
   };
 
   type Player_stats {
     required id_room: Room;
     required id_user: Users;
     required property score -> float32;
+    created_at: datetime {
+      rewrite insert using (datetime_of_statement())
+    }
+    modified_at: datetime {
+      rewrite update using (datetime_of_statement())
+    }
   };
 }

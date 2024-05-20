@@ -8,6 +8,8 @@ export type $Player_statsλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5
   "score": $.PropertyDesc<_std.$float32, $.Cardinality.One, false, false, false, false>;
   "id_room": $.LinkDesc<$Room, $.Cardinality.One, {}, false, false,  false, false>;
   "id_user": $.LinkDesc<$Users, $.Cardinality.One, {}, false, false,  false, false>;
+  "created_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
+  "modified_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
 }>;
 type $Player_stats = $.ObjectType<"default::Player_stats", $Player_statsλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
@@ -24,6 +26,8 @@ export type $RoomλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c2
   "delay": $.PropertyDesc<_std.$int64, $.Cardinality.One, false, false, false, false>;
   "level": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "nb_players": $.PropertyDesc<_std.$int32, $.Cardinality.One, false, false, false, false>;
+  "created_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
+  "modified_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "<id_room[is Temp_room]": $.LinkDesc<$Temp_room, $.Cardinality.Many, {}, false, false,  false, false>;
   "<id_room[is Player_stats]": $.LinkDesc<$Player_stats, $.Cardinality.Many, {}, false, false,  false, false>;
   "<id_room": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -41,6 +45,8 @@ export type $Temp_roomλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73
   "time": $.PropertyDesc<_std.$int16, $.Cardinality.One, false, false, false, false>;
   "id_room": $.LinkDesc<$Room, $.Cardinality.One, {}, false, false,  false, false>;
   "id_user": $.LinkDesc<$Users, $.Cardinality.One, {}, false, false,  false, false>;
+  "created_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
+  "modified_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
 }>;
 type $Temp_room = $.ObjectType<"default::Temp_room", $Temp_roomλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
@@ -57,6 +63,8 @@ export type $UsersλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c
   "full_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "nationality": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "pseudo": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "created_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
+  "modified_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "<id_user[is Temp_room]": $.LinkDesc<$Temp_room, $.Cardinality.Many, {}, false, false,  false, false>;
   "<id_user[is Player_stats]": $.LinkDesc<$Player_stats, $.Cardinality.Many, {}, false, false,  false, false>;
   "<id_user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

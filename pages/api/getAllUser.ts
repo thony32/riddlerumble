@@ -14,6 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         pseudo: true,
         score: true,
         nationality: true,
+        created_at: true,
+        modified_at: true,
         order_by: {
             expression: user.score,
             direction: e.DESC,
