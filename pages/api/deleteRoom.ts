@@ -21,7 +21,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return;
         }
 
-        // Construction de la requête de suppression
         const query = `
         delete Room
         filter .id = <uuid>$id
@@ -31,7 +30,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const result: any = await client.query(query, params);
 
-        // Optionnel : Émettre un événement avec Pusher pour informer que la salle a été supprimée
         pusherServer.trigger(id, "delete-room", { id });
 
         res.status(200).json({ success: true, result });

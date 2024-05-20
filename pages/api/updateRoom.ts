@@ -16,13 +16,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const { id, delay, latitude, longitude, nb_players, prompt, user_pseudo } = req.body
 
-        // Vérifier que l'ID est présent
         if (!id) {
             res.status(400).json({ success: false, error: "Missing required field: id" })
             return
         }
 
-        // Construction de la requête de mise à jour
         const query = `
         update Room
             filter .id = <uuid>$id

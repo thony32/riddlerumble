@@ -13,7 +13,7 @@ const PARTY_START_TIME_KEY = "partyStartTime"
 
 const fetchRoom = async (roomId: string) => {
     const response = await fetch('/api/getRoom', {
-        method: 'GET',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },

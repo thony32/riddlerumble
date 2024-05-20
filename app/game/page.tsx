@@ -3,13 +3,11 @@ import BtnCreateRoom from "@/components/game/BtnCreateRoom"
 import PlayerProfil from "@/components/game/PlayerProfil"
 import PreventSwitch from "@/components/game/PreventSwitch"
 import RoomCard from "@/components/game/RoomCard"
-import RoomList from "@/components/game/RoomCard"
 import { pusherClient } from "@/lib/pusher"
 import { Room } from "@/types/room"
 import useResponsive from "@/utils/useResponsive"
 import { Skeleton } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
-// import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 const getAllRoom = async () => {
@@ -37,7 +35,7 @@ const StatsDrawer = () => {
                     htmlFor="my-drawer-2"
                     className="btn btn-primary drawer-button lg:hidden"
                 >
-                    Open drawer
+                    Stats
                 </label>
             </div>
             <div className="drawer-side">
