@@ -5,7 +5,7 @@ import { useUser } from "@/store/useUser"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import SvgHighLevel from "../Misc/SvgHighLevel"
 import SvgLowLevel from "../Misc/SvgLowLevel"
-import { FacebookMessengerIcon, FacebookMessengerShareButton } from "react-share"
+import { FacebookMessengerShareButton } from "react-share"
 
 export interface Room {
     id: string
