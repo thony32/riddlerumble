@@ -26,12 +26,6 @@ const Game = () => {
         queryFn: async () => {
             const data: Room[] = await getAllRoom()
 
-            // const roomSelected = data.find((room) => room.nb_players == 4)
-            // if (roomSelected) {
-            //     router.push(`/game/${roomSelected.id}`)
-            //     return []
-            // }
-
             setAllRooms(data)
 
             return data
@@ -95,25 +89,26 @@ const Game = () => {
                 </div>
                 <div className="space-y-5">
                     <BtnCreateRoom />
-                    {isInitialRoomsPending ? (
-                        <div className="grid grid-cols-2 gap-4">
-                            <Skeleton className="rounded-lg w-full h-44" />
-                            <Skeleton className="rounded-lg w-full h-44" />
-                            <Skeleton className="rounded-lg w-full h-44" />
-                            <Skeleton className="rounded-lg w-full h-44" />
-                        </div>
-                    ) : (
-                        // <RoomList room_list={allRooms} />
-                        allRooms.map((room: Room) => {
-                            return (
-                                <RoomCard
-                                    room={room}
-                                    key={room.id}
-                                />
-                            )
-                        })
-                    )}
-                    {allRooms.length == 0 && !isInitialRoomsPending && <div className="text-center text-current/50 my-5 text-xl">No room available yet !</div>}
+                    <div className="grid grid-cols-2 gap-4">
+                        {isInitialRoomsPending ? (
+                            <>
+                                <Skeleton className="rounded-lg w-full h-44" />
+                                <Skeleton className="rounded-lg w-full h-44" />
+                                <Skeleton className="rounded-lg w-full h-44" />
+                                <Skeleton className="rounded-lg w-full h-44" />
+                            </>
+                        ) : (
+                            allRooms.map((room: Room) => {
+                                return (
+                                    <RoomCard
+                                        room={room}
+                                        key={room.id}
+                                    />
+                                )
+                            })
+                        )}
+                        {allRooms.length == 0 && !isInitialRoomsPending && <div className="text-center text-current/50 my-5 text-xl">No room available yet !</div>}
+                    </div>
                 </div>
             </div>
             <div className="p-5 space-y-10">

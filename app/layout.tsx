@@ -5,6 +5,7 @@ import "./globals.css"
 import Footer from "@/components/landing/Footer"
 import ThemeHandler from "@/components/Misc/ThemeHandler"
 import ReactQueryProvider from "@/utils/ReactQueryProvider"
+import { ReactLenis } from "@/utils/lenis"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -26,9 +27,11 @@ export default function RootLayout({
             <body className={inter.className}>
                 <NextUIProvider>
                     <main className="px-[2%] py-3">
-                        <ReactQueryProvider>
-                            {children}
-                        </ReactQueryProvider>
+                        <ReactLenis root>
+                            <ReactQueryProvider>
+                                {children}
+                            </ReactQueryProvider>
+                        </ReactLenis>
                     </main>
                     <footer className="mt-20">
                         <Footer />

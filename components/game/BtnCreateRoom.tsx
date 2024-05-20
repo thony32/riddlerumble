@@ -67,7 +67,7 @@ function BtnCreateRoom() {
                     >
                         <div className="px-1 py-2">
                             <div className="flex w-full">
-                                <div className="grid h-20 flex-grow card bg-base-300 rounded-box place-items-center">
+                                <div className="grid h-20 flex-grow card rounded-box place-items-center">
                                     <Button
                                         size="lg"
                                         onClick={() => createLowMutation.mutate()}
@@ -76,7 +76,7 @@ function BtnCreateRoom() {
                                     >
                                         {createLowMutation.isPending ? (
                                             <div className="flex justify-center">
-                                                <span className="loading loading-dots loading-md"></span>
+                                                <span className="loading loading-dots loading-lg"></span>
                                             </div>
                                         ) : (
                                             <span>Low Level Room</span>
@@ -84,7 +84,7 @@ function BtnCreateRoom() {
                                     </Button>
                                 </div>
                                 <div className="divider divider-horizontal">OR</div>
-                                <div className="grid h-20 flex-grow card bg-base-300 rounded-box place-items-center">
+                                <div className="grid h-20 flex-grow card rounded-box place-items-center">
                                     <Button
                                         size="lg"
                                         onClick={() => createHighMutation.mutate()}
@@ -93,7 +93,7 @@ function BtnCreateRoom() {
                                     >
                                         {createHighMutation.isPending ? (
                                             <div className="flex justify-center">
-                                                <span className="loading loading-dots loading-md"></span>
+                                                <span className="loading loading-dots loading-lg"></span>
                                             </div>
                                         ) : (
                                             <span>High Level Room</span>
