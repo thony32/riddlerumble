@@ -1,7 +1,7 @@
-const SvgDecoEnigme = () => {
+const SvgDecoEnigme = ({ width = 'w-full' }: { width?: string }) => {
     return (
         <svg
-            className="w-full"
+            className={`${width}`}
             zoomAndPan="magnify"
             viewBox="0 0 375 225"
             preserveAspectRatio="xMidYMid meet"
