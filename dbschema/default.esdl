@@ -10,8 +10,8 @@ module default {
   );
   
   type Temp_room {
-    required property id_room -> uuid;
-    required property id_user -> uuid;
+    required id_room: Room;
+    required id_user: Users;
     required property latitude -> float32;
     required property longitude -> float32;
     required property time -> int16;
@@ -40,8 +40,8 @@ module default {
   };
 
   type Player_stats {
-    required property id_room -> uuid;
-    required property id_user -> uuid;
+    required id_room: Room;
+    required id_user: Users;
     required property score -> float32;
   };
 }
