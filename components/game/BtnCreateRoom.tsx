@@ -18,6 +18,7 @@ const create_room = async (level: string, pseudo: string) => {
 function BtnCreateRoom() {
     const user = useUser((state) => state.user)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
+    const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const createLowMutation = useMutation({
         mutationKey: ["createLow"],
         mutationFn: async () => {
@@ -75,6 +76,7 @@ function BtnCreateRoom() {
                                         onClick={() => createLowMutation.mutate()}
                                         className="py-10"
                                         color="warning"
+                                        disabled={!!selectedRoom}
                                     >
                                         {createLowMutation.isPending ? (
                                             <div className="flex justify-center">
@@ -92,6 +94,7 @@ function BtnCreateRoom() {
                                         onClick={() => createHighMutation.mutate()}
                                         className="py-10"
                                         color="danger"
+                                        disabled={!!selectedRoom}
                                     >
                                         {createHighMutation.isPending ? (
                                             <div className="flex justify-center">
