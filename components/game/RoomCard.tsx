@@ -2,12 +2,13 @@ import { Button } from "@nextui-org/button"
 import { Card } from "@nextui-org/react"
 import UsersSVG from "../Misc/UsersSVG"
 import { useUser } from "@/store/useUser"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import SvgHighLevel from "../Misc/SvgHighLevel"
 import SvgLowLevel from "../Misc/SvgLowLevel"
 import { FacebookMessengerShareButton } from "react-share"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { pusherClient } from "@/lib/pusher"
+import { useRouter } from "next/navigation"
 
 export interface Room {
     id: string
@@ -36,14 +37,35 @@ const update_room = async (room: Room, pseudo: string) => {
     return data
 }
 
+const leave_room = async (room: Room, pseudo: string) => {
+    const nbPlayersInt32 = room.nb_players - 1
+    const user_pseudo = room.user_pseudo
+        .split(", ")
+        .filter((p) => p !== pseudo)
+        .join(", ")
+
+    const response = await fetch("/api/updateRoom", {
+        body: JSON.stringify({ ...room, nb_players: nbPlayersInt32, user_pseudo }),
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) {
+        throw new Error("Failed to leave the room")
+    }
+
+    const data = await response.json()
+    return data
+}
+
 function RoomCard({ room: room_props }: { room: Room }) {
+    const router = useRouter()
     const user = useUser((state) => state.user)
-    const queryClient = useQueryClient()
     const [room, setRoom] = useState<Room>(room_props)
     const updateRoomMutation = useMutation({
         mutationKey: ["updateRoom"],
-        mutationFn: async (room: Room) => {
-            return await update_room(room, user?.pseudo || "")
+        mutationFn: async ({ room, action }: { room: Room; action: "join" | "leave" }) => {
+            if (action == "join") return await update_room(room, user?.pseudo || "")
+            else return await leave_room(room, user?.pseudo || "")
         },
         onError: (error) => {
             console.log(error)
@@ -53,13 +75,19 @@ function RoomCard({ room: room_props }: { room: Room }) {
         },
     })
 
-    useEffect(() => {
-        const handleJoinRoom = ({ id, nb_players, user_pseudo }: { id: string; nb_players: number; user_pseudo: string }) => {
+    const handleJoinRoom = useCallback(
+        ({ id, nb_players, user_pseudo }: { id: string; nb_players: number; user_pseudo: string }) => {
             if (id == room_props.id) {
                 setRoom((prevRoom) => ({ ...prevRoom, nb_players, user_pseudo }))
+                if (nb_players == 2) {
+                    router.push(`/game/${room_props.id}`)
+                }
             }
-        }
+        },
+        [room_props, router]
+    )
 
+    useEffect(() => {
         pusherClient.subscribe(room_props.id)
 
         pusherClient.bind("join-room", handleJoinRoom)
@@ -67,7 +95,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
         return () => {
             pusherClient.unsubscribe(room_props.id)
         }
-    }, [room_props])
+    }, [room_props, handleJoinRoom])
 
     return (
         <Card
@@ -100,7 +128,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
                         variant="shadow"
                         color="primary"
                         isLoading={updateRoomMutation.isPending}
-                        onClick={() => updateRoomMutation.mutate(room)}
+                        onClick={() => updateRoomMutation.mutate({ room, action: "join" })}
                     >
                         Join
                     </Button>
@@ -108,6 +136,8 @@ function RoomCard({ room: room_props }: { room: Room }) {
                     <Button
                         size="lg"
                         variant="shadow"
+                        isLoading={updateRoomMutation.isPending}
+                        onClick={() => updateRoomMutation.mutate({ room, action: "leave" })}
                     >
                         Leave
                     </Button>
