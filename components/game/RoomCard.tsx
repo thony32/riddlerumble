@@ -81,7 +81,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
         ({ id, nb_players, user_pseudo }: { id: string; nb_players: number; user_pseudo: string }) => {
             if (id == room_props.id) {
                 setRoom((prevRoom) => ({ ...prevRoom, nb_players, user_pseudo }))
-                if (nb_players == 2) {
+                if (nb_players == 3) {
                     router.push(`/game/${room_props.id}`)
                 }
             }
