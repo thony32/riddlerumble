@@ -5,7 +5,6 @@ import getInitial from "@/utils/getInitials"
 import { Avatar } from "@nextui-org/avatar"
 import { useQuery } from "@tanstack/react-query"
 import Image from "next/image"
-import { useEffect, useState } from "react"
 
 const getAllUser = async () => {
     const response = await fetch('/api/getAllUser');
