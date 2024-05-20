@@ -17,7 +17,10 @@ const OAuth = () => {
     }
 
     function base64URLEncode(array: Uint8Array) {
-        return btoa(String.fromCharCode.apply(null, Array.from(array))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "")
+        return btoa(String.fromCharCode.apply(null, Array.from(array)))
+            .replace(/\+/g, "-")
+            .replace(/\//g, "_")
+            .replace(/=/g, "")
     }
 
     const handleAuthorize = async () => {
@@ -25,7 +28,8 @@ const OAuth = () => {
         redirectUrl.searchParams.set("provider", "builtin::oauth_google")
         const pkce = await generatePKCE()
         redirectUrl.searchParams.set("challenge", pkce.challenge)
-        redirectUrl.searchParams.set("redirect_to", `http://localhost:3000`)
+        const redirectTo = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://enigmap.vercel.app" 
+        redirectUrl.searchParams.set("redirect_to", redirectTo)
         localStorage.setItem("edgedb-pkce-verifier", pkce.verifier)
         window.location.href = redirectUrl.toString()
     }
