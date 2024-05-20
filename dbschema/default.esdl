@@ -14,7 +14,7 @@ module default {
     required id_user: Users;
     required property latitude -> float32;
     required property longitude -> float32;
-    required property time -> int64;
+    required property time -> str;
     created_at: datetime {
       rewrite insert using (datetime_of_statement())
     }
