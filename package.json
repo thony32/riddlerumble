@@ -30,6 +30,8 @@
     "inquirer": "^9.2.20",
     "mapbox-gl": "^3.3.0",
     "next": "14.2.3",
+    "pusher": "^5.2.0",
+    "pusher-js": "^8.4.0-rc2",
     "react": "^18",
     "react-countdown": "^2.3.5",
     "react-dom": "^18",

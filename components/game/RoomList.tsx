@@ -50,8 +50,8 @@ function RoomList({ room_list }: Props) {
             console.log(error)
         },
         onSuccess: ({ result }) => {
-            // console.log("Room updated successfully! ", result)
-            queryClient.invalidateQueries({ queryKey: ["allRoom"], exact: true, refetchType: "active" })
+            console.log("Room updated successfully! ", result)
+            // queryClient.invalidateQueries({ queryKey: ["allRoom"], exact: true, refetchType: "active" })
         },
     })
     return (

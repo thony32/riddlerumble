@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import e, { createClient } from "@/dbschema/edgeql-js"
+import { pusherServer } from "@/lib/pusher"
+import { Room } from "@/components/game/RoomList"
 
 const room_api = async (level: string) => {
     const response = await fetch(`https://ia-codeipsum.vercel.app/${level}`, {
@@ -22,17 +24,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const latitude = parseFloat(room_data.response.lat)
     const longitude = parseFloat(room_data.response.lng)
 
-    const room = await client.querySingle(
+    const room: any = await client.querySingle(
         `
-            insert Room {
-                delay := <int32>$delay_party,
-                latitude := <float32>$latitude,
-                longitude := <float32>$longitude,
-                level := <str>$level,
-                nb_players := 1,
-                prompt := <str>$prompt,
-                user_pseudo := <str>$user_pseudo
-            }`,
+            select (
+                insert Room {
+                    delay := <int32>$delay_party,
+                    latitude := <float32>$latitude,
+                    longitude := <float32>$longitude,
+                    level := <str>$level,
+                    nb_players := 1,
+                    prompt := <str>$prompt,
+                    user_pseudo := <str>$user_pseudo
+                }
+            ) {id, delay, latitude, longitude, level, nb_players, prompt, user_pseudo}`,
         {
             delay_party: delay_party,
             latitude: latitude,
@@ -42,6 +46,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             user_pseudo: user_pseudo,
         }
     )
+
+    pusherServer.trigger("lobby", "new-room", {
+        id: room.id,
+        delay: room.delay,
+        latitude: room.latitude,
+        longitude: room.longitude,
+        level: room.level,
+        nb_players: room.nb_players,
+        prompt: room.prompt,
+        user_pseudo: room.user_pseudo,
+    })
 
     res.status(200).json({ success: true, room_id: room })
 }
