@@ -83,7 +83,7 @@ function BtnCreateRoom() {
                                                 <span className="loading loading-dots loading-lg"></span>
                                             </div>
                                         ) : (
-                                            <span>Low Level Room</span>
+                                            <span>Normal Level</span>
                                         )}
                                     </Button>
                                 </div>
@@ -101,7 +101,7 @@ function BtnCreateRoom() {
                                                 <span className="loading loading-dots loading-lg"></span>
                                             </div>
                                         ) : (
-                                            <span>High Level Room</span>
+                                            <span>High Level</span>
                                         )}
                                     </Button>
                                 </div>
