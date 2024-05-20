@@ -43,11 +43,11 @@ const Room: $.$expr_PathNode<$.TypeSet<$Room, $.Cardinality.Many>, null> = _.syn
 export type $Temp_roomλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
   "latitude": $.PropertyDesc<_std.$float32, $.Cardinality.One, false, false, false, false>;
   "longitude": $.PropertyDesc<_std.$float32, $.Cardinality.One, false, false, false, false>;
-  "id_room": $.LinkDesc<$Room, $.Cardinality.One, {}, false, false,  false, false>;
-  "id_user": $.LinkDesc<$Users, $.Cardinality.One, {}, false, false,  false, false>;
   "created_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "modified_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "time": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
+  "id_room": $.LinkDesc<$Room, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
+  "id_user": $.LinkDesc<$Users, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
 }>;
 type $Temp_room = $.ObjectType<"default::Temp_room", $Temp_roomλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],

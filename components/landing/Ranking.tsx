@@ -112,7 +112,8 @@ const Ranking = () => {
                                         </td>
                                         <td className="px-4 py-2 text-right">{player.score}</td>
                                     </tr>
-                                ))}
+                                ))
+                        }
                         {
                             allUserError && (
                                 <tr className="border-b border-current w-full">

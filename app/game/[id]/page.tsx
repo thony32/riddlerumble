@@ -4,10 +4,14 @@ import Map, { MapMouseEvent, MapRef, Marker, MarkerDragEvent } from "react-map-g
 import * as turf from "@turf/turf"
 import "mapbox-gl/dist/mapbox-gl.css"
 import Countdown, { CountdownRendererFn } from "react-countdown"
-import { Button } from "@nextui-org/react"
+import { Avatar, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
 import Link from "next/link"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import SvgDecoEnigme from "@/components/Misc/SvgDecoEnigme"
+import { useUser } from "@/store/useUser"
+import getInitial from "@/utils/getInitials"
+import Image from "next/image"
+import getCountryCode from "@/utils/getCountryCode"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -25,6 +29,47 @@ const fetchRoom = async (roomId: string) => {
     return response.json();
 };
 
+const create_temp_room = async (latitude: number, longitude: number, time: string, id_user: string, id_room: string) => {
+    const response = await fetch("/api/createTempRoom", {
+        body: JSON.stringify({ latitude, longitude, time, id_user, id_room }),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) throw new Error("Failed to create temp room")
+    return await response.json()
+}
+
+const create_player_stat = async (score: number, id_user: string, id_room: string) => {
+    const response = await fetch("/api/createPlayerStat", {
+        body: JSON.stringify({ score, id_user, id_room }),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) throw new Error("Failed to create temp room")
+    return await response.json()
+}
+
+const getTempRoom = async (id_room: string) => {
+    const response = await fetch("/api/getTempRoomPerRoom", {
+        body: JSON.stringify(id_room),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) throw new Error("Failed to fetch temp room")
+    const jsonData = await response.json();
+    return jsonData;
+}
+
+const disableRoom = async (id_room: string) => {
+    const response = await fetch("/api/disableRoom", {
+        body: JSON.stringify({ id_room }),
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) throw new Error("Failed to create temp room")
+    return await response.json()
+}
+
 function Party({ params }: { params: { id: string } }) {
     const {
         isPending: isRoomPending,
@@ -37,9 +82,117 @@ function Party({ params }: { params: { id: string } }) {
 
     const Completionist = () => {
         localStorage.removeItem(PARTY_START_TIME_KEY)
-        setShowTarget(true)
-        mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
-        return <span></span>
+        const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+        const {
+            isPending: isTempRoomPending,
+            data: tempRoomData,
+        } = useQuery({
+            queryKey: ["tempRoomData"],
+            queryFn: () => getTempRoom(params.id),
+        })
+
+        const disableRoomFun = useMutation({
+            mutationKey: ["disableRoomFun"],
+            mutationFn: async () => {
+                return await disableRoom(params.id)
+            },
+            onError: (error) => {
+                console.log(error)
+            },
+            onSuccess: (data) => {
+                console.log("Room disabled! ", data)
+            },
+        })
+
+        useEffect(() => {
+            setShowTarget(true)
+            onOpen()
+            mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
+            disableRoomFun.mutate()
+        }, [])
+        return (
+            <Modal className="-translate-x-[100%]" placement="bottom-center" isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">Result</ModalHeader>
+                            <ModalBody>
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th className="px-4 py-2 text-left">Pseudo</th>
+                                            <th className="px-4 py-2 text-right">Time</th>
+                                            <th className="px-4 py-2 text-right">Coordonates</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            isTempRoomPending ?
+                                                <tr className="border-b border-current w-full">
+                                                    <td colSpan={1} className='py-2'>
+                                                        <div className='flex justify-start'>
+                                                            <span className="loading loading-dots loading-md"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td colSpan={1} className='py-2'>
+                                                        <div className='flex justify-end'>
+                                                            <span className="loading loading-dots loading-md"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td colSpan={1} className='py-2'>
+                                                        <div className='flex justify-end px-4'>
+                                                            <span className="loading loading-dots loading-md"></span>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                :
+                                                tempRoomData?.map((tempRoom: any, index: number) => (
+                                                    <tr
+                                                        key={index}
+                                                        className="border-b border-current"
+                                                    >
+                                                        <td className="px-4 py-2 flex items-center gap-2 justify-between">
+                                                            <div className="flex flex-col gap-1">
+                                                                <Avatar
+                                                                    className="w-5 h-5"
+                                                                    showFallback
+                                                                    name={getInitial(tempRoom.id_user.full_name)}
+                                                                    src={tempRoom.id_user.avatar}
+                                                                    alt="Avatar"
+                                                                />
+                                                                <Image
+                                                                    width={64}
+                                                                    height={64}
+                                                                    src={`https://flagsapi.com/${getCountryCode(tempRoom.id_user.nationality)}/shiny/64.png`}
+                                                                    alt={getInitial(tempRoom.id_user.full_name)}
+                                                                    className="w-4"
+                                                                />
+                                                            </div>
+                                                            <span>{tempRoom.id_user.pseudo}</span>
+                                                        </td>
+                                                        <td className="px-4 py-2 text-right">
+                                                            {tempRoom.time}
+                                                        </td>
+                                                        <td className="px-4 py-2 text-right">Lat: {tempRoom.latitude.toFixed(2)} , Long: {tempRoom.longitude.toFixed(2)}</td>
+                                                    </tr>
+                                                ))
+                                        }
+                                    </tbody>
+                                </table>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Link href={'/game'}>
+                                    <Button>
+                                        Close
+                                    </Button>
+                                </Link>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+        )
     }
 
     const timerRender: CountdownRendererFn = ({ minutes, seconds, completed }) => {
@@ -131,6 +284,33 @@ function Party({ params }: { params: { id: string } }) {
         return Math.round(score)
     }
 
+    const user = useUser((state) => state.user)
+    const createTempRoom = useMutation({
+        mutationKey: ["createTempRoom"],
+        mutationFn: async () => {
+            return await create_temp_room(marker.latitude, marker.longitude, elapsedTime, user?.id, roomData && roomData.id)
+        },
+        onError: (error) => {
+            console.log(error)
+        },
+        onSuccess: (data) => {
+            console.log("Temp Room created successfully! ", data)
+        },
+    })
+
+    const createPlayerStat = useMutation({
+        mutationKey: ["createPlayerStat"],
+        mutationFn: async () => {
+            return await create_player_stat(totalScore, user?.id, roomData && roomData.id)
+        },
+        onError: (error) => {
+            console.log(error)
+        },
+        onSuccess: (data) => {
+            console.log("Temp Room created successfully! ", data)
+        },
+    })
+
     const submitResult = () => {
         const elapsedTime = Date.now() - (startTime || Date.now())
         const elapsedMinutes = Math.floor(elapsedTime / 60000)
@@ -150,8 +330,10 @@ function Party({ params }: { params: { id: string } }) {
 
         const totalScore = Math.round((scoreDistance * distanceWeight + timeScore * timeWeight) / (distanceWeight + timeWeight))
         setShowTarget(true)
-        setTotalScore(totalScore)
+        setTotalScore(roomData.level == 'high-level' ? totalScore : totalScore + 10)
         mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
+        createTempRoom.mutate()
+        createPlayerStat.mutate()
         localStorage.removeItem(PARTY_START_TIME_KEY)
     }
 
@@ -191,7 +373,7 @@ function Party({ params }: { params: { id: string } }) {
                     <div className="translate-y-14">
                         {
                             roomData &&
-                            <h1 className={`text-center ${roomData.level == 'high-level' && 'text-red-500'}`}>{roomData.level == 'high-level' ? 'High Level' : 'Normal Level'}</h1>
+                            <h1 className={`text-center ${roomData.level == 'high-level' && 'text-red-500'}`}>{roomData.level == 'high-level' ? 'High Level (+10 pts)' : 'Normal Level'}</h1>
                         }
                         <h1 className="text-3xl text-center">Find the place</h1>
                         <SvgDecoEnigme />
@@ -268,11 +450,7 @@ function Party({ params }: { params: { id: string } }) {
                                 </div>
                             )}
                             <div className="flex justify-center">
-                                {showTarget ? (
-                                    <Link href="/game/room">
-                                        <Button>Finished</Button>
-                                    </Link>
-                                ) : (
+                                {!showTarget && (
                                     <Button
                                         onClick={submitResult}
                                         className="bg-green-500 text-white font-semibold"
@@ -285,18 +463,15 @@ function Party({ params }: { params: { id: string } }) {
                     </div>
                 </div>
                 <div className="col-span-10 rounded-2xl relative">
-                    {
-                        !showTarget &&
-                        <div className="absolute z-50 top-3 left-3">
-                            {
-                                roomData &&
-                                <Countdown
-                                    date={startTime + (roomData.delay)}
-                                    renderer={timerRender}
-                                />
-                            }
-                        </div>
-                    }
+                    <div className="absolute z-50 top-3 left-3">
+                        {
+                            roomData &&
+                            <Countdown
+                                date={startTime + (roomData.delay)}
+                                renderer={timerRender}
+                            />
+                        }
+                    </div>
                     <Map
                         ref={mapRef as React.RefObject<MapRef>}
                         mapStyle="mapbox://styles/mapbox/streets-v12"
