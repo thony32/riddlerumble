@@ -3,6 +3,9 @@ import { useUser } from "@/store/useUser"
 import getCountryCode from "@/utils/getCountryCode"
 import getInitial from "@/utils/getInitials"
 import { Avatar } from "@nextui-org/avatar"
+import { Button } from "@nextui-org/button"
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/modal"
+import { Input, Select, SelectItem } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
 import Image from "next/image"
 
@@ -26,6 +29,8 @@ const PlayerProfil = () => {
         queryFn: () => getAllUser(),
         staleTime: 1000 * 60 * 60 * 24,
     })
+
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     return (
         <>
             {
@@ -50,6 +55,45 @@ const PlayerProfil = () => {
                             />
                         </div>
                         <div className="text-right w-1/2">
+                            <div className="flex justify-end">
+                                <svg onClick={onOpen} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 cursor-pointer hover:scale-125 duration-150 ease-soft-spring">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                </svg>
+                                <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
+                                    <ModalContent>
+                                        {(onClose) => (
+                                            <>
+                                                <ModalHeader className="flex flex-col gap-1">Update profil info</ModalHeader>
+                                                <ModalBody>
+                                                    <div className="grid grid-cols-2 gap-5">
+                                                        <Input type="text" variant="underlined" label="Pseudo" />
+                                                        <Input type="text" variant="underlined" label="Full name" />
+                                                    </div>
+                                                    <div>
+                                                        <Select
+                                                            variant="underlined"
+                                                            label="Select country"
+                                                            className="max-w-xs"
+                                                        >
+                                                            <SelectItem key={"MG"} value={"MG"}>
+                                                                Madagascar, MG
+                                                            </SelectItem>
+                                                        </Select>
+                                                    </div>
+                                                </ModalBody>
+                                                <ModalFooter>
+                                                    <Button variant="light" onPress={onClose}>
+                                                        Close
+                                                    </Button>
+                                                    <Button color="primary" onPress={onClose}>
+                                                        Update
+                                                    </Button>
+                                                </ModalFooter>
+                                            </>
+                                        )}
+                                    </ModalContent>
+                                </Modal>
+                            </div>
                             <h1 className="text-3xl">{user.pseudo}</h1>
                             <p>{user.full_name}</p>
                             <p className="opacity-30">{user.email}</p>
