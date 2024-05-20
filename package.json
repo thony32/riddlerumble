@@ -8,11 +8,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:vercel": "pnpm dlx @edgedb/generate edgeql-js --target ts -I codeipsum/enigmap && next build",
     "create": "edgedb migration create -I codeipsum/enigmap",
-    "migrate": "edgedb migrate -I codeipsum/enigmap && pnpm dlx @edgedb/generate edgeql-js --target ts -I codeipsum/enigmap",
     "setup": "pnpm dlx @edgedb/generate edgeql-js --target ts -I codeipsum/enigmap",
-    "migrate:all": "edgedb migration create -I codeipsum/enigmap && edgedb migrate -I codeipsum/enigmap && pnpm dlx @edgedb/generate edgeql-js --target ts -I codeipsum/enigmap"
+    "migrate": "edgedb migrate -I codeipsum/enigmap && pnpm setup",
+    "migrate:all": "pnpm create && pnpm migrate"
   },
   "dependencies": {
     "@edgedb/auth-nextjs": "^0.3.1",
