@@ -8,7 +8,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "auth:setup": "pnpm esr auth-setup.ts",
     "build:vercel": "pnpm dlx @edgedb/generate edgeql-js --target ts -I codeipsum/enigmap && next build",
     "create": "edgedb migration create -I codeipsum/enigmap",
     "migrate": "edgedb migrate -I codeipsum/enigmap",
