@@ -19,6 +19,7 @@ export interface Room {
     nb_players: number
     prompt: string
     user_pseudo: string
+    isActive: boolean
 }
 
 const roomLink = process.env.NODE_ENV === "production" ? "https://enigmap.vercel.app" : "http://localhost:3000"

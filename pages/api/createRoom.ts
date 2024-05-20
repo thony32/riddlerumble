@@ -34,9 +34,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     level := <str>$level,
                     nb_players := 1,
                     prompt := <str>$prompt,
-                    user_pseudo := <str>$user_pseudo
+                    user_pseudo := <str>$user_pseudo,
+                    isActive := true 
                 }
-            ) {id, delay, latitude, longitude, level, nb_players, prompt, user_pseudo}`,
+            ) {id, delay, latitude, longitude, level, nb_players, prompt, user_pseudo, isActive}`,
         {
             delay_party: delay_party,
             latitude: latitude,
@@ -56,6 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         nb_players: room.nb_players,
         prompt: room.prompt,
         user_pseudo: room.user_pseudo,
+        isActive: room.isActive,
     })
 
     res.status(200).json({ success: true, room_id: room })
