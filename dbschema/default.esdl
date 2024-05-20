@@ -19,6 +19,7 @@ module default {
       rewrite insert using (datetime_of_statement())
     }
     modified_at: datetime {
+      rewrite insert using (datetime_of_statement());
       rewrite update using (datetime_of_statement())
     }
   };
@@ -37,6 +38,7 @@ module default {
       rewrite insert using (datetime_of_statement())
     }
     modified_at: datetime {
+      rewrite insert using (datetime_of_statement());
       rewrite update using (datetime_of_statement())
     }
   };
@@ -53,6 +55,7 @@ module default {
       rewrite insert using (datetime_of_statement())
     }
     modified_at: datetime {
+      rewrite insert using (datetime_of_statement());
       rewrite update using (datetime_of_statement())
     }
   };
@@ -65,6 +68,7 @@ module default {
       rewrite insert using (datetime_of_statement())
     }
     modified_at: datetime {
+      rewrite insert using (datetime_of_statement());
       rewrite update using (datetime_of_statement())
     }
   };
