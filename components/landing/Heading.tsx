@@ -37,7 +37,7 @@ const Heading = () => {
                     World tournament
                 </Chip>
             </div>
-            <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+            <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
                 <SvgMapDraw />
             </div>
             <div className="w-1/2 text-center space-y-5">
