@@ -37,6 +37,26 @@ const update_room = async (room: Room, pseudo: string) => {
     return data
 }
 
+// const leave_room = async (room: Room, pseudo: string) => {
+//     const nbPlayersInt32 = room.nb_players - 1
+//     const user_pseudo = room.user_pseudo
+//         .split(", ")
+//         .filter((p) => p !== pseudo)
+//         .join(", ")
+
+//     const response = await fetch("/api/updateRoom", {
+//         body: JSON.stringify({ ...room, nb_players: nbPlayersInt32, user_pseudo }),
+//         method: "PUT",
+//         headers: { "Content-Type": "application/json" },
+//     })
+//     if (!response.ok) {
+//         throw new Error("Failed to leave the room")
+//     }
+
+//     const data = await response.json()
+//     return data
+// }
+
 const leave_room = async (room: Room, pseudo: string) => {
     const nbPlayersInt32 = room.nb_players - 1
     const user_pseudo = room.user_pseudo
@@ -44,17 +64,29 @@ const leave_room = async (room: Room, pseudo: string) => {
         .filter((p) => p !== pseudo)
         .join(", ")
 
-    const response = await fetch("/api/updateRoom", {
-        body: JSON.stringify({ ...room, nb_players: nbPlayersInt32, user_pseudo }),
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-    })
-    if (!response.ok) {
-        throw new Error("Failed to leave the room")
+    if (nbPlayersInt32 === 0) {
+        const response = await fetch("/api/deleteRoom", {
+            body: JSON.stringify({ id: room.id }),
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+        })
+        if (!response.ok) {
+            throw new Error("Failed to delete the room")
+        }
+        const data = await response.json()
+        return data
+    } else {
+        const response = await fetch("/api/updateRoom", {
+            body: JSON.stringify({ ...room, nb_players: nbPlayersInt32, user_pseudo }),
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+        })
+        if (!response.ok) {
+            throw new Error("Failed to leave the room")
+        }
+        const data = await response.json()
+        return data
     }
-
-    const data = await response.json()
-    return data
 }
 
 function RoomCard({ room: room_props }: { room: Room }) {
