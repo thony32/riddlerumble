@@ -40,15 +40,15 @@ const Heading = () => {
             <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
                 <SvgMapDraw />
             </div>
-            <div className="w-1/2 text-center space-y-5">
+            <div className="w-[80%] xl:w-1/2 text-center space-y-8">
                 <Wordz />
-                <div className="translate-y-10 space-y-5">
+                <div className="space-y-5">
                     <div>
-                        <h1 className="text-[9rem] font-title tracking-wider">Enigmap</h1>
+                        <h1 className="text-[6em] md:text-[7rem] xl:text-[9rem] font-title md:tracking-wider">Enigmap</h1>
                     </div>
-                    <div className="w-full flex justify-between gap-[30%]">
-                        <div className="text-justify text-3xl first-letter:text-5xl">Set off on a thrilling quest through an interactive map, where every location hides a cryptic puzzle.</div>
-                        <div className="text-justify text-3xl first-letter:text-5xl">Dive into our enigma-filled adventure and unravel the secrets waiting to be discovered!</div>
+                    <div className="w-full flex flex-col md:flex-row justify-between gap-5 md:gap-[30%]">
+                        <div className="text-justify text-xl md:text-2xl xl:text-3xl first-letter:text-5xl">Set off on a thrilling quest through an interactive map, where every location hides a cryptic puzzle.</div>
+                        <div className="text-justify text-xl md:text-2xl xl:text-3xl first-letter:text-5xl">Dive into our enigma-filled adventure and unravel the secrets waiting to be discovered!</div>
                     </div>
                     <div className="flex justify-center">
                         {sessionPending ? (
