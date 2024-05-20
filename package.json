@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --hostname 0.0.0.0",
+    "dev": "next dev",
+    "dev:host": "next dev --hostname 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "auth:setup": "pnpm esr auth-setup.ts",
-    "build:vercel": "npx @edgedb/generate edgeql-js && next build"
+    "build:vercel": "pnpm dlx @edgedb/generate edgeql-js --target ts -I codeipsum/enigmap && next build",
+    "create": "edgedb migration create -I codeipsum/enigmap",
+    "migrate": "edgedb migrate -I codeipsum/enigmap && pnpm dlx @edgedb/generate edgeql-js --target ts -I codeipsum/enigmap",
+    "setup": "pnpm dlx @edgedb/generate edgeql-js --target ts -I codeipsum/enigmap",
+    "migrate:all": "edgedb migration create -I codeipsum/enigmap && edgedb migrate -I codeipsum/enigmap && pnpm dlx @edgedb/generate edgeql-js --target ts -I codeipsum/enigmap"
   },
   "dependencies": {
     "@edgedb/auth-nextjs": "^0.3.1",

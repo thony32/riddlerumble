@@ -21,7 +21,7 @@ function BtnCreateRoom() {
     const createLowMutation = useMutation({
         mutationKey: ["createLow"],
         mutationFn: async () => {
-            return await create_room("", user?.pseudo || "")
+            return await create_room("normal-level", user?.pseudo || "")
         },
         onError: (error) => {
             console.log(error)
