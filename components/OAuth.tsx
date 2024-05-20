@@ -28,7 +28,7 @@ const OAuth = () => {
         redirectUrl.searchParams.set("provider", "builtin::oauth_google")
         const pkce = await generatePKCE()
         redirectUrl.searchParams.set("challenge", pkce.challenge)
-        const redirectTo = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://enigmap.vercel.app" 
+        const redirectTo = process.env.NODE_ENV === "production" ? "https://enigmap.vercel.app" : "http://localhost:3000" 
         redirectUrl.searchParams.set("redirect_to", redirectTo)
         localStorage.setItem("edgedb-pkce-verifier", pkce.verifier)
         window.location.href = redirectUrl.toString()
