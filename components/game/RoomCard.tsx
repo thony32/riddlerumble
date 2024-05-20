@@ -2,7 +2,7 @@ import { Button } from "@nextui-org/button"
 import { Card, Chip } from "@nextui-org/react"
 import UsersSVG from "../Misc/UsersSVG"
 import { useUser } from "@/store/useUser"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import SvgHighLevel from "../Misc/SvgHighLevel"
 import SvgLowLevel from "../Misc/SvgLowLevel"
 import { FacebookMessengerShareButton } from "react-share"
@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from "react"
 import { pusherClient } from "@/lib/pusher"
 import { useRouter } from "next/navigation"
 import { formatDistanceToNow } from "date-fns"
+import useSelectedRoom from "@/store/useSelectedRoom"
 
 export type Room = {
     id: string
@@ -64,8 +65,9 @@ const leave_room = async (room: Room, pseudo: string) => {
 
 function RoomCard({ room: room_props }: { room: Room }) {
     const router = useRouter()
-    const queryClient = useQueryClient()
     const user = useUser((state) => state.user)
+    const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
+    const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
     const [room, setRoom] = useState<Room>(room_props)
     const updateRoomMutation = useMutation({
         mutationKey: ["updateRoom"],
@@ -83,12 +85,13 @@ function RoomCard({ room: room_props }: { room: Room }) {
         ({ id, nb_players, user_pseudo }: { id: string; nb_players: number; user_pseudo: string }) => {
             if (id == room_props.id) {
                 setRoom((prevRoom) => ({ ...prevRoom, nb_players, user_pseudo }))
+                setSelectedRoom(room_props.id)
                 if (nb_players == 3) {
                     router.push(`/game/${room_props.id}`)
                 }
             }
         },
-        [room_props, router]
+        [room_props, router, setSelectedRoom]
     )
 
     useEffect(() => {
@@ -131,6 +134,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
                         size="lg"
                         variant="shadow"
                         color="primary"
+                        disabled={selectedRoom && selectedRoom != room.id ? true : false}
                         isLoading={updateRoomMutation.isPending}
                         onClick={() => updateRoomMutation.mutate({ room, action: "join" })}
                     >

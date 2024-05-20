@@ -59,5 +59,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         user_pseudo: room.user_pseudo,
     })
 
-    res.status(200).json({ success: true, room_id: room })
+    res.status(200).json({ success: true, room: room })
 }
