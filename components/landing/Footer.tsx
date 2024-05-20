@@ -1,10 +1,14 @@
 import Image from "next/image"
+import SvgDecoEnigme from "../Misc/SvgDecoEnigme"
 
 const Footer = () => {
     return (
-        <div className="px-[10%] py-10 bg-base-200/20">
+        <div className="px-[10%] py-10 bg-base-200/20 relative">
             <div className="text-center my-20">
                 <h1 className="font-title text-7xl">Enigmap</h1>
+                <div className="absolute top-0 left-0 w-full flex justify-center -z-50">
+                    <SvgDecoEnigme width="w-1/3" />
+                </div>
             </div>
             <div className="grid grid-cols-3">
                 <div className="space-y-2">
