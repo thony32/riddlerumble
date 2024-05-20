@@ -1,22 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import e, { createClient } from "@/dbschema/edgeql-js"
 import { pusherServer } from "@/lib/pusher"
-import { Room } from "@/components/game/RoomCard"
 
 const room_api = async (level: string) => {
-    let url: string;
-    if (level === "normal-level") {
-        url = "https://ia-codeipsum.vercel.app";
-    } else {
-        url = `https://ia-codeipsum.vercel.app/${level}`;
-    }
-
-    const response = await fetch(url, {
+    const response = await fetch(`https://ia-codeipsum.vercel.app/${level}`, {
         method: "POST",
-    });
-    const data = await response.json();
-    return data;
-};
+    })
+    const data = await response.json()
+    return data
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const client = createClient({
@@ -44,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     user_pseudo := <str>$user_pseudo,
                     isActive := <bool>true
                 }
-            ) {id, delay, latitude, longitude, level, nb_players, prompt, user_pseudo, isActive}`,
+            ) {id, delay, latitude, longitude, level, nb_players, prompt, user_pseudo}`,
         {
             delay_party: delay_party,
             latitude: latitude,
@@ -64,7 +56,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         nb_players: room.nb_players,
         prompt: room.prompt,
         user_pseudo: room.user_pseudo,
-        isActive: room.isActive,
     })
 
     res.status(200).json({ success: true, room: room })

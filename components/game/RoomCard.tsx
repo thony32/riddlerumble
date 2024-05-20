@@ -12,20 +12,7 @@ import { useRouter } from "next/navigation"
 import { formatDistanceToNow } from "date-fns"
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { motion } from "framer-motion"
-
-export type Room = {
-    id: string
-    delay: number
-    latitude: string
-    longitude: string
-    level: string
-    nb_players: number
-    prompt: string
-    user_pseudo: string
-    isActive: boolean
-    created_at: Date | null
-    modified_at: Date | null
-}
+import { Room } from "@/types/room"
 
 const roomLink = process.env.NODE_ENV === "production" ? "https://enigmap.vercel.app" : "http://localhost:3000"
 
