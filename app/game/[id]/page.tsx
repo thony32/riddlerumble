@@ -35,8 +35,6 @@ function Party({ params }: { params: { id: string } }) {
         staleTime: 1000 * 60 * 60 * 24,
     })
 
-    console.log(roomData);
-
     const Completionist = () => {
         localStorage.removeItem(PARTY_START_TIME_KEY)
         setShowTarget(true)
@@ -66,12 +64,18 @@ function Party({ params }: { params: { id: string } }) {
     })
 
     const [showTarget, setShowTarget] = useState(false)
-    const targetMarker = {
+    var targetMarker = {
         latitude: -18,
         longitude: 46,
     }
 
-    const [delay, setDelay] = useState(300000)
+    if (roomData) {
+        targetMarker = {
+            latitude: roomData.latitude,
+            longitude: roomData.longitude
+        }
+    }
+
     const [startTime, setStartTime] = useState<number | null>(null)
     const [distance, setDistance] = useState(0)
     const [elapsedTime, setElapsedTime] = useState("")
@@ -97,7 +101,7 @@ function Party({ params }: { params: { id: string } }) {
 
     const onMarkerDragEnd = useCallback((event: MarkerDragEvent) => {
         var from = turf.point([event.lngLat.lng, event.lngLat.lat])
-        var to = turf.point([46, -18])
+        var to = turf.point([targetMarker.longitude, targetMarker.latitude])
         var options = { units: "kilometers" }
         var distance = turf.distance(from, to, options)
 
@@ -111,7 +115,7 @@ function Party({ params }: { params: { id: string } }) {
                 latitude: event.lngLat.lat,
             })
             var from = turf.point([event.lngLat.lng, event.lngLat.lat])
-            var to = turf.point([46, -18])
+            var to = turf.point([targetMarker.longitude, targetMarker.latitude])
             var options = { units: "kilometers" }
             var distance = turf.distance(from, to, options)
 
@@ -148,7 +152,6 @@ function Party({ params }: { params: { id: string } }) {
         setShowTarget(true)
         setTotalScore(totalScore)
         mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
-        setDelay(0)
         localStorage.removeItem(PARTY_START_TIME_KEY)
     }
 
@@ -186,13 +189,21 @@ function Party({ params }: { params: { id: string } }) {
             <div className="grid grid-cols-12 gap-10">
                 <div className="col-span-2 relative space-y-4">
                     <div className="translate-y-14">
+                        {
+                            roomData &&
+                            <h1 className={`text-center ${roomData.level == 'high-level' && 'text-red-500'}`}>{roomData.level == 'high-level' ? 'High Level' : 'Normal Level'}</h1>
+                        }
                         <h1 className="text-3xl text-center">Find the place</h1>
                         <SvgDecoEnigme />
                         {
                             isRoomPending ?
-                                <span className="loading loading-bars loading-md"></span>
+                                <div className="flex justify-center">
+                                    <span className="loading loading-bars loading-md"></span>
+                                </div>
                                 :
-                                <div dangerouslySetInnerHTML={roomData.prompt}></div>
+                                <>
+                                    <div dangerouslySetInnerHTML={{ __html: roomData.prompt }} />
+                                </>
                         }
                         <SvgDecoEnigme />
                     </div>
@@ -274,12 +285,18 @@ function Party({ params }: { params: { id: string } }) {
                     </div>
                 </div>
                 <div className="col-span-10 rounded-2xl relative">
-                    <div className="absolute z-50 top-3 left-3">
-                        <Countdown
-                            date={startTime + delay}
-                            renderer={timerRender}
-                        />
-                    </div>
+                    {
+                        !showTarget &&
+                        <div className="absolute z-50 top-3 left-3">
+                            {
+                                roomData &&
+                                <Countdown
+                                    date={startTime + (roomData.delay)}
+                                    renderer={timerRender}
+                                />
+                            }
+                        </div>
+                    }
                     <Map
                         ref={mapRef as React.RefObject<MapRef>}
                         mapStyle="mapbox://styles/mapbox/streets-v12"

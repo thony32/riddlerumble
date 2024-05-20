@@ -8,8 +8,8 @@ import useResponsive from "@/utils/useResponsive"
 
 const Loading = () => {
     return (
-        <div>
-            <h1>Loading...</h1>
+        <div className="h-screen grid place-items-center">
+            <span className="loading loading-bars loading-lg"></span>
         </div>
     )
 }
@@ -32,7 +32,7 @@ const ModelContainer = () => {
         invokePlanet()
     }
     return (
-        <div className="h-screen max-md:-translate-y-16">
+        <div className="h-screen -translate-y-16 md:-translate-y-24 xl:translate-y-0 ">
             <Suspense fallback={<Loading />}>
                 <Canvas>
                     <ambientLight

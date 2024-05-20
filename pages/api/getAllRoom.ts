@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         secretKey: process.env.EDGEDB_SECRET_KEY,
     })
 
-    const roomsQuery = e.select(e.Room, () => ({
+    const roomsQuery = e.select(e.Room, (room) => ({
         id: true,
         latitude: true,
         longitude: true,
@@ -18,6 +18,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         user_pseudo: true,
         created_at: true,
         modified_at: true,
+        order_by: {
+            expression: room.modified_at,
+            direction: e.DESC,
+        },
     }));
     const rooms = await roomsQuery.run(client)
 

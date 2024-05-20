@@ -14,7 +14,7 @@ module default {
     required id_user: Users;
     required property latitude -> float32;
     required property longitude -> float32;
-    required property time -> int16;
+    required property time -> int64;
     created_at: datetime {
       rewrite insert using (datetime_of_statement())
     }
@@ -51,6 +51,7 @@ module default {
     required property prompt -> str;
     required property user_pseudo -> str;
     required property level -> str;
+    required property isActive -> bool;
     created_at: datetime {
       rewrite insert using (datetime_of_statement())
     }
