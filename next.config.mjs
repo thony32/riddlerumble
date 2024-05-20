@@ -11,10 +11,6 @@ const nextConfig = (phase, { defaultConfig }) => {
             ],
         },
         swcMinify: true,
-        experimental: {
-            swcTraceProfiling: true,
-            swcMinify: true,
-        },
     }
 }
 

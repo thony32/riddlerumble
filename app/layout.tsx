@@ -6,6 +6,8 @@ import Footer from "@/components/landing/Footer"
 import ThemeHandler from "@/components/Misc/ThemeHandler"
 import ReactQueryProvider from "@/utils/ReactQueryProvider"
 import { ReactLenis } from "@/utils/lenis"
+import { Suspense } from "react"
+import Loader from "@/components/loader"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -29,7 +31,7 @@ export default function RootLayout({
                     <main className="px-[2%] py-3">
                         <ReactLenis root>
                             <ReactQueryProvider>
-                                {children}
+                                <Suspense fallback={<Loader />}>{children}</Suspense>
                             </ReactQueryProvider>
                         </ReactLenis>
                     </main>
