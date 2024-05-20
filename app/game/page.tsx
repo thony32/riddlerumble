@@ -1,6 +1,7 @@
 "use client"
 import BtnCreateRoom from "@/components/game/BtnCreateRoom"
 import PlayerProfil from "@/components/game/PlayerProfil"
+import PreventSwitch from "@/components/game/PreventSwitch"
 import RoomCard from "@/components/game/RoomCard"
 import RoomList from "@/components/game/RoomCard"
 import { pusherClient } from "@/lib/pusher"
@@ -136,6 +137,7 @@ const Game = () => {
 
     return (
         <div className="min-h-[100vh] flex flex-col-reverse xl:grid xl:grid-cols-3 gap-14">
+            <PreventSwitch />
             <div className="xl:col-span-2 p-5 space-y-10">
                 <div className="flex items-center gap-5">
                     <h1 className="text-3xl text-center">List of room</h1>
