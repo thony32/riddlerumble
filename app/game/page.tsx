@@ -20,31 +20,38 @@ const getAllRoom = async () => {
 const Game = () => {
     // const router = useRouter()
     const [allRooms, setAllRooms] = useState<Room[]>([])
-    // const { isPending: isInitialRoomsPending } = useQuery({
-    //     queryKey: ["allRoom"],
-    //     queryFn: async () => {
-    //         const data: Room[] = await getAllRoom()
+    const { isPending: isInitialRoomsPending } = useQuery({
+        queryKey: ["allRoom"],
+        queryFn: async () => {
+            const data: Room[] = await getAllRoom()
 
-    //         // const roomSelected = data.find((room) => room.nb_players == 4)
-    //         // if (roomSelected) {
-    //         //     router.push(`/game/${roomSelected.id}`)
-    //         //     return []
-    //         // }
+            // const roomSelected = data.find((room) => room.nb_players == 4)
+            // if (roomSelected) {
+            //     router.push(`/game/${roomSelected.id}`)
+            //     return []
+            // }
 
-    //         setAllRooms(data)
+            setAllRooms(data)
 
-    //         return data
-    //     },
+            return data
+        },
 
-    //     staleTime: 100 * 60 * 60 * 24,
-    // })
+        staleTime: 100 * 60 * 60 * 24,
+    })
 
     useEffect(() => {
+        const handleNewRoom = (room: Room) => {
+            setAllRooms((prevRooms) => {
+                if (prevRooms.find((r) => r.id === room.id)) {
+                    return prevRooms
+                }
+                return [room, ...prevRooms]
+            })
+        }
+
         pusherClient.subscribe("lobby")
 
-        pusherClient.bind("new-room", (room: Room) => {
-            setAllRooms((prev) => [room, ...prev])
-        })
+        pusherClient.bind("new-room", handleNewRoom)
 
         return () => {
             pusherClient.unsubscribe("lobby")
@@ -87,7 +94,7 @@ const Game = () => {
                 </div>
                 <div className="space-y-5">
                     <BtnCreateRoom />
-                    {/* {isInitialRoomsPending ? (
+                    {isInitialRoomsPending ? (
                         <div className="grid grid-cols-2 gap-4">
                             <Skeleton className="rounded-lg w-full h-44" />
                             <Skeleton className="rounded-lg w-full h-44" />
@@ -98,8 +105,7 @@ const Game = () => {
                         </div>
                     ) : (
                         <RoomList room_list={allRooms} />
-                    )} */}
-                    <RoomList room_list={allRooms} />
+                    )}
                 </div>
             </div>
             <div className="p-5 space-y-10">
