@@ -2,6 +2,7 @@ import getInitial from "@/utils/getInitials"
 import { Avatar } from "@nextui-org/avatar"
 import BtnLogout from "./BtnLogout"
 import { useUser } from "@/store/useUser"
+import Link from "next/link"
 
 const Navbar = () => {
     const user = useUser((state) => state.user)
@@ -9,14 +10,17 @@ const Navbar = () => {
     return (
         <div className="flex justify-between items-center border-b-1 border-current pb-4">
             <div>
-                <h1 className="text-2xl">Enigmap</h1>
+                <Link href="/">
+                    <h1 className="text-2xl">Enigmap</h1>
+                </Link>
             </div>
             <div className="flex gap-8 items-center">
                 <div className="flex items-center gap-2 relative">
                     {user != null && (
                         <>
                             <Avatar
-                                isBordered color="primary"
+                                isBordered
+                                color="primary"
                                 showFallback
                                 name={getInitial(user.full_name)}
                                 src={user.avatar!}

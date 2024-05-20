@@ -12,22 +12,23 @@ import { useUser } from "@/store/useUser"
 import getInitial from "@/utils/getInitials"
 import Image from "next/image"
 import getCountryCode from "@/utils/getCountryCode"
+import useSelectedRoom from "@/store/useSelectedRoom"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
 const fetchRoom = async (roomId: string) => {
-    const response = await fetch('/api/getRoom', {
-        method: 'POST',
+    const response = await fetch("/api/getRoom", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify({ room_id: roomId })
-    });
+        body: JSON.stringify({ room_id: roomId }),
+    })
     if (!response.ok) {
-        throw new Error('Failed to fetch room data');
+        throw new Error("Failed to fetch room data")
     }
-    return response.json();
-};
+    return response.json()
+}
 
 const create_temp_room = async (latitude: number, longitude: number, time: string, id_user: string, id_room: string) => {
     const response = await fetch("/api/createTempRoom", {
@@ -56,8 +57,8 @@ const getTempRoom = async (id_room: string) => {
         headers: { "Content-Type": "application/json" },
     })
     if (!response.ok) throw new Error("Failed to fetch temp room")
-    const jsonData = await response.json();
-    return jsonData;
+    const jsonData = await response.json()
+    return jsonData
 }
 
 const disableRoom = async (id_room: string) => {
@@ -71,23 +72,18 @@ const disableRoom = async (id_room: string) => {
 }
 
 function Party({ params }: { params: { id: string } }) {
-    const {
-        isPending: isRoomPending,
-        data: roomData,
-    } = useQuery({
+    const { isPending: isRoomPending, data: roomData } = useQuery({
         queryKey: ["roomData"],
         queryFn: () => fetchRoom(params.id),
         staleTime: 1000 * 60 * 60 * 24,
     })
+    const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
 
     const Completionist = () => {
         localStorage.removeItem(PARTY_START_TIME_KEY)
-        const { isOpen, onOpen, onOpenChange } = useDisclosure();
+        const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-        const {
-            isPending: isTempRoomPending,
-            data: tempRoomData,
-        } = useQuery({
+        const { isPending: isTempRoomPending, data: tempRoomData } = useQuery({
             queryKey: ["tempRoomData"],
             queryFn: () => getTempRoom(params.id),
         })
@@ -112,7 +108,14 @@ function Party({ params }: { params: { id: string } }) {
             disableRoomFun.mutate()
         }, [])
         return (
-            <Modal className="-translate-x-[100%]" placement="bottom-center" isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+            <Modal
+                className="-translate-x-[100%]"
+                placement="bottom-center"
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                isDismissable={false}
+                isKeyboardDismissDisabled={true}
+            >
                 <ModalContent>
                     {(onClose) => (
                         <>
@@ -127,65 +130,74 @@ function Party({ params }: { params: { id: string } }) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {
-                                            isTempRoomPending ?
-                                                <tr className="border-b border-current w-full">
-                                                    <td colSpan={1} className='py-2'>
-                                                        <div className='flex justify-start'>
-                                                            <span className="loading loading-dots loading-md"></span>
+                                        {isTempRoomPending ? (
+                                            <tr className="border-b border-current w-full">
+                                                <td
+                                                    colSpan={1}
+                                                    className="py-2"
+                                                >
+                                                    <div className="flex justify-start">
+                                                        <span className="loading loading-dots loading-md"></span>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    colSpan={1}
+                                                    className="py-2"
+                                                >
+                                                    <div className="flex justify-end">
+                                                        <span className="loading loading-dots loading-md"></span>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    colSpan={1}
+                                                    className="py-2"
+                                                >
+                                                    <div className="flex justify-end px-4">
+                                                        <span className="loading loading-dots loading-md"></span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            tempRoomData?.map((tempRoom: any, index: number) => (
+                                                <tr
+                                                    key={index}
+                                                    className="border-b border-current"
+                                                >
+                                                    <td className="px-4 py-2 flex items-center gap-2 justify-between">
+                                                        <div className="flex flex-col gap-1">
+                                                            <Avatar
+                                                                className="w-5 h-5"
+                                                                showFallback
+                                                                name={getInitial(tempRoom.id_user.full_name)}
+                                                                src={tempRoom.id_user.avatar}
+                                                                alt="Avatar"
+                                                            />
+                                                            <Image
+                                                                width={64}
+                                                                height={64}
+                                                                src={`https://flagsapi.com/${getCountryCode(tempRoom.id_user.nationality)}/shiny/64.png`}
+                                                                alt={getInitial(tempRoom.id_user.full_name)}
+                                                                className="w-4"
+                                                            />
                                                         </div>
+                                                        <span>{tempRoom.id_user.pseudo}</span>
                                                     </td>
-                                                    <td colSpan={1} className='py-2'>
-                                                        <div className='flex justify-end'>
-                                                            <span className="loading loading-dots loading-md"></span>
-                                                        </div>
-                                                    </td>
-                                                    <td colSpan={1} className='py-2'>
-                                                        <div className='flex justify-end px-4'>
-                                                            <span className="loading loading-dots loading-md"></span>
-                                                        </div>
+                                                    <td className="px-4 py-2 text-right">{tempRoom.time}</td>
+                                                    <td className="px-4 py-2 text-right">
+                                                        Lat: {tempRoom.latitude.toFixed(2)} , Long: {tempRoom.longitude.toFixed(2)}
                                                     </td>
                                                 </tr>
-                                                :
-                                                tempRoomData?.map((tempRoom: any, index: number) => (
-                                                    <tr
-                                                        key={index}
-                                                        className="border-b border-current"
-                                                    >
-                                                        <td className="px-4 py-2 flex items-center gap-2 justify-between">
-                                                            <div className="flex flex-col gap-1">
-                                                                <Avatar
-                                                                    className="w-5 h-5"
-                                                                    showFallback
-                                                                    name={getInitial(tempRoom.id_user.full_name)}
-                                                                    src={tempRoom.id_user.avatar}
-                                                                    alt="Avatar"
-                                                                />
-                                                                <Image
-                                                                    width={64}
-                                                                    height={64}
-                                                                    src={`https://flagsapi.com/${getCountryCode(tempRoom.id_user.nationality)}/shiny/64.png`}
-                                                                    alt={getInitial(tempRoom.id_user.full_name)}
-                                                                    className="w-4"
-                                                                />
-                                                            </div>
-                                                            <span>{tempRoom.id_user.pseudo}</span>
-                                                        </td>
-                                                        <td className="px-4 py-2 text-right">
-                                                            {tempRoom.time}
-                                                        </td>
-                                                        <td className="px-4 py-2 text-right">Lat: {tempRoom.latitude.toFixed(2)} , Long: {tempRoom.longitude.toFixed(2)}</td>
-                                                    </tr>
-                                                ))
-                                        }
+                                            ))
+                                        )}
                                     </tbody>
                                 </table>
                             </ModalBody>
                             <ModalFooter>
-                                <Link href={'/game'}>
-                                    <Button>
-                                        Close
-                                    </Button>
+                                <Link
+                                    href={"/game"}
+                                    onClick={() => setSelectedRoom(null)}
+                                >
+                                    <Button>Close</Button>
                                 </Link>
                             </ModalFooter>
                         </>
@@ -225,7 +237,7 @@ function Party({ params }: { params: { id: string } }) {
     if (roomData) {
         targetMarker = {
             latitude: roomData.latitude,
-            longitude: roomData.longitude
+            longitude: roomData.longitude,
         }
     }
 
@@ -330,7 +342,7 @@ function Party({ params }: { params: { id: string } }) {
 
         const totalScore = Math.round((scoreDistance * distanceWeight + timeScore * timeWeight) / (distanceWeight + timeWeight))
         setShowTarget(true)
-        setTotalScore(roomData.level == 'high-level' ? totalScore : totalScore + 10)
+        setTotalScore(roomData.level == "high-level" ? totalScore : totalScore + 10)
         mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
         createTempRoom.mutate()
         createPlayerStat.mutate()
@@ -371,22 +383,18 @@ function Party({ params }: { params: { id: string } }) {
             <div className="grid grid-cols-12 gap-10">
                 <div className="col-span-2 relative space-y-4">
                     <div className="translate-y-14">
-                        {
-                            roomData &&
-                            <h1 className={`text-center ${roomData.level == 'high-level' && 'text-red-500'}`}>{roomData.level == 'high-level' ? 'High Level (+10 pts)' : 'Normal Level'}</h1>
-                        }
+                        {roomData && <h1 className={`text-center ${roomData.level == "high-level" && "text-red-500"}`}>{roomData.level == "high-level" ? "High Level (+10 pts)" : "Normal Level"}</h1>}
                         <h1 className="text-3xl text-center">Find the place</h1>
                         <SvgDecoEnigme />
-                        {
-                            isRoomPending ?
-                                <div className="flex justify-center">
-                                    <span className="loading loading-bars loading-md"></span>
-                                </div>
-                                :
-                                <>
-                                    <div dangerouslySetInnerHTML={{ __html: roomData.prompt }} />
-                                </>
-                        }
+                        {isRoomPending ? (
+                            <div className="flex justify-center">
+                                <span className="loading loading-bars loading-md"></span>
+                            </div>
+                        ) : (
+                            <>
+                                <div dangerouslySetInnerHTML={{ __html: roomData.prompt }} />
+                            </>
+                        )}
                         <SvgDecoEnigme />
                     </div>
                     <div className="absolute bottom-0 w-full py-2">
@@ -464,13 +472,12 @@ function Party({ params }: { params: { id: string } }) {
                 </div>
                 <div className="col-span-10 rounded-2xl relative">
                     <div className="absolute z-50 top-3 left-3">
-                        {
-                            roomData &&
+                        {roomData && (
                             <Countdown
-                                date={startTime + (roomData.delay)}
+                                date={startTime + roomData.delay}
                                 renderer={timerRender}
                             />
-                        }
+                        )}
                     </div>
                     <Map
                         ref={mapRef as React.RefObject<MapRef>}
