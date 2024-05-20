@@ -1,16 +1,17 @@
 import { Button } from "@nextui-org/button"
-import { Card } from "@nextui-org/react"
+import { Card, Chip } from "@nextui-org/react"
 import UsersSVG from "../Misc/UsersSVG"
 import { useUser } from "@/store/useUser"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import SvgHighLevel from "../Misc/SvgHighLevel"
 import SvgLowLevel from "../Misc/SvgLowLevel"
 import { FacebookMessengerShareButton } from "react-share"
 import { useCallback, useEffect, useState } from "react"
 import { pusherClient } from "@/lib/pusher"
 import { useRouter } from "next/navigation"
+import { formatDistanceToNow } from "date-fns"
 
-export interface Room {
+export type Room = {
     id: string
     delay: number
     latitude: string
@@ -20,6 +21,8 @@ export interface Room {
     prompt: string
     user_pseudo: string
     isActive: boolean
+    created_at: Date | null
+    modified_at: Date | null
 }
 
 const roomLink = process.env.NODE_ENV === "production" ? "https://enigmap.vercel.app" : "http://localhost:3000"
@@ -62,6 +65,7 @@ const leave_room = async (room: Room, pseudo: string) => {
 
 function RoomCard({ room: room_props }: { room: Room }) {
     const router = useRouter()
+    const queryClient = useQueryClient()
     const user = useUser((state) => state.user)
     const [room, setRoom] = useState<Room>(room_props)
     const updateRoomMutation = useMutation({
@@ -73,9 +77,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
         onError: (error) => {
             console.log(error)
         },
-        onSuccess: ({ result }) => {
-            console.log("Room updated successfully! ", result)
-        },
+        onSuccess: ({ result }) => {},
     })
 
     const handleJoinRoom = useCallback(
@@ -146,6 +148,15 @@ function RoomCard({ room: room_props }: { room: Room }) {
                     </Button>
                 )}
             </div>
+
+            <Chip
+                variant="faded"
+                color="primary"
+                className="absolute top-1 left-1"
+                size="sm"
+            >
+                {formatDistanceToNow(new Date(room.created_at || new Date()), { includeSeconds: true, addSuffix: true })}
+            </Chip>
 
             <div className="absolute bottom-1 right-4 text-white text-xs flex gap-2 items-center">
                 <span>ID {room.id}</span>

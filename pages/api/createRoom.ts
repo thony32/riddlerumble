@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     nb_players := 1,
                     prompt := <str>$prompt,
                     user_pseudo := <str>$user_pseudo,
-                    isActive := true 
+                    isActive := <bool>true
                 }
             ) {id, delay, latitude, longitude, level, nb_players, prompt, user_pseudo, isActive}`,
         {
