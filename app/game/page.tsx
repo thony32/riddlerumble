@@ -1,4 +1,5 @@
 "use client"
+import SvgMapDraw from "@/components/Misc/SvgMapDraw"
 import BtnCreateRoom from "@/components/game/BtnCreateRoom"
 import PlayerProfil from "@/components/game/PlayerProfil"
 import RoomCard from "@/components/game/RoomCard"
@@ -136,6 +137,9 @@ const Game = () => {
 
     return (
         <div className="min-h-[100vh] flex flex-col-reverse xl:grid xl:grid-cols-3 gap-14">
+            <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
+                <SvgMapDraw />
+            </div>
             <div className="xl:col-span-2 p-5 space-y-10">
                 <div className="flex items-center gap-5">
                     <h1 className="text-3xl text-center">List of room</h1>
