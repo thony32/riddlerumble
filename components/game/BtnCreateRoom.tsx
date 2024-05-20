@@ -1,3 +1,4 @@
+import useSelectedRoom from "@/store/useSelectedRoom"
 import { useUser } from "@/store/useUser"
 import { Button } from "@nextui-org/button"
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
@@ -16,6 +17,8 @@ const create_room = async (level: string, pseudo: string) => {
 
 function BtnCreateRoom() {
     const user = useUser((state) => state.user)
+    const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
+    const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const createLowMutation = useMutation({
         mutationKey: ["createLow"],
         mutationFn: async () => {
@@ -24,8 +27,8 @@ function BtnCreateRoom() {
         onError: (error) => {
             console.log(error)
         },
-        onSuccess: (data) => {
-            console.log("Room created successfully! ", data)
+        onSuccess: ({ room }) => {
+            setSelectedRoom(room.id)
         },
     })
     const createHighMutation = useMutation({
@@ -36,8 +39,8 @@ function BtnCreateRoom() {
         onError: (error) => {
             console.log(error)
         },
-        onSuccess: (data) => {
-            console.log("Room created successfully! ", data)
+        onSuccess: ({ room }) => {
+            setSelectedRoom(room.id)
         },
     })
 
@@ -73,6 +76,7 @@ function BtnCreateRoom() {
                                         onClick={() => createLowMutation.mutate()}
                                         className="py-10"
                                         color="warning"
+                                        disabled={!!selectedRoom}
                                     >
                                         {createLowMutation.isPending ? (
                                             <div className="flex justify-center">
@@ -90,6 +94,7 @@ function BtnCreateRoom() {
                                         onClick={() => createHighMutation.mutate()}
                                         className="py-10"
                                         color="danger"
+                                        disabled={!!selectedRoom}
                                     >
                                         {createHighMutation.isPending ? (
                                             <div className="flex justify-center">

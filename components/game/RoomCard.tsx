@@ -2,7 +2,7 @@ import { Button } from "@nextui-org/button"
 import { Card, Chip } from "@nextui-org/react"
 import UsersSVG from "../Misc/UsersSVG"
 import { useUser } from "@/store/useUser"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import SvgHighLevel from "../Misc/SvgHighLevel"
 import SvgLowLevel from "../Misc/SvgLowLevel"
 import { FacebookMessengerShareButton } from "react-share"
@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from "react"
 import { pusherClient } from "@/lib/pusher"
 import { useRouter } from "next/navigation"
 import { formatDistanceToNow } from "date-fns"
+import useSelectedRoom from "@/store/useSelectedRoom"
 
 export type Room = {
     id: string
@@ -65,19 +66,27 @@ const leave_room = async (room: Room, pseudo: string) => {
 
 function RoomCard({ room: room_props }: { room: Room }) {
     const router = useRouter()
-    const queryClient = useQueryClient()
     const user = useUser((state) => state.user)
+    const [action, setAction] = useState<"join" | "leave">()
+    const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
+    const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
     const [room, setRoom] = useState<Room>(room_props)
     const updateRoomMutation = useMutation({
         mutationKey: ["updateRoom"],
-        mutationFn: async ({ room, action }: { room: Room; action: "join" | "leave" }) => {
-            if (action == "join") return await update_room(room, user?.pseudo || "")
+        mutationFn: async ({ room, given_action }: { room: Room; given_action: "join" | "leave" }) => {
+            if (given_action == "join") return await update_room(room, user?.pseudo || "")
             else return await leave_room(room, user?.pseudo || "")
         },
         onError: (error) => {
             console.log(error)
         },
-        onSuccess: ({ result }) => {},
+        onSuccess: () => {
+            if (action == "join") {
+                setSelectedRoom(room.id)
+            } else {
+                setSelectedRoom(null)
+            }
+        },
     })
 
     const handleJoinRoom = useCallback(
@@ -91,6 +100,11 @@ function RoomCard({ room: room_props }: { room: Room }) {
         },
         [room_props, router]
     )
+
+    const handleClick = (room: Room, given_action: "join" | "leave") => {
+        setAction(given_action)
+        updateRoomMutation.mutate({ room, given_action })
+    }
 
     useEffect(() => {
         pusherClient.subscribe(room_props.id)
@@ -109,8 +123,8 @@ function RoomCard({ room: room_props }: { room: Room }) {
         >
             <div className="w-full top-0 left-0 absolute bg-[url('/images/room-map.png')] bg-cover bg-center h-full opacity-45 group-hover:opacity-100 duration-700 ease-soft-spring" />
             <div className="relative justify-end items-center gap-52 flex text-white p-7 w-full bg-gradient-to-r from-transparent to-black">
-                <div>
-                    <h1 className="text-3xl flex items-center gap-3 font-extrabold [text-shadow:_1px_3px_5px_rgba(0,0,0,1)]">
+                <div className="w-full">
+                    <h1 className="text-3xl flex items-center text-nowrap gap-3 font-extrabold [text-shadow:_1px_3px_5px_rgba(0,0,0,1)]">
                         {room.level == "high-level" ? (
                             <>
                                 <SvgHighLevel />
@@ -119,7 +133,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
                         ) : (
                             <>
                                 <SvgLowLevel />
-                                Low Level
+                                Normal Level
                             </>
                         )}
                     </h1>
@@ -127,25 +141,27 @@ function RoomCard({ room: room_props }: { room: Room }) {
                         <UsersSVG className="size-16" /> <span>{room.nb_players} / 4</span>
                     </div>
                 </div>
-                {!room.user_pseudo.split(", ").includes(user?.pseudo!, 0) ? (
+                {!selectedRoom ? (
                     <Button
                         size="lg"
                         variant="shadow"
                         color="primary"
                         isLoading={updateRoomMutation.isPending}
-                        onClick={() => updateRoomMutation.mutate({ room, action: "join" })}
+                        onClick={() => handleClick(room, "join")}
                     >
                         Join
                     </Button>
-                ) : (
+                ) : room.id == selectedRoom ? (
                     <Button
                         size="lg"
                         variant="shadow"
                         isLoading={updateRoomMutation.isPending}
-                        onClick={() => updateRoomMutation.mutate({ room, action: "leave" })}
+                        onClick={() => handleClick(room, "leave")}
                     >
                         Leave
                     </Button>
+                ) : (
+                    <span className="w-20" />
                 )}
             </div>
 

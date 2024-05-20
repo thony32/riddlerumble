@@ -67,5 +67,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         isActive: room.isActive,
     })
 
-    res.status(200).json({ success: true, room_id: room })
+    res.status(200).json({ success: true, room: room })
 }
