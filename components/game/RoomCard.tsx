@@ -76,16 +76,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
         onError: (error) => {
             console.log(error)
         },
-        onSuccess: ({ result }) => {
-            // queryClient.cancelQueries({queryKey: ["allRoom"]})
-
-            // const previousRooms = queryClient.getQueryData(["allRoom"])
-
-            // if(previousRooms) {
-            //     queryClient.setQueryData(["allRoom"], [])
-            // }
-            console.log(result)
-        },
+        onSuccess: ({ result }) => {},
     })
 
     const handleJoinRoom = useCallback(
@@ -163,7 +154,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
                 className="absolute top-1 left-1"
                 size="sm"
             >
-                {formatDistanceToNow(new Date(room.created_at!), { includeSeconds: true, addSuffix: true })}
+                {formatDistanceToNow(new Date(room.created_at || new Date()), { includeSeconds: true, addSuffix: true })}
             </Chip>
 
             <div className="absolute bottom-1 right-4 text-white text-xs flex gap-2 items-center">
