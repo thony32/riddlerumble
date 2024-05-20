@@ -50,8 +50,8 @@ function RoomList({ room_list }: Props) {
             console.log(error)
         },
         onSuccess: ({ result }) => {
-            // console.log("Room updated successfully! ", result)
-            queryClient.invalidateQueries({ queryKey: ["allRoom"], exact: true, refetchType: "active" })
+            console.log("Room updated successfully! ", result)
+            // queryClient.invalidateQueries({ queryKey: ["allRoom"], exact: true, refetchType: "active" })
         },
     })
     return (
@@ -108,7 +108,7 @@ function RoomList({ room_list }: Props) {
                             url={`http://localhost:3000/game/${room.id}`}
                         >
                             {/* TODO: ovay ty icon ty */}
-                            <FacebookMessengerIcon size={32}/>
+                            <FacebookMessengerIcon size={32} />
                         </FacebookMessengerShareButton>
                     </div>
                 </Card>
