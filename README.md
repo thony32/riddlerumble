@@ -1,2 +1,2 @@
 ## Generating edeql-js
-pnpx @edgedb/generate edgeql-js --target ts  -I codeipsum/enigmap
+pnpm dlx @edgedb/generate edgeql-js --target ts  -I codeipsum/enigmap
