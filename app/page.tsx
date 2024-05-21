@@ -1,7 +1,8 @@
-import Heading from "@/components/landing/Heading";
-import ModelContainer from "@/components/landing/ModelContainer";
-import Ranking from "@/components/landing/Ranking";
-import TutoVideo from "@/components/landing/TutoVideo";
+import dynamic from "next/dynamic"
+const Heading = dynamic(() => import("@/components/landing/Heading"))
+const ModelContainer = dynamic(() => import("@/components/landing/ModelContainer"))
+const Ranking = dynamic(() => import("@/components/landing/Ranking"))
+const TutoVideo = dynamic(() => import("@/components/landing/TutoVideo"))
 
 export default async function Home() {
     return (

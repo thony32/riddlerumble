@@ -4,10 +4,12 @@ import { Avatar, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeade
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useUser } from "@/store/useUser"
 import React, { useCallback, useState, useEffect, useRef } from "react"
-import Map, { MapMouseEvent, MapRef, Marker, MarkerDragEvent } from "react-map-gl"
+import { MapMouseEvent, MapRef, Marker, MarkerDragEvent } from "react-map-gl"
 import Countdown, { CountdownRendererFn } from "react-countdown"
 import Link from "next/link"
-import SvgDecoEnigme from "@/components/Misc/SvgDecoEnigme"
+import dynamic from "next/dynamic"
+const Map = dynamic(() => import("react-map-gl"))
+const SvgDecoEnigme = dynamic(() => import("@/components/Misc/SvgDecoEnigme"))
 import Image from "next/image"
 import getCountryCode from "@/utils/getCountryCode"
 import * as turf from "@turf/turf"
@@ -361,7 +363,7 @@ function Party({ params }: { params: { id: string } }) {
 
         const totalScore = Math.round((scoreDistance * distanceWeight + timeScore * timeWeight) / (distanceWeight + timeWeight))
         setShowTarget(true)
-        setTotalScore(roomData.level == 'high-level' ? totalScore - penalityPoints : totalScore - penalityPoints + 10)
+        setTotalScore(roomData.level == "high-level" ? totalScore - penalityPoints : totalScore - penalityPoints + 10)
         mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
         createTempRoom.mutate()
         createPlayerStat.mutate()
@@ -428,12 +430,11 @@ function Party({ params }: { params: { id: string } }) {
                     </div>
                     <div className="absolute bottom-0 w-full py-2">
                         <div className="space-y-4">
-                            {
-                                penalityPoints != 0 &&
+                            {penalityPoints != 0 && (
                                 <div className="text-center">
                                     <label className="text-red-500">Penality Points : - {penalityPoints} pts</label>
                                 </div>
-                            }
+                            )}
                             {showTarget && (
                                 <div className="flex items-center justify-between">
                                     <div>

@@ -3,12 +3,13 @@ import { pusherClient } from "@/lib/pusher"
 import { Room } from "@/types/room"
 import { Skeleton } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
-import BtnCreateRoom from "@/components/game/BtnCreateRoom"
-import PlayerProfil from "@/components/game/PlayerProfil"
-import PreventSwitch from "@/components/game/PreventSwitch"
-import RoomCard from "@/components/game/RoomCard"
+import dynamic from "next/dynamic"
+const BtnCreateRoom = dynamic(() => import("@/components/game/BtnCreateRoom"))
+const PlayerProfil = dynamic(() => import("@/components/game/PlayerProfil"))
+const PreventSwitch = dynamic(() => import("@/components/game/PreventSwitch"))
+const RoomCard = dynamic(() => import("@/components/game/RoomCard"))
 import useResponsive from "@/utils/useResponsive"
+import { useEffect, useState } from "react"
 
 const getAllRoom = async () => {
     const res = await fetch("/api/getAllRoom")

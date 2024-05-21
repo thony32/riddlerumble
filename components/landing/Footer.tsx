@@ -1,6 +1,7 @@
 "use client"
+import dynamic from "next/dynamic"
 import Image from "next/image"
-import SvgDecoEnigme from "../Misc/SvgDecoEnigme"
+const SvgDecoEnigme = dynamic(() => import("../Misc/SvgDecoEnigme"))
 
 const Footer = () => {
     return (

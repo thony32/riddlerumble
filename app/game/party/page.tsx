@@ -1,6 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/display-name */
 "use client"
-import React, { useCallback, useState, useEffect, useRef } from "react"
-import Map, { MapMouseEvent, MapRef, Marker, MarkerDragEvent } from "react-map-gl"
+import React, { useCallback, useState, useEffect, useRef, useMemo } from "react"
+import { MapMouseEvent, MapRef, Marker, MarkerDragEvent } from "react-map-gl"
+import dynamic from "next/dynamic"
+const Map = dynamic(() => import("react-map-gl"))
 import * as turf from "@turf/turf"
 import "mapbox-gl/dist/mapbox-gl.css"
 import Countdown, { CountdownRendererFn } from "react-countdown"
@@ -10,27 +14,31 @@ import Link from "next/link"
 const PARTY_START_TIME_KEY = "partyStartTime"
 
 function Party() {
-    const Completionist = () => {
-        localStorage.removeItem(PARTY_START_TIME_KEY)
-        setShowTarget(true)
-        mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
-        return <span></span>
-    }
-
-    const timerRender: CountdownRendererFn = ({ minutes, seconds, completed }) => {
-        if (completed) {
-            return <Completionist />
-        } else {
-            const formattedMinutes = String(minutes).padStart(2, "0")
-            const formattedSeconds = String(seconds).padStart(2, "0")
-
-            return (
-                <span className="text-3xl bg-base-200 px-2 rounded-lg">
-                    {formattedMinutes}:{formattedSeconds}
-                </span>
-            )
+    const Completionist = useMemo(() => {
+        return () => {
+            localStorage.removeItem(PARTY_START_TIME_KEY)
+            setShowTarget(true)
+            mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
+            return <span></span>
         }
-    }
+    }, [])
+
+    const timerRender = useMemo<CountdownRendererFn>(() => {
+        return ({ minutes, seconds, completed }) => {
+            if (completed) {
+                return <Completionist />
+            } else {
+                const formattedMinutes = String(minutes).padStart(2, "0")
+                const formattedSeconds = String(seconds).padStart(2, "0")
+
+                return (
+                    <span className="text-3xl bg-base-200 px-2 rounded-lg">
+                        {formattedMinutes}:{formattedSeconds}
+                    </span>
+                )
+            }
+        }
+    }, [Completionist])
 
     const mapRef = useRef<MapRef>(null!)
     const [marker, setMarker] = useState({

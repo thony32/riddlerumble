@@ -1,18 +1,18 @@
 "use client"
+import dynamic from "next/dynamic"
 import { Canvas } from "@react-three/fiber"
-import { Suspense, useRef } from "react"
-import { CuteModel } from "./CutePlanet"
-import { useQuery } from "@tanstack/react-query"
-import { getSession } from "@/services/user-action"
-import useResponsive from "@/utils/useResponsive"
-
-const Loading = () => {
-    return (
+import { useRef } from "react"
+const CuteModel = dynamic(() => import("./CutePlanet"), {
+    ssr: false,
+    loading: () => (
         <div className="h-screen grid place-items-center">
             <span className="loading loading-bars loading-lg"></span>
         </div>
-    )
-}
+    ),
+})
+import { useQuery } from "@tanstack/react-query"
+import { getSession } from "@/services/user-action"
+import useResponsive from "@/utils/useResponsive"
 
 const ModelContainer = () => {
     const planet_ref = useRef() as any
@@ -33,27 +33,25 @@ const ModelContainer = () => {
     }
     return (
         <div className="h-screen -translate-y-16 md:-translate-y-24 xl:translate-y-0 ">
-            <Suspense fallback={<Loading />}>
-                <Canvas>
-                    <ambientLight
-                        color={0xffffff}
-                        intensity={0.5}
-                    />
-                    <spotLight
-                        position={[1, 6, 1.5]}
-                        angle={0.2}
-                        penumbra={1}
-                        intensity={2.5}
-                        castShadow
-                        shadow-mapSize={[2048, 2048]}
-                    />
-                    <directionalLight />
-                    <CuteModel
-                        ref={planet_ref}
-                        scale={isMobile ? [0.5, 0.5, 0.5] : isTablet ? [0.75, 0.75, 0.75] : [1, 1, 1]}
-                    />
-                </Canvas>
-            </Suspense>
+            <Canvas>
+                <ambientLight
+                    color={0xffffff}
+                    intensity={0.5}
+                />
+                <spotLight
+                    position={[1, 6, 1.5]}
+                    angle={0.2}
+                    penumbra={1}
+                    intensity={2.5}
+                    castShadow
+                    shadow-mapSize={[2048, 2048]}
+                />
+                <directionalLight />
+                <CuteModel
+                    ref={planet_ref}
+                    scale={isMobile ? [0.5, 0.5, 0.5] : isTablet ? [0.75, 0.75, 0.75] : [1, 1, 1]}
+                />
+            </Canvas>
         </div>
     )
 }
