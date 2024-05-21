@@ -349,12 +349,20 @@ function Party({ params }: { params: { id: string } }) {
             }
         }
 
+        const handleTabNavSwitch = () => {
+            if (document.hidden) {
+                console.log("add penality points");
+            }
+        }
+
         document.addEventListener("contextmenu", handleContextMenu)
         document.addEventListener("keydown", handleKeyDown)
+        document.addEventListener("visibilitychange", handleTabNavSwitch)
 
         return () => {
             document.removeEventListener("contextmenu", handleContextMenu)
             document.removeEventListener("keydown", handleKeyDown)
+            document.removeEventListener("visibilitychange", handleTabNavSwitch)
         }
     }, [])
 
