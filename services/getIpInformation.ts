@@ -1,9 +1,8 @@
+import { BASE_URL } from "@/env"
 import { IpInformation } from "@/models/ipInformation"
 
-const IpInfoLink = process.env.NODE_ENV === "production" ? "https://enigmap.vercel.app" : "http://localhost:3000"
-
 export default async function getIpInformation(): Promise<IpInformation> {
-    const response = await fetch(`${IpInfoLink}/api/getClientNationality`)
+    const response = await fetch(`${BASE_URL}/api/getClientNationality`)
     if (!response.ok) {
         throw new Error("Failed to fetch IP info")
     }

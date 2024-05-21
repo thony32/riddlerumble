@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import e, { createClient } from "@/dbschema/edgeql-js"
+import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const client = createClient({
-        instanceName: process.env.EDGEDB_INSTANCE,
-        secretKey: process.env.EDGEDB_SECRET_KEY,
+        instanceName: EDGEDB_INSTANCE,
+        secretKey: EDGEDB_SECRET_KEY,
     })
 
     const roomsQuery = e.select(e.Room, (room) => ({
@@ -23,8 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             expression: room.modified_at,
             direction: e.DESC,
         },
-        filter: e.op(room.isActive, '=', true)
-    }));
+        filter: e.op(room.isActive, "=", true),
+    }))
     const rooms = await roomsQuery.run(client)
 
     res.status(200).json(rooms)

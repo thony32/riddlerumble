@@ -1,11 +1,12 @@
-import e, { createClient } from '@/dbschema/edgeql-js';
-import { NextApiRequest, NextApiResponse } from "next";
+import e, { createClient } from "@/dbschema/edgeql-js"
+import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
+import { NextApiRequest, NextApiResponse } from "next"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const client = createClient({
-            instanceName: process.env.EDGEDB_INSTANCE,
-            secretKey: process.env.EDGEDB_SECRET_KEY,
+            instanceName: EDGEDB_INSTANCE,
+            secretKey: EDGEDB_SECRET_KEY,
         })
 
         const { user_id, player_score } = req.body
@@ -13,16 +14,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const currentScoreQuery = e.select(e.Users, () => ({
             score: true,
             filter_single: { id: user_id },
-        }));
-        const currentScore = await currentScoreQuery.run(client);
+        }))
+        const currentScore = await currentScoreQuery.run(client)
 
-        const newScore = currentScore?.score + player_score;
+        const newScore = currentScore?.score + player_score
 
         const userScoreUpdateQuery = e.update(e.Users, () => ({
             filter_single: { id: user_id },
             set: {
-                score: newScore
-            }
+                score: newScore,
+            },
         }))
 
         await userScoreUpdateQuery.run(client)

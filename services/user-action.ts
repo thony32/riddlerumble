@@ -1,11 +1,12 @@
 "use server"
 import e, { createClient } from "@/dbschema/edgeql-js"
 import { auth } from "@/edgedb"
+import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
 import { cookies } from "next/headers"
 
 const client = createClient({
-    instanceName: process.env.EDGEDB_INSTANCE,
-    secretKey: process.env.EDGEDB_SECRET_KEY,
+    instanceName: EDGEDB_INSTANCE,
+    secretKey: EDGEDB_SECRET_KEY,
 })
 
 export async function getSession() {

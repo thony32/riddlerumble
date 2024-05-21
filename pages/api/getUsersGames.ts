@@ -1,15 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import e, { createClient } from "@/dbschema/edgeql-js"
+import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const client = createClient({
-        instanceName: process.env.EDGEDB_INSTANCE,
-        secretKey: process.env.EDGEDB_SECRET_KEY,
+        instanceName: EDGEDB_INSTANCE,
+        secretKey: EDGEDB_SECRET_KEY,
     })
 
     try {
-        const userGamesQuery =
-            `
+        const userGamesQuery = `
         select Player_stats {
             id,
             score,
@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           order by .created_at desc;
         `
         const params = {
-            id_user: req.body.id_user
+            id_user: req.body.id_user,
         }
 
         const response = await client.query(userGamesQuery, params)

@@ -1,26 +1,27 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import e, { createClient } from "@/dbschema/edgeql-js"
 import { pusherServer } from "@/lib/pusher"
+import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
 
 const room_api = async (level: string) => {
-    let url: string;
+    let url: string
     if (level === "normal-level") {
-        url = "https://ia-codeipsum.vercel.app";
+        url = "https://ia-codeipsum.vercel.app"
     } else {
-        url = `https://ia-codeipsum.vercel.app/${level}`;
+        url = `https://ia-codeipsum.vercel.app/${level}`
     }
 
     const response = await fetch(url, {
         method: "POST",
-    });
-    const data = await response.json();
-    return data;
-};
+    })
+    const data = await response.json()
+    return data
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const client = createClient({
-        instanceName: process.env.EDGEDB_INSTANCE,
-        secretKey: process.env.EDGEDB_SECRET_KEY,
+        instanceName: EDGEDB_INSTANCE,
+        secretKey: EDGEDB_SECRET_KEY,
     })
     const { level, user_pseudo } = req.body
     const room_data = await room_api(level)
@@ -37,20 +38,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         nb_players: 1,
         prompt: room_data.enigm,
         user_pseudo: user_pseudo,
-        isActive: true
-    });
+        isActive: true,
+    })
 
-    const room = await e.select(query, () => ({
-        id: true,
-        delay: true,
-        latitude: true,
-        longitude: true,
-        level: true,
-        nb_players: true,
-        prompt: true,
-        user_pseudo: true,
-    })).run(client);
-
+    const room = await e
+        .select(query, () => ({
+            id: true,
+            delay: true,
+            latitude: true,
+            longitude: true,
+            level: true,
+            nb_players: true,
+            prompt: true,
+            user_pseudo: true,
+        }))
+        .run(client)
 
     pusherServer.trigger("lobby", "new-room", {
         id: room.id,
