@@ -34,7 +34,10 @@ const Heading = () => {
                 <Wordz />
                 <div className="space-y-5">
                     <div>
-                        <h1 className="text-[4em] md:text-[7rem] xl:text-[9rem] font-title-bold">Enigmap</h1>
+                        <div>
+                            <h1 className="text-[4em] md:text-[7rem] xl:text-[9rem] font-title-bold">RiddleRumble</h1>
+                            <h5 className="text-[1em] md:text-[3rem] xl:text-[5rem] font-title-bold">The Map Quest</h5>
+                        </div>
                     </div>
                     <div className="w-full flex flex-col md:flex-row justify-between gap-5 md:gap-[30%]">
                         <div className="text-justify text-xl md:text-2xl xl:text-3xl first-letter:text-5xl">Set off on a thrilling quest through an interactive map, where every location hides a cryptic puzzle.</div>

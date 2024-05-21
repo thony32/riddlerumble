@@ -11,7 +11,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center border-b-1 border-current pb-4">
             <div>
                 <Link href="/">
-                    <h1 className="text-2xl">Enigmap</h1>
+                    <h1 className="text-2xl">RR - The Map Quest</h1>
                 </Link>
             </div>
             <div className="flex gap-8 items-center">
