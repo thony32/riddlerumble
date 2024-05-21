@@ -7,12 +7,13 @@ import { useCallback, useEffect, useState } from "react"
 import { pusherClient } from "@/lib/pusher"
 import { useRouter } from "next/navigation"
 import { formatDistanceToNow } from "date-fns"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import { Room } from "@/types/room"
 import UsersSVG from "../Misc/UsersSVG"
 import SvgHighLevel from "../Misc/SvgHighLevel"
 import SvgLowLevel from "../Misc/SvgLowLevel"
 import useSelectedRoom from "@/store/useSelectedRoom"
+import { MAX_PLAYERS } from "@/utils/constants"
 
 const roomLink = process.env.NODE_ENV === "production" ? "https://enigmap.vercel.app" : "http://localhost:3000"
 
@@ -55,10 +56,11 @@ const leave_room = async (room: Room, pseudo: string) => {
 function RoomCard({ room: room_props }: { room: Room }) {
     const router = useRouter()
     const user = useUser((state) => state.user)
-    const [action, setAction] = useState<"join" | "leave">()
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
     const [room, setRoom] = useState<Room>(room_props)
+    const [action, setAction] = useState<"join" | "leave">("join")
+    const [countdown, setCountdown] = useState<number | null>(null)
     const updateRoomMutation = useMutation({
         mutationKey: ["updateRoom"],
         mutationFn: async ({ room, given_action }: { room: Room; given_action: "join" | "leave" }) => {
@@ -81,12 +83,12 @@ function RoomCard({ room: room_props }: { room: Room }) {
         ({ id, nb_players, user_pseudo }: { id: string; nb_players: number; user_pseudo: string }) => {
             if (id == room_props.id) {
                 setRoom((prevRoom) => ({ ...prevRoom, nb_players, user_pseudo }))
-                if (nb_players == 3) {
-                    router.push(`/game/${room_props.id}`)
+                if (nb_players == MAX_PLAYERS) {
+                    setCountdown(5)
                 }
             }
         },
-        [room_props, router]
+        [room_props]
     )
 
     const handleClick = (room: Room, given_action: "join" | "leave") => {
@@ -104,12 +106,42 @@ function RoomCard({ room: room_props }: { room: Room }) {
         }
     }, [room_props, handleJoinRoom])
 
+    useEffect(() => {
+        if (countdown !== null) {
+            if (countdown > 0) {
+                const timer = setTimeout(() => {
+                    setCountdown((prev) => (prev !== null ? prev - 1 : null))
+                }, 1000)
+                return () => clearTimeout(timer)
+            } else {
+                router.push(`/game/${room_props.id}`)
+            }
+        }
+    }, [selectedRoom, router, room_props, countdown])
+
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="w-full flex"
+            className="w-full flex relative"
         >
+            {/* COUNTDOWN */}
+            <AnimatePresence>
+                {countdown !== null && (
+                    <div className="fixed z-50 inset-0 w-dvw h-dvh grid place-items-center backdrop-blur-sm">
+                        <motion.span
+                            key={countdown}
+                            initial={{ opacity: 0, scale: 0 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="text-[70dvh]"
+                        >
+                            {countdown == 0 ? "GO!" : countdown}
+                        </motion.span>
+                    </div>
+                )}
+            </AnimatePresence>
             <Card
                 key={room.id}
                 className="w-full group"
@@ -131,7 +163,10 @@ function RoomCard({ room: room_props }: { room: Room }) {
                             )}
                         </h1>
                         <div className="flex gap-3 text-3xl items-center">
-                            <UsersSVG className="size-16" /> <span>{room.nb_players} / 4</span>
+                            <UsersSVG className="size-16" />{" "}
+                            <span>
+                                {room.nb_players} / {MAX_PLAYERS}
+                            </span>
                         </div>
                     </div>
                     {!selectedRoom ? (
