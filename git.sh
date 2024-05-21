@@ -15,8 +15,18 @@ git add . || error_exit "Failed to stage changes."
 echo "Enter the commit message:"
 read commit_message
 
-echo "Committing changes..."
-git commit -m "$commit_message" || error_exit "Failed to commit changes."
+# Check if there are any changes to commit
+if git diff-index --quiet HEAD --; then
+    echo "No changes to commit."
+else
+    # Prompt the user for the commit message
+    echo "Enter the commit message:"
+    read commit_message
+
+    # Commit the changes with the provided message
+    echo "Committing changes..."
+    git commit -m "$commit_message" || error_exit "Failed to commit changes."
+fi
 
 echo "Pulling latest changes..."
 git pull || error_exit "Failed to pull changes."
