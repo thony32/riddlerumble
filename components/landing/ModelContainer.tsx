@@ -1,15 +1,7 @@
 "use client"
-import dynamic from "next/dynamic"
 import { Canvas } from "@react-three/fiber"
 import { useRef } from "react"
-const CuteModel = dynamic(() => import("./CutePlanet"), {
-    ssr: false,
-    loading: () => (
-        <div className="h-screen grid place-items-center">
-            <span className="loading loading-bars loading-lg"></span>
-        </div>
-    ),
-})
+import CuteModel from "./CutePlanet"
 import { useQuery } from "@tanstack/react-query"
 import { getSession } from "@/services/user-action"
 import useResponsive from "@/utils/useResponsive"
