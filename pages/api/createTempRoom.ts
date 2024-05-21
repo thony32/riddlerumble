@@ -1,4 +1,5 @@
-import { createClient } from '@/dbschema/edgeql-js';
+import e, { createClient } from '@/dbschema/edgeql-js';
+import { Temp_room } from '@/dbschema/edgeql-js/modules/default';
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -14,26 +15,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         })
 
         const { latitude, longitude, time, id_room, id_user } = req.body
-        await client.querySingle(
-            `
-                select (
-                    insert default::Temp_room {
-                        latitude := <float32>$latitude,
-                        longitude := <float32>$longitude,
-                        time := <str>$time,
-                        id_user := (select detached default::Users filter .id = <uuid>$id_user),
-                        id_room := (select detached default::Room filter .id = <uuid>$id_room),
-                    }
-                ) {latitude, longitude, time, id_user, id_room}`,
-            {
-                latitude: latitude,
-                longitude: longitude,
-                time: time,
-                id_user: id_user,
-                id_room: id_room,
-            }
-        )
-        res.status(200).json({ success: true })
+
+        const insertQuery = e.insert(e.Temp_room, {
+            latitude: e.float32(latitude),
+            longitude: e.float32(longitude),
+            time: e.str(time),
+            id_user: e.select(e.Users, (user) => ({
+                filter_single: { id: e.uuid(id_user) }
+            })),
+            id_room: e.select(e.Room, (room) => ({
+                filter_single: { id: e.uuid(id_room) }
+            })),
+        });
+
+        const result = await insertQuery.run(client);
+        res.status(200).json({ success: true, temp_room: result })
     } catch (error) {
         res.status(500).json({ success: false, error: error })
     }
