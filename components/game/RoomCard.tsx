@@ -2,7 +2,6 @@ import { Button } from "@nextui-org/button"
 import { Card, Chip } from "@nextui-org/react"
 import { useUser } from "@/store/useUser"
 import { useMutation } from "@tanstack/react-query"
-import { FacebookMessengerShareButton } from "react-share"
 import { useCallback, useEffect, useState } from "react"
 import { pusherClient } from "@/lib/pusher"
 import { useRouter } from "next/navigation"
@@ -14,8 +13,6 @@ import SvgHighLevel from "../misc/SvgHighLevel"
 import SvgLowLevel from "../misc/SvgLowLevel"
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { MAX_PLAYERS } from "@/utils/constants"
-
-const roomLink = process.env.NODE_ENV === "production" ? "https://enigmap.vercel.app" : "http://localhost:3000"
 
 const update_room = async (room: Room, pseudo: string) => {
     const nbPlayersInt32 = room.nb_players + 1
@@ -204,17 +201,6 @@ function RoomCard({ room: room_props }: { room: Room }) {
 
                 <div className="absolute bottom-1 right-4 text-white text-xs flex gap-2 items-center">
                     <span>ID {room.id}</span>
-                    <FacebookMessengerShareButton
-                        appId={room.id}
-                        url={`${roomLink}/game/${room.id}`}
-                    >
-                        <svg
-                            className="w-4 fill-current mb-1 hover:scale-125 duration-150 ease-soft-spring"
-                            viewBox="0 0 24 24"
-                        >
-                            <path d="M.001 11.639C.001 4.949 5.241 0 12.001 0S24 4.95 24 11.639c0 6.689-5.24 11.638-12 11.638-1.21 0-2.38-.16-3.47-.46a.96.96 0 00-.64.05l-2.39 1.05a.96.96 0 01-1.35-.85l-.07-2.14a.97.97 0 00-.32-.68A11.39 11.389 0 01.002 11.64zm8.32-2.19l-3.52 5.6c-.35.53.32 1.139.82.75l3.79-2.87c.26-.2.6-.2.87 0l2.8 2.1c.84.63 2.04.4 2.6-.48l3.52-5.6c.35-.53-.32-1.13-.82-.75l-3.79 2.87c-.25.2-.6.2-.86 0l-2.8-2.1a1.8 1.8 0 00-2.61.48z" />
-                        </svg>
-                    </FacebookMessengerShareButton>
                 </div>
             </Card>
         </motion.div>
