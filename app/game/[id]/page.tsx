@@ -375,7 +375,7 @@ function Party({ params }: { params: { id: string } }) {
 
     // NOTE: prevent dev tools and context menus
     const [penalityPoints, setPenalityPoints] = useState(0)
-    /* useEffect(() => {
+    useEffect(() => {
         const handleContextMenu = (e: MouseEvent) => {
             e.preventDefault()
         }
@@ -401,7 +401,7 @@ function Party({ params }: { params: { id: string } }) {
             document.removeEventListener("keydown", handleKeyDown)
             document.removeEventListener("visibilitychange", handleTabNavSwitch)
         }
-    }, []) */
+    }, [])
 
     if (startTime === null) {
         return (
