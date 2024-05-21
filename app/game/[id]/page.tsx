@@ -374,7 +374,7 @@ function Party({ params }: { params: { id: string } }) {
 
     // NOTE: prevent dev tools and context menus
     const [penalityPoints, setPenalityPoints] = useState(0)
-    useEffect(() => {
+    /* useEffect(() => {
         const handleContextMenu = (e: MouseEvent) => {
             e.preventDefault()
         }
@@ -400,7 +400,7 @@ function Party({ params }: { params: { id: string } }) {
             document.removeEventListener("keydown", handleKeyDown)
             document.removeEventListener("visibilitychange", handleTabNavSwitch)
         }
-    }, [])
+    }, []) */
 
     if (startTime === null) {
         return (
@@ -415,7 +415,7 @@ function Party({ params }: { params: { id: string } }) {
     }
 
     return (
-        <div className="w-full h-screen py-6 relative overflow-hidden">
+        <div className="w-full h-screen py-6 overflow-hidden fixed z-50 bg-base-100">
             <div className="grid grid-cols-12 gap-10">
                 <div className="col-span-2 relative space-y-4">
                     <div className="translate-y-14">
@@ -530,7 +530,7 @@ function Party({ params }: { params: { id: string } }) {
                         }}
                         onClick={clickPostion}
                         mapboxAccessToken="pk.eyJ1IjoidGhvbnkzMiIsImEiOiJjbHc5azQ5bWQwNWhjMmtxa2Q5dTcyNWxhIn0.pXpGUWi_9wWY3zwfflmzSQ"
-                        style={{ width: "100%", height: "90dvh", margin: 0, padding: 0, borderRadius: "1rem", overflow: "hidden" }}
+                        style={{ width: "100%", height: "85dvh", margin: 0, padding: 0, borderRadius: "1rem", overflow: "hidden" }}
                     >
                         <Marker
                             longitude={marker.longitude}

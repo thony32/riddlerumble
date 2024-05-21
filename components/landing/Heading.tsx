@@ -1,6 +1,5 @@
 "use client"
 import { Button } from "@nextui-org/button"
-import { Chip } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
 import { getOAuthUrl, getSession } from "@/services/user-action"
 import { useState } from "react"
@@ -28,15 +27,6 @@ const Heading = () => {
 
     return (
         <div className="h-screen flex justify-center items-center relative">
-            <div className="absolute right-0 bottom-4">
-                <Chip
-                    color="success"
-                    variant="dot"
-                    size="lg"
-                >
-                    World tournament
-                </Chip>
-            </div>
             <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
                 <SvgMapDraw />
             </div>
@@ -44,7 +34,7 @@ const Heading = () => {
                 <Wordz />
                 <div className="space-y-5">
                     <div>
-                        <h1 className="text-[6em] md:text-[7rem] xl:text-[9rem] font-title md:tracking-wider">Enigmap</h1>
+                        <h1 className="text-[6em] md:text-[7rem] xl:text-[9rem] font-title-bold md:tracking-wider">Enigmap</h1>
                     </div>
                     <div className="w-full flex flex-col md:flex-row justify-between gap-5 md:gap-[30%]">
                         <div className="text-justify text-xl md:text-2xl xl:text-3xl first-letter:text-5xl">Set off on a thrilling quest through an interactive map, where every location hides a cryptic puzzle.</div>
@@ -64,7 +54,7 @@ const Heading = () => {
                                     size="lg"
                                     onClick={() => setIsLoading(true)}
                                 >
-                                    <span className="font-bold">Play Now</span>
+                                    <span className="font-title-bold">Play Now</span>
                                     {isLoading ? (
                                         <div className="flex justify-center">
                                             <span className="loading loading-dots loading-md"></span>
