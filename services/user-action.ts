@@ -33,9 +33,8 @@ export async function getData() {
 
 export async function getOAuthUrl() {
     const googleUrl = auth.getOAuthUrl("builtin::oauth_google")
-    const discordUrl = auth.getOAuthUrl("builtin::oauth_discord")
 
-    return { googleUrl, discordUrl }
+    return { googleUrl }
 }
 
 export async function getLogoutUrl() {
