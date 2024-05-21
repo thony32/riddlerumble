@@ -9,7 +9,7 @@ import Countdown, { CountdownRendererFn } from "react-countdown"
 import Link from "next/link"
 import dynamic from "next/dynamic"
 const Map = dynamic(() => import("react-map-gl"))
-const SvgDecoEnigme = dynamic(() => import("@/components/Misc/SvgDecoEnigme"))
+const SvgDecoEnigme = dynamic(() => import("@/components/misc/SvgDecoEnigme"))
 import Image from "next/image"
 import getCountryCode from "@/utils/getCountryCode"
 import * as turf from "@turf/turf"

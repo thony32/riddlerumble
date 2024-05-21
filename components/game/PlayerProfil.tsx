@@ -12,6 +12,11 @@ import getInitial from "@/utils/getInitials"
 import Image from "next/image"
 import * as Yup from "yup"
 import LastGames from "./LastGames"
+import SvgMedalNovice from "../misc/SvgMedalNovice"
+import SvgMedalCasual from "../misc/SvgMedalCasual"
+import SvgMedalPro from "../misc/SvgMedalPro"
+import SvgMedalExpert from "../misc/SvgMedalExpert"
+import SvgMedalAmiral from "../misc/SvgMedalAmiral"
 
 const validationSchema = Yup.object({
     pseudo: Yup.string().required("Pseudo is required"),
@@ -120,6 +125,23 @@ const PlayerProfil = () => {
                                 name={getInitial(user.full_name)}
                                 src={user.avatar!}
                             />
+                            <div className="my-5 flex justify-center">
+                                {user.score <= 50 &&
+                                    <SvgMedalNovice />
+                                }
+                                {user.score > 50 && user.score <= 100 &&
+                                    <SvgMedalCasual />
+                                }
+                                {user.score > 100 && user.score <= 200 &&
+                                    <SvgMedalPro />
+                                }
+                                {user.score > 200 && user.score <= 400 &&
+                                    <SvgMedalExpert />
+                                }
+                                {user.score > 400 &&
+                                    <SvgMedalAmiral />
+                                }
+                            </div>
                         </div>
                         <div className="text-right w-1/2">
                             <div className="flex justify-end">

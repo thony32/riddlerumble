@@ -5,8 +5,8 @@ import { useQuery } from "@tanstack/react-query"
 import { getOAuthUrl, getSession } from "@/services/user-action"
 import { useState } from "react"
 import Link from "next/link"
-import Wordz from "../Misc/Wordz"
-import SvgMapDraw from "../Misc/SvgMapDraw"
+import Wordz from "../misc/Wordz"
+import SvgMapDraw from "../misc/SvgMapDraw"
 
 const Heading = () => {
     const [isLoading, setIsLoading] = useState(false)
