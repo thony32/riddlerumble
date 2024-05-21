@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import e, { createClient } from "@/dbschema/edgeql-js"
-// import { pusherServer } from "@/lib/pusher"
+import { pusherServer } from "@/lib/pusher"
 import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
-import { broadcastMessage } from "@/lib/websocket"
+// import { broadcastMessage } from "@/lib/websocket"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "PUT") {
@@ -50,17 +50,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const result: any = await selectQuery.run(client)
 
-        // pusherServer.trigger(id, "join-room", {
-        //     id: id,
-        //     nb_players: nb_players,
-        //     user_pseudo: user_pseudo,
-        // })
-
-        broadcastMessage(id, "join-room", {
+        pusherServer.trigger(id, "join-room", {
             id: id,
             nb_players: nb_players,
             user_pseudo: user_pseudo,
         })
+
+        // broadcastMessage(id, "join-room", {
+        //     id: id,
+        //     nb_players: nb_players,
+        //     user_pseudo: user_pseudo,
+        // })
 
         res.status(200).json({ success: true, result })
     } catch (error) {

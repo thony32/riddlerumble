@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { createClient } from "@/dbschema/edgeql-js"
-// import { pusherServer } from "@/lib/pusher"
+import { pusherServer } from "@/lib/pusher"
 import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
-import { broadcastMessage } from "@/lib/websocket"
+// import { broadcastMessage } from "@/lib/websocket"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "DELETE") {
@@ -32,8 +32,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const result: any = await client.query(query, params)
 
-        // pusherServer.trigger(id, "delete-room", { id })
-        broadcastMessage(id, "delete-room", { id });
+        pusherServer.trigger(id, "delete-room", { id })
+        // broadcastMessage(id, "delete-room", { id });
 
         res.status(200).json({ success: true, result })
     } catch (error) {

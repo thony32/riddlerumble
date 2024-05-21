@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import e, { createClient } from "@/dbschema/edgeql-js"
-// import { pusherServer } from "@/lib/pusher"
+import { pusherServer } from "@/lib/pusher"
 import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
-import { broadcastMessage } from "@/lib/websocket"
+// import { broadcastMessage } from "@/lib/websocket"
 
 const room_api = async (level: string) => {
     let url: string
@@ -55,18 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }))
         .run(client)
 
-    // pusherServer.trigger("lobby", "new-room", {
-    //     id: room.id,
-    //     delay: room.delay,
-    //     latitude: room.latitude,
-    //     longitude: room.longitude,
-    //     level: room.level,
-    //     nb_players: room.nb_players,
-    //     prompt: room.prompt,
-    //     user_pseudo: room.user_pseudo,
-    // })
-
-    broadcastMessage("lobby", "new-room", {
+    pusherServer.trigger("lobby", "new-room", {
         id: room.id,
         delay: room.delay,
         latitude: room.latitude,
@@ -76,6 +65,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         prompt: room.prompt,
         user_pseudo: room.user_pseudo,
     })
+
+    // broadcastMessage("lobby", "new-room", {
+    //     id: room.id,
+    //     delay: room.delay,
+    //     latitude: room.latitude,
+    //     longitude: room.longitude,
+    //     level: room.level,
+    //     nb_players: room.nb_players,
+    //     prompt: room.prompt,
+    //     user_pseudo: room.user_pseudo,
+    // })
 
     res.status(200).json({ success: true, room: room })
 }

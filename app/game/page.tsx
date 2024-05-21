@@ -1,5 +1,8 @@
+// page.tsx
+
 "use client"
-// import { pusherClient } from "@/lib/pusher"
+import { pusherClient } from "@/lib/pusher"
+// import { io, Socket } from "socket.io-client"
 import { Room } from "@/types/room"
 import { Skeleton } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
@@ -92,57 +95,57 @@ const Game = () => {
         staleTime: 100 * 60 * 60 * 24,
     })
 
+    useEffect(() => {
+        const handleNewRoom = (room: Room) => {
+            setAllRooms((prevRooms) => {
+                if (prevRooms.find((r) => r.id === room.id)) {
+                    return prevRooms
+                }
+                return [room, ...prevRooms]
+            })
+        }
+
+        pusherClient.subscribe("lobby")
+
+        pusherClient.bind("new-room", handleNewRoom)
+
+        return () => {
+            pusherClient.unsubscribe("lobby")
+        }
+    }, [])
+
+    // const [socket, setSocket] = useState<Socket | null>(null)
     // useEffect(() => {
-    //     const handleNewRoom = (room: Room) => {
+    //     const wsProtocol = process.env.NODE_ENV === "production" ? "wss" : "ws"
+    //     const wsHost = process.env.NODE_ENV === "production" ? "riddlerumble.vercel.app" : "localhost"
+    //     const wsPort = process.env.NODE_ENV === "production" ? "443" : "8080"
+    //     const socketUrl = `${wsProtocol}://${wsHost}${process.env.NODE_ENV === "production" ? "" : `:${wsPort}`}`
+
+    //     const socket = io(socketUrl)
+
+    //     socket.on("connect", () => {
+    //         console.log("WebSocket connected")
+    //         setSocket(socket)
+    //         socket.emit("subscribe", "lobby")
+    //     })
+
+    //     socket.on("new-room", (room: Room) => {
     //         setAllRooms((prevRooms) => {
     //             if (prevRooms.find((r) => r.id === room.id)) {
     //                 return prevRooms
     //             }
     //             return [room, ...prevRooms]
     //         })
-    //     }
+    //     })
 
-    //     pusherClient.subscribe("lobby")
-
-    //     pusherClient.bind("new-room", handleNewRoom)
+    //     socket.on("disconnect", () => {
+    //         console.log("WebSocket disconnected")
+    //     })
 
     //     return () => {
-    //         pusherClient.unsubscribe("lobby")
+    //         socket.disconnect()
     //     }
     // }, [])
-
-    useEffect(() => {
-        const wsProtocol = process.env.NODE_ENV === "production" ? "wss" : "ws"
-        const wsHost = process.env.NODE_ENV === "production" ? "riddlerumble.vercel.app" : "localhost"
-        const wsPort = process.env.NODE_ENV === "production" ? "443" : "8080"
-        const wsUrl = `${wsProtocol}://${wsHost}:${wsPort}`
-
-        const ws = new WebSocket(wsUrl)
-
-        ws.onopen = () => {
-            console.log("WebSocket connected")
-        }
-
-        ws.onmessage = (event: MessageEvent) => {
-            const { event: eventName, data } = JSON.parse(event.data) as { event: string; data: Room }
-            if (eventName === "new-room") {
-                setAllRooms((prevRooms) => {
-                    if (prevRooms.find((r) => r.id === data.id)) {
-                        return prevRooms
-                    }
-                    return [data, ...prevRooms]
-                })
-            }
-        }
-
-        ws.onclose = () => {
-            console.log("WebSocket disconnected")
-        }
-
-        return () => {
-            ws.close()
-        }
-    }, [])
 
     return (
         <div className="min-h-[100vh] flex flex-col-reverse xl:grid xl:grid-cols-3 gap-14">
