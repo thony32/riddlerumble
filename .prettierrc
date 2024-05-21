@@ -6,5 +6,5 @@
     "trailingComma": "es5",
     "singleQuote": false,
     "endOfLine": "lf",
-    "singleAttributePerLine": true
+    "singleAttributePerLine": false
 }
