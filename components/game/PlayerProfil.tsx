@@ -1,15 +1,15 @@
 "use client"
 import { useUser } from "@/store/useUser"
-import getCountryCode from "@/utils/getCountryCode"
-import getInitial from "@/utils/getInitials"
 import { Avatar } from "@nextui-org/avatar"
 import { Button } from "@nextui-org/button"
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/modal"
 import { Input, Select, SelectItem } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
 import { useFormik } from "formik"
-import Image from "next/image"
 import { useState } from "react"
+import getCountryCode from "@/utils/getCountryCode"
+import getInitial from "@/utils/getInitials"
+import Image from "next/image"
 import * as Yup from "yup"
 
 const validationSchema = Yup.object({
@@ -17,7 +17,6 @@ const validationSchema = Yup.object({
     full_name: Yup.string().required("Full name is required"),
     nationality: Yup.string().required("Nationality is required"),
 })
-
 
 const getAllUser = async () => {
     const response = await fetch('/api/getAllUser');
@@ -78,9 +77,9 @@ const PlayerProfil = () => {
                     },
                     body: JSON.stringify({
                         user_id: user.id,
-                        pseudo: user.pseudo,
-                        full_name: user.full_name,
-                        nationality: user.nationality
+                        pseudo: values.pseudo,
+                        full_name: values.full_name,
+                        nationality: values.nationality
                     })
                 });
                 const result = await response.json();
@@ -94,7 +93,6 @@ const PlayerProfil = () => {
             } finally {
                 setIsUpdating(false);
             }
-            console.log(values);
         }
     })
     return (
@@ -161,11 +159,15 @@ const PlayerProfil = () => {
                                                         </div>
                                                     </ModalBody>
                                                     <ModalFooter>
-                                                        <Button variant="light" onPress={onClose}>
+                                                        <Button onPress={onClose}>
                                                             Close
                                                         </Button>
                                                         <Button type="submit" color="primary">
-                                                            Update
+                                                            <span>Update</span>
+                                                            {
+                                                                isUpdating &&
+                                                                <span className="loading loading-dots loading-sm"></span>
+                                                            }
                                                         </Button>
                                                     </ModalFooter>
                                                 </form>
@@ -176,7 +178,7 @@ const PlayerProfil = () => {
                             </div>
                             <h1 className="text-3xl">{user.pseudo}</h1>
                             <p>{user.full_name}</p>
-                            <p className="opacity-30">{user.email}</p>
+                            <p className="opacity-30 break-words">{user.email}</p>
                             <hr className="my-5" />
                             <div className="space-y-1">
                                 <div className="flex justify-between items-center">

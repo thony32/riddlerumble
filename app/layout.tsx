@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { NextUIProvider } from "@nextui-org/react"
-import "./globals.css"
+import { ReactLenis } from "@/utils/lenis"
 import Footer from "@/components/landing/Footer"
 import ThemeHandler from "@/components/Misc/ThemeHandler"
 import ReactQueryProvider from "@/utils/ReactQueryProvider"
-import { ReactLenis } from "@/utils/lenis"
+import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 

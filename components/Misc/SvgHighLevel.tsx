@@ -6,8 +6,6 @@ const SvgHighLevel = () => {
             viewBox="0 0 1024 1024"
             className="icon"
             style={{ verticalAlign: "middle", fill: "#000000", overflow: "hidden" }}
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
             fill="#000000"
         >
             <g

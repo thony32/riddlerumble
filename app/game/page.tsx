@@ -1,14 +1,14 @@
 "use client"
+import { pusherClient } from "@/lib/pusher"
+import { Room } from "@/types/room"
+import { Skeleton } from "@nextui-org/react"
+import { useQuery } from "@tanstack/react-query"
+import { useEffect, useState } from "react"
 import BtnCreateRoom from "@/components/game/BtnCreateRoom"
 import PlayerProfil from "@/components/game/PlayerProfil"
 import PreventSwitch from "@/components/game/PreventSwitch"
 import RoomCard from "@/components/game/RoomCard"
-import { pusherClient } from "@/lib/pusher"
-import { Room } from "@/types/room"
 import useResponsive from "@/utils/useResponsive"
-import { Skeleton } from "@nextui-org/react"
-import { useQuery } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
 
 const getAllRoom = async () => {
     const res = await fetch("/api/getAllRoom")
@@ -19,54 +19,54 @@ const getAllRoom = async () => {
     return jsonData
 }
 
-// NOTE: StatsDrawer
-
 const StatsDrawer = () => {
     return (
-        <div className="drawer drawer-end lg:drawer-open">
-            <input
-                id="my-drawer-2"
-                type="checkbox"
-                className="drawer-toggle"
-            />
-            <div className="drawer-content flex flex-col items-center justify-center">
-                {/* Page content here */}
-                <label
-                    htmlFor="my-drawer-2"
-                    className="btn btn-primary drawer-button lg:hidden"
-                >
-                    Stats
-                </label>
-            </div>
-            <div className="drawer-side">
-                <label
-                    htmlFor="my-drawer-2"
-                    aria-label="close sidebar"
-                    className="drawer-overlay"
-                ></label>
-                <div className="p-2 space-y-10 bg-base-200 h-screen">
-                    <div className="flex items-center gap-5">
-                        <h1 className="text-xl">Vos Statistiques</h1>
-                        <svg
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={2}
-                            stroke="currentColor"
-                            className="w-8"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"
-                            />
-                        </svg>
-                    </div>
-                    <div className="h-[100dvh] overflow-y-auto">
-                        <PlayerProfil />
+        <>
+            <div className="drawer drawer-end">
+                <input
+                    id="my-drawer-4"
+                    type="checkbox"
+                    className="drawer-toggle"
+                />
+                <div className="drawer-content">
+                    {/* Page content here */}
+                    <label
+                        htmlFor="my-drawer-4"
+                        className="drawer-button btn btn-primary"
+                    >
+                        Open drawer
+                    </label>
+                </div>
+                <div className="drawer-side">
+                    <label
+                        htmlFor="my-drawer-4"
+                        aria-label="close sidebar"
+                        className="drawer-overlay"
+                    ></label>
+                    <div className="p-2 space-y-10 bg-base-200 h-screen">
+                        <div className="flex items-center gap-5">
+                            <h1 className="text-xl">Vos Statistiques</h1>
+                            <svg
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={2}
+                                stroke="currentColor"
+                                className="w-8"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"
+                                />
+                            </svg>
+                        </div>
+                        <div className="h-[100dvh] overflow-y-auto">
+                            <PlayerProfil />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 
@@ -98,7 +98,6 @@ const Stats = () => {
 
 // NOTE:  Main Component
 const Game = () => {
-    // const router = useRouter()
     const { isMobile, isTablet } = useResponsive()
     const [allRooms, setAllRooms] = useState<Room[]>([])
     const { isPending: isInitialRoomsPending } = useQuery({

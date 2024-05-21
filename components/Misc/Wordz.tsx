@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
-
 import { useEffect, useRef } from "react"
-
 import "@/styles/Wordz.css"
+
 export default function Wordz() {
     const wordInterval = useRef<NodeJS.Timeout | undefined>()
     const currentWord = useRef(0)
@@ -83,7 +82,7 @@ export default function Wordz() {
     return (
         <div className="absolute top-0 xl:-top-20 left-0">
             <div className="relative h-[100%] flex items-center">
-                <div className="bannertxt text-[4em] sm:text-[6em] md:text-[10em] xl:text-[18rem] opacity-5">
+                <div className="bannertxt text-[5em] sm:text-[6em] md:text-[10em] xl:text-[18rem] opacity-5">
                     <label>
                         <span className="word font-title">Mysteries</span>
                         <span className="word font-title">Challenges</span>

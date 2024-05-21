@@ -1,7 +1,6 @@
 "use client"
-
-import anime from "animejs"
 import { ReactNode, useEffect } from "react"
+import anime from "animejs"
 
 interface DrawerProps {
     children: ReactNode

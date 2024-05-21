@@ -1,18 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
+import { Avatar, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useUser } from "@/store/useUser"
 import React, { useCallback, useState, useEffect, useRef } from "react"
 import Map, { MapMouseEvent, MapRef, Marker, MarkerDragEvent } from "react-map-gl"
-import * as turf from "@turf/turf"
-import "mapbox-gl/dist/mapbox-gl.css"
 import Countdown, { CountdownRendererFn } from "react-countdown"
-import { Avatar, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
 import Link from "next/link"
-import { useMutation, useQuery } from "@tanstack/react-query"
 import SvgDecoEnigme from "@/components/Misc/SvgDecoEnigme"
-import { useUser } from "@/store/useUser"
-import getInitial from "@/utils/getInitials"
 import Image from "next/image"
 import getCountryCode from "@/utils/getCountryCode"
 import useSelectedRoom from "@/store/useSelectedRoom"
+import * as turf from "@turf/turf"
+import "mapbox-gl/dist/mapbox-gl.css"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -117,7 +117,7 @@ function Party({ params }: { params: { id: string } }) {
                 isKeyboardDismissDisabled={true}
             >
                 <ModalContent>
-                    {(onClose) => (
+                    {() => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">Result</ModalHeader>
                             <ModalBody>
@@ -229,16 +229,16 @@ function Party({ params }: { params: { id: string } }) {
     })
 
     const [showTarget, setShowTarget] = useState(false)
-    var targetMarker = {
+    const [targetMarker, setTargetMarker] = useState({
         latitude: -18,
         longitude: 46,
-    }
+    })
 
     if (roomData) {
-        targetMarker = {
+        setTargetMarker({
             latitude: roomData.latitude,
-            longitude: roomData.longitude,
-        }
+            longitude: roomData.longitude
+        })
     }
 
     const [startTime, setStartTime] = useState<number | null>(null)
@@ -319,7 +319,7 @@ function Party({ params }: { params: { id: string } }) {
             console.log(error)
         },
         onSuccess: (data) => {
-            console.log("Temp Room created successfully! ", data)
+            console.log("Player Stat created successfully! ", data)
         },
     })
 
@@ -361,12 +361,20 @@ function Party({ params }: { params: { id: string } }) {
             }
         }
 
+        const handleTabNavSwitch = () => {
+            if (document.hidden) {
+                console.log("add penality points");
+            }
+        }
+
         document.addEventListener("contextmenu", handleContextMenu)
         document.addEventListener("keydown", handleKeyDown)
+        document.addEventListener("visibilitychange", handleTabNavSwitch)
 
         return () => {
             document.removeEventListener("contextmenu", handleContextMenu)
             document.removeEventListener("keydown", handleKeyDown)
+            document.removeEventListener("visibilitychange", handleTabNavSwitch)
         }
     }, [])
 

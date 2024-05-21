@@ -2,7 +2,7 @@ import useSelectedRoom from "@/store/useSelectedRoom"
 import { useUser } from "@/store/useUser"
 import { Button } from "@nextui-org/button"
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import React from "react"
 
 const create_room = async (level: string, pseudo: string) => {

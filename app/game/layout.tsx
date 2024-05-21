@@ -1,9 +1,9 @@
 "use client"
-import Navbar from "@/components/game/Navbar"
 import { redirect } from "next/navigation"
 import { getData } from "@/services/user-action"
 import { useUser } from "@/store/useUser"
 import { useQuery } from "@tanstack/react-query"
+import Navbar from "@/components/game/Navbar"
 
 export default function GameLayout({
     children,

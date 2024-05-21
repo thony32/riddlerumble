@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import e, { createClient } from "@/dbschema/edgeql-js"
+import { createClient } from "@/dbschema/edgeql-js"
 import { pusherServer } from "@/lib/pusher"
 
 const room_api = async (level: string) => {
