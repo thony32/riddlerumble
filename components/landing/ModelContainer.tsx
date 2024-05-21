@@ -1,8 +1,8 @@
 "use client"
 import { Canvas } from "@react-three/fiber"
+import { OrbitControls } from "@react-three/drei"
 import { useRef } from "react"
 import CutePlanet from "./CutePlanet"
-
 import { useQuery } from "@tanstack/react-query"
 import { getSession } from "@/services/user-action"
 import useResponsive from "@/utils/useResponsive"
@@ -40,6 +40,7 @@ const ModelContainer = () => {
                     shadow-mapSize={[2048, 2048]}
                 />
                 <directionalLight />
+                <OrbitControls enableZoom={true}/>
                 <CutePlanet
                     ref={planet_ref}
                     scale={isMobile ? [0.5, 0.5, 0.5] : isTablet ? [0.75, 0.75, 0.75] : [1, 1, 1]}
