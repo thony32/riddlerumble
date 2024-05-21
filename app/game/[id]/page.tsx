@@ -10,7 +10,6 @@ import Link from "next/link"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import SvgDecoEnigme from "@/components/Misc/SvgDecoEnigme"
 import { useUser } from "@/store/useUser"
-import getInitial from "@/utils/getInitials"
 import Image from "next/image"
 import getCountryCode from "@/utils/getCountryCode"
 
@@ -115,7 +114,7 @@ function Party({ params }: { params: { id: string } }) {
         return (
             <Modal className="-translate-x-[100%]" placement="bottom-center" isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
                 <ModalContent>
-                    {(onClose) => (
+                    {() => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">Result</ModalHeader>
                             <ModalBody>
@@ -218,16 +217,16 @@ function Party({ params }: { params: { id: string } }) {
     })
 
     const [showTarget, setShowTarget] = useState(false)
-    var targetMarker = {
+    const [targetMarker, setTargetMarker] = useState({
         latitude: -18,
         longitude: 46,
-    }
+    })
 
     if (roomData) {
-        targetMarker = {
+        setTargetMarker({
             latitude: roomData.latitude,
             longitude: roomData.longitude
-        }
+        })
     }
 
     const [startTime, setStartTime] = useState<number | null>(null)
@@ -308,7 +307,7 @@ function Party({ params }: { params: { id: string } }) {
             console.log(error)
         },
         onSuccess: (data) => {
-            console.log("Temp Room created successfully! ", data)
+            console.log("Player Stat created successfully! ", data)
         },
     })
 

@@ -94,7 +94,6 @@ const PlayerProfil = () => {
             } finally {
                 setIsUpdating(false);
             }
-            console.log(values);
         }
     })
     return (
@@ -161,11 +160,15 @@ const PlayerProfil = () => {
                                                         </div>
                                                     </ModalBody>
                                                     <ModalFooter>
-                                                        <Button variant="light" onPress={onClose}>
+                                                        <Button onPress={onClose}>
                                                             Close
                                                         </Button>
                                                         <Button type="submit" color="primary">
-                                                            Update
+                                                            <span>Update</span>
+                                                            {
+                                                                isUpdating &&
+                                                                <span className="loading loading-dots loading-sm"></span>
+                                                            }
                                                         </Button>
                                                     </ModalFooter>
                                                 </form>
