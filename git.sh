@@ -12,9 +12,6 @@ fi
 echo "Staging all changes..."
 git add . || error_exit "Failed to stage changes."
 
-echo "Enter the commit message:"
-read commit_message
-
 # Check if there are any changes to commit
 if git diff-index --quiet HEAD --; then
     echo "No changes to commit"
@@ -34,4 +31,4 @@ git pull || error_exit "Failed to pull changes."
 echo "Pushing changes..."
 git push || error_exit "Failed to push changes."
 
-echo "Success !"
+echo "Success!"
