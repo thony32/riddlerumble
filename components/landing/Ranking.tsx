@@ -37,7 +37,7 @@ const Ranking = () => {
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 sm:px-[10%] gap-10">
-            <div className='order-2 sm:order-1'>
+            <div className='order-2 sm:order-1 flex flex-col justify-center'>
                 <div className="px-2 py-2 flex items-center border-b border-current">
                     <div className="flex-1 font-bold text-lg xl:text-xl">ENIGMAP</div>
                     <div className='text-lg xl:text-xl'>INTERNATIONAL RANKING</div>
