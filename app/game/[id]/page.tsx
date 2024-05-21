@@ -3,6 +3,7 @@
 import { Avatar, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useUser } from "@/store/useUser"
+import { ReactTyped } from "react-typed";
 import React, { useCallback, useState, useEffect, useRef } from "react"
 import { MapMouseEvent, MapRef, Marker, MarkerDragEvent } from "react-map-gl"
 import Countdown, { CountdownRendererFn } from "react-countdown"
@@ -425,7 +426,13 @@ function Party({ params }: { params: { id: string } }) {
                             </div>
                         ) : (
                             <>
-                                <div dangerouslySetInnerHTML={{ __html: roomData.prompt }} />
+                                <ReactTyped
+                                    startWhenVisible
+                                    strings={[
+                                        roomData.prompt
+                                    ]}
+                                    typeSpeed={40}
+                                />
                             </>
                         )}
                         <SvgDecoEnigme />
