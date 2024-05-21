@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { createClient } from "@/dbschema/edgeql-js"
+import e, { createClient } from "@/dbschema/edgeql-js"
 import { pusherServer } from "@/lib/pusher"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -20,31 +20,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.status(400).json({ success: false, error: "Missing required field: id" })
             return
         }
+        
+        const updateQuery = e.update(e.Room, (room) => ({
+            filter_single: { id: e.uuid(id) },
+            set: {
+                delay: e.int32(delay ?? 0),
+                latitude: e.float32(latitude ?? 0),
+                longitude: e.float32(longitude ?? 0),
+                nb_players: e.int32(nb_players ?? 0),
+                prompt: e.str(prompt ?? ''),
+                user_pseudo: e.str(user_pseudo ?? ''),
+            },
+        }));
 
-        const query = `
-        update Room
-            filter .id = <uuid>$id
-            set {
-                delay := <int32>$delay,
-                latitude := <float32>$latitude,
-                longitude := <float32>$longitude,
-                nb_players := <int32>$nb_players,
-                prompt := <str>$prompt,
-                user_pseudo := <str>$user_pseudo
-            }
-        `
+        await updateQuery.run(client);
 
-        const params = {
-            id: id,
-            delay: delay ?? null,
-            latitude: latitude ?? null,
-            longitude: longitude ?? null,
-            nb_players: nb_players ?? null,
-            prompt: prompt ?? null,
-            user_pseudo: user_pseudo ?? null
-        }
+        const selectQuery = e.select(e.Room, (room) => ({
+            filter_single: { id: e.uuid(id) },
+            id: true,
+            delay: true,
+            latitude: true,
+            longitude: true,
+            nb_players: true,
+            prompt: true,
+            user_pseudo: true,
+        }));
 
-        const result: any = await client.query(query, params)
+        const result: any = await selectQuery.run(client);
 
         pusherServer.trigger(id, "join-room", {
             id: id,
