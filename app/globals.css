@@ -3,25 +3,25 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: "sfpro";
-    src: url("/fonts/SFPRODISPLAYREGULAR.OTF") format("opentype");
+    font-family: "jaro";
+    src: url("/fonts/Jaro_9pt-Regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: "sfprobold";
-    src: url("/fonts/SFPRODISPLAYBOLD.OTF") format("opentype");
+    font-family: "lilita";
+    src: url("/fonts/LilitaOne-Regular.ttf") format("truetype");
 }
 
 .font-title {
-    font-family: "sfpro"
+    font-family: "jaro"
 }
 
 .font-title-bold {
-    font-family: "sfprobold"
+    font-family: "lilita"
 }
 
 * {
-    font-family: "sfpro", sans-serif;
+    font-family: "jaro", sans-serif;
     font-weight: 100;
 }
 

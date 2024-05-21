@@ -1,4 +1,4 @@
-import { createClient } from "@/dbschema/edgeql-js"
+import e, { createClient } from "@/dbschema/edgeql-js"
 import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
 import { NextApiRequest, NextApiResponse } from "next"
 
@@ -15,22 +15,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         })
 
         const { score, id_room, id_user } = req.body
-        await client.querySingle(
-            `
-                select (
-                    insert default::Player_stats {
-                        score := <float32>$score,
-                        id_user := (select detached default::Users filter .id = <uuid>$id_user),
-                        id_room := (select detached default::Room filter .id = <uuid>$id_room),
-                    }
-                ) {score, id_user, id_room}`,
-            {
-                score: score,
-                id_user: id_user,
-                id_room: id_room,
-            }
-        )
-        res.status(200).json({ success: true })
+
+        const insertQuery = e.insert(e.Player_stats, {
+            score: e.float32(score),
+            id_user: e.select(e.Users, (user) => ({
+                filter_single: { id: e.uuid(id_user) },
+            })),
+            id_room: e.select(e.Room, (room) => ({
+                filter_single: { id: e.uuid(id_room) },
+            })),
+        })
+
+        const result = await insertQuery.run(client)
+
+        res.status(200).json({ success: true, player_stats: result })
     } catch (error) {
         res.status(500).json({ success: false, error: error })
     }

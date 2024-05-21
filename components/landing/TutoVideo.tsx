@@ -9,7 +9,7 @@ const TutoVideo = () => {
                 <div className="space-y-5">
                     <div className="flex flex-col items-center xl:items-start gap-4">                        
                         <h1 className="text-4xl md:text-7xl font-title-bold">What is Enigmap ?</h1>
-                        <p className="md:w-3/4 xl:w-2/3 md:text-lg sm:text-start text-center">
+                        <p className="md:w-3/4 xl:w-2/3 md:text-lg xl:text-start text-center">
                             In this game, players embark on a treasure hunt by solving riddles to locate specific places on a map. Each riddle provides clues about the treasure&apos;s location, prompting
                             careful exploration of the virtual map. Players must interpret the clues to identify landmarks or geographical features. Once they believe they&apos;ve found the right spot, they
                             click to see if they&apos;ve discovered the treasure. This immersive experience blends adventure with intellectual challenges for hours of thrilling entertainment.
