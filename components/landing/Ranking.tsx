@@ -129,7 +129,7 @@ const Ranking = () => {
                 </table>
             </div>
             <div className='flex items-center relative order-1 sm:order-2'>
-                <h1 className='sm:text-right text-4xl md:text-6xl xl:text-8xl text-center'>
+                <h1 className='sm:text-right text-4xl md:text-6xl xl:text-8xl font-title-bold text-center'>
                     Player Rankings: Discover <span className='text-primary'>the top</span> scores in real time!
                 </h1>
             </div>

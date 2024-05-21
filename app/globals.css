@@ -3,17 +3,25 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: "Title";
-    src: url("/fonts/Jaro.ttf") format("truetype");
+    font-family: "sfpro";
+    src: url("/fonts/SFPRODISPLAYREGULAR.OTF") format("opentype");
+}
+
+@font-face {
+    font-family: "sfprobold";
+    src: url("/fonts/SFPRODISPLAYBOLD.OTF") format("opentype");
 }
 
 .font-title {
-    font-family: "Title", sans-serif;
-    font-weight: 900;
+    font-family: "sfpro"
+}
+
+.font-title-bold {
+    font-family: "sfprobold"
 }
 
 * {
-    font-family: "Title", sans-serif;
+    font-family: "sfpro", sans-serif;
     font-weight: 100;
 }
 

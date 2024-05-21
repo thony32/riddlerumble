@@ -8,7 +8,7 @@ const TutoVideo = () => {
             <div className="flex items-center">
                 <div className="space-y-5">
                     <div className="flex flex-col items-center xl:items-start gap-4">                        
-                        <h1 className="text-4xl md:text-7xl font-extrabold font-title">What is Enigmap ?</h1>
+                        <h1 className="text-4xl md:text-7xl font-title-bold">What is Enigmap ?</h1>
                         <p className="md:w-3/4 xl:w-2/3 md:text-lg sm:text-start text-center">
                             In this game, players embark on a treasure hunt by solving riddles to locate specific places on a map. Each riddle provides clues about the treasure&apos;s location, prompting
                             careful exploration of the virtual map. Players must interpret the clues to identify landmarks or geographical features. Once they believe they&apos;ve found the right spot, they
@@ -16,9 +16,9 @@ const TutoVideo = () => {
                         </p>
                         <Button
                             size="lg"
-                            className="bg-emerald-500 text-xl text-base-100 flex items-center group font-title tracking-wider"
+                            className="bg-emerald-500 text-xl text-base-100 flex items-center group tracking-wider"
                         >
-                            <span>Play Now</span>
+                            <span className="font-title-bold">Play Now</span>
                             <svg
                                 className="w-8 group-hover:translate-x-2 duration-150 fill-base-100"
                                 viewBox="0 0 31.719 31.688"

@@ -34,7 +34,7 @@ const Heading = () => {
                 <Wordz />
                 <div className="space-y-5">
                     <div>
-                        <h1 className="text-[6em] md:text-[7rem] xl:text-[9rem] font-title md:tracking-wider">Enigmap</h1>
+                        <h1 className="text-[6em] md:text-[7rem] xl:text-[9rem] font-title-bold md:tracking-wider">Enigmap</h1>
                     </div>
                     <div className="w-full flex flex-col md:flex-row justify-between gap-5 md:gap-[30%]">
                         <div className="text-justify text-xl md:text-2xl xl:text-3xl first-letter:text-5xl">Set off on a thrilling quest through an interactive map, where every location hides a cryptic puzzle.</div>
@@ -54,7 +54,7 @@ const Heading = () => {
                                     size="lg"
                                     onClick={() => setIsLoading(true)}
                                 >
-                                    <span className="font-bold">Play Now</span>
+                                    <span className="font-title-bold">Play Now</span>
                                     {isLoading ? (
                                         <div className="flex justify-center">
                                             <span className="loading loading-dots loading-md"></span>
