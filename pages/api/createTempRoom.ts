@@ -1,5 +1,4 @@
 import e, { createClient } from '@/dbschema/edgeql-js';
-import { Temp_room } from '@/dbschema/edgeql-js/modules/default';
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
