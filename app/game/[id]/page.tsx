@@ -88,7 +88,7 @@ function Party({ params }: { params: { id: string } }) {
         queryFn: () => fetchRoom(params.id),
         staleTime: 1000 * 60 * 60 * 24,
     })
-
+    const [markerAllPlayers, setMarkerAllPlayers] = useState([])
     const Completionist = () => {
         localStorage.removeItem(PARTY_START_TIME_KEY)
         const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -97,6 +97,8 @@ function Party({ params }: { params: { id: string } }) {
             queryKey: ["tempRoomData"],
             queryFn: () => getTempRoom(params.id),
         })
+
+        setMarkerAllPlayers(tempRoomData)
 
         const disableRoomFun = useMutation({
             mutationKey: ["disableRoomFun"],
@@ -373,7 +375,7 @@ function Party({ params }: { params: { id: string } }) {
 
     // NOTE: prevent dev tools and context menus
     const [penalityPoints, setPenalityPoints] = useState(0)
-    /* useEffect(() => {
+    useEffect(() => {
         const handleContextMenu = (e: MouseEvent) => {
             e.preventDefault()
         }
@@ -399,7 +401,7 @@ function Party({ params }: { params: { id: string } }) {
             document.removeEventListener("keydown", handleKeyDown)
             document.removeEventListener("visibilitychange", handleTabNavSwitch)
         }
-    }, []) */
+    }, [])
 
     if (startTime === null) {
         return (
@@ -494,14 +496,20 @@ function Party({ params }: { params: { id: string } }) {
                                 </div>
                             )}
                             <div className="flex justify-center">
-                                {!showTarget && (
-                                    <Button
-                                        onClick={submitResult}
-                                        className="bg-green-500 text-white font-semibold"
-                                    >
-                                        Submit
-                                    </Button>
-                                )}
+                                {
+                                    !showTarget ? (
+                                        <Button
+                                            onClick={submitResult}
+                                            className="bg-green-500 text-white font-semibold"
+                                        >
+                                            Submit
+                                        </Button>
+                                    ) : (
+                                        <Link href={"/game"}>
+                                            <Button>Close</Button>
+                                        </Link>
+                                    )
+                                }
                             </div>
                         </div>
                     </div>
@@ -527,53 +535,78 @@ function Party({ params }: { params: { id: string } }) {
                         mapboxAccessToken="pk.eyJ1IjoidGhvbnkzMiIsImEiOiJjbHc5azQ5bWQwNWhjMmtxa2Q5dTcyNWxhIn0.pXpGUWi_9wWY3zwfflmzSQ"
                         style={{ width: "100%", height: "85dvh", margin: 0, padding: 0, borderRadius: "1rem", overflow: "hidden" }}
                     >
-                        <Marker
-                            longitude={marker.longitude}
-                            latitude={marker.latitude}
-                            anchor="bottom"
-                            draggable={!showTarget ? true : false}
-                            onDrag={onMarkerDrag}
-                            onDragEnd={onMarkerDragEnd}
-                        >
-                            <svg
-                                className="stroke-black w-10"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                            >
-                                <path
-                                    d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                                <path
-                                    d="M12 22C16 18 20 14.4183 20 10C20 5.58172 16.4183 2 12 2C7.58172 2 4 5.58172 4 10C4 14.4183 8 18 12 22Z"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                            </svg>
-                        </Marker>
-                        {showTarget && (
+                        {
+                            !showTarget &&
                             <Marker
-                                longitude={targetMarker.longitude}
-                                latitude={targetMarker.latitude}
+                                longitude={marker.longitude}
+                                latitude={marker.latitude}
                                 anchor="bottom"
+                                draggable={!showTarget ? true : false}
+                                onDrag={onMarkerDrag}
+                                onDragEnd={onMarkerDragEnd}
                             >
                                 <svg
-                                    className="stroke-black w-14"
+                                    className="stroke-black w-10"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                 >
                                     <path
-                                        d="M16 13.3744C19.5318 14.0688 22 15.6547 22 17.5C22 19.9853 17.5228 22 12 22C6.47715 22 2 19.9853 2 17.5C2 15.6547 4.46819 14.0688 8 13.3744M12 17V3L17.3177 6.27244C17.7056 6.51114 17.8995 6.63049 17.9614 6.78085C18.0154 6.912 18.0111 7.0599 17.9497 7.18771C17.8792 7.33426 17.6787 7.44222 17.2777 7.65815L12 10.5"
+                                        d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    <path
+                                        d="M12 22C16 18 20 14.4183 20 10C20 5.58172 16.4183 2 12 2C7.58172 2 4 5.58172 4 10C4 14.4183 8 18 12 22Z"
                                         strokeWidth="2"
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                     />
                                 </svg>
                             </Marker>
-                        )}
+                        }
+                        {/* result marker */}
+                        {
+                            showTarget && (
+                                <Marker
+                                    longitude={targetMarker.longitude}
+                                    latitude={targetMarker.latitude}
+                                    anchor="bottom"
+                                >
+                                    <svg
+                                        className="stroke-black w-14"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <path
+                                            d="M16 13.3744C19.5318 14.0688 22 15.6547 22 17.5C22 19.9853 17.5228 22 12 22C6.47715 22 2 19.9853 2 17.5C2 15.6547 4.46819 14.0688 8 13.3744M12 17V3L17.3177 6.27244C17.7056 6.51114 17.8995 6.63049 17.9614 6.78085C18.0154 6.912 18.0111 7.0599 17.9497 7.18771C17.8792 7.33426 17.6787 7.44222 17.2777 7.65815L12 10.5"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                    </svg>
+                                </Marker>
+                            )
+                        }
+                        {/* all players markers */}
+                        {
+                            markerAllPlayers && markerAllPlayers.map((marker: any, index: number) => (
+                                <Marker
+                                    key={index}
+                                    longitude={marker.longitude}
+                                    latitude={marker.latitude}
+                                    anchor="bottom"
+                                >
+                                    <Avatar
+                                        isBordered
+                                        color="primary"
+                                        showFallback
+                                        name="M"
+                                        src={marker.id_user.avatar!}
+                                    />
+                                </Marker>
+                            ))
+                        }
                     </Map>
                 </div>
             </div>
