@@ -1,6 +1,5 @@
 "use client"
 import { Button } from "@nextui-org/button"
-import { Chip } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
 import { getOAuthUrl, getSession } from "@/services/user-action"
 import { useState } from "react"
@@ -28,15 +27,6 @@ const Heading = () => {
 
     return (
         <div className="h-screen flex justify-center items-center relative">
-            <div className="absolute right-0 bottom-4">
-                <Chip
-                    color="success"
-                    variant="dot"
-                    size="lg"
-                >
-                    World tournament
-                </Chip>
-            </div>
             <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
                 <SvgMapDraw />
             </div>
