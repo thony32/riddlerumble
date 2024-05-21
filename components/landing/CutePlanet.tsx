@@ -6,7 +6,7 @@ import { useSpring, animated, config } from "@react-spring/three"
 
 const CuteModel = forwardRef((props: any, ref: any) => {
     const group = useRef<THREE.Group>()
-    const { nodes, materials, animations } = useGLTF("/models/cute_little_planet/scene-transformed.glb") as any
+    const { nodes, materials, animations } = useGLTF("/models/scene.glb") as any
     const { actions } = useAnimations(animations, group) as any
     // play animation
     useEffect(() => {
@@ -2070,6 +2070,6 @@ const CuteModel = forwardRef((props: any, ref: any) => {
     )
 })
 
-useGLTF.preload("/models/cute_little_planet/scene-transformed.glb")
+useGLTF.preload("/models/cute_little_planet/scene.glb")
 
 export default CuteModel
