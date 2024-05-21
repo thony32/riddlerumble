@@ -353,7 +353,7 @@ function Party({ params }: { params: { id: string } }) {
 
         const totalScore = Math.round((scoreDistance * distanceWeight + timeScore * timeWeight) / (distanceWeight + timeWeight))
         setShowTarget(true)
-        setTotalScore(roomData.level == 'high-level' ? totalScore : totalScore + 10)
+        setTotalScore(roomData.level == 'high-level' ? totalScore - penalityPoints : totalScore - penalityPoints + 10)
         mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
         createTempRoom.mutate()
         createPlayerStat.mutate()
@@ -362,6 +362,7 @@ function Party({ params }: { params: { id: string } }) {
     }
 
     // NOTE: prevent dev tools and context menus
+    const [penalityPoints, setPenalityPoints] = useState(0)
     useEffect(() => {
         const handleContextMenu = (e: MouseEvent) => {
             e.preventDefault()
@@ -375,7 +376,7 @@ function Party({ params }: { params: { id: string } }) {
 
         const handleTabNavSwitch = () => {
             if (document.hidden) {
-                console.log("add penality points");
+                setPenalityPoints(penalityPoints + 10)
             }
         }
 
