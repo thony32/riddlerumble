@@ -14,13 +14,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         prompt: true,
         delay: true,
         level: true,
+        user_pseudo: true,
         nb_players: true,
         created_at: true,
         modified_at: true,
         filter_single: { id: req.body.room_id },
-    }));
+    }))
     const room = await roomQuery.run(client)
-
 
     res.status(200).json(room)
 }

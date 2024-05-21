@@ -14,6 +14,7 @@ import Image from "next/image"
 import getCountryCode from "@/utils/getCountryCode"
 import * as turf from "@turf/turf"
 import "mapbox-gl/dist/mapbox-gl.css"
+import { redirect } from "next/navigation"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -407,6 +408,10 @@ function Party({ params }: { params: { id: string } }) {
                 <span className="loading loading-ring loading-lg"></span>
             </div>
         )
+    }
+
+    if (roomData && !roomData.user_pseudo.split(", ").includes(user?.pseudo) && process.env.NODE_ENV !== "production") {
+        redirect("/game/")
     }
 
     return (
