@@ -17,11 +17,11 @@ read commit_message
 
 # Check if there are any changes to commit
 if git diff-index --quiet HEAD --; then
-    echo "No changes to commit."
+    echo "No changes to commit"
 else
     # Prompt the user for the commit message
     echo "Enter the commit message:"
-    read commit_message
+    read -r commit_message
 
     # Commit the changes with the provided message
     echo "Committing changes..."
