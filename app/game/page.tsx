@@ -6,7 +6,6 @@ import { useQuery } from "@tanstack/react-query"
 import dynamic from "next/dynamic"
 const BtnCreateRoom = dynamic(() => import("@/components/game/BtnCreateRoom"))
 const PlayerProfil = dynamic(() => import("@/components/game/PlayerProfil"))
-const PreventSwitch = dynamic(() => import("@/components/game/PreventSwitch"))
 const RoomCard = dynamic(() => import("@/components/game/RoomCard"))
 import useResponsive from "@/utils/useResponsive"
 import { useEffect, useState } from "react"
@@ -137,7 +136,6 @@ const Game = () => {
 
     return (
         <div className="min-h-[100vh] flex flex-col-reverse xl:grid xl:grid-cols-3 gap-14">
-            <PreventSwitch />
             <div className="xl:col-span-2 p-5 space-y-10">
                 <div className="flex items-center gap-5">
                     <h1 className="text-3xl text-center">List of room</h1>
