@@ -17,7 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
     const { level, user_pseudo } = req.body
     const room_data = await room_api(level)
-
     const delay_party = level == "high-level" ? 420000 : 300000
 
     const latitude = parseFloat(room_data.response.lat)
