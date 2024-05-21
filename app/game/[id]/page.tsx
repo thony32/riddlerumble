@@ -321,7 +321,7 @@ function Party({ params }: { params: { id: string } }) {
         },
     })
 
-    const updateUserScoreMutatiom = useMutation({
+    const updateUserScoreMutation = useMutation({
         mutationKey: ["updateUserScoreMutatiom"],
         mutationFn: async () => {
             return await updateUserScore(user?.id, totalScore)
@@ -357,7 +357,7 @@ function Party({ params }: { params: { id: string } }) {
         mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
         createTempRoom.mutate()
         createPlayerStat.mutate()
-        updateUserScoreMutatiom.mutate()
+        updateUserScoreMutation.mutate()
         localStorage.removeItem(PARTY_START_TIME_KEY)
     }
 
