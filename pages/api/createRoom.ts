@@ -3,12 +3,19 @@ import { createClient } from "@/dbschema/edgeql-js"
 import { pusherServer } from "@/lib/pusher"
 
 const room_api = async (level: string) => {
-    const response = await fetch(`https://ia-codeipsum.vercel.app/${level}`, {
+    let url: string;
+    if (level === "normal-level") {
+        url = "https://ia-codeipsum.vercel.app";
+    } else {
+        url = `https://ia-codeipsum.vercel.app/${level}`;
+    }
+
+    const response = await fetch(url, {
         method: "POST",
-    })
-    const data = await response.json()
-    return data
-}
+    });
+    const data = await response.json();
+    return data;
+};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const client = createClient({
