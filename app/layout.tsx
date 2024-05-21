@@ -3,7 +3,7 @@ import { Inter } from "next/font/google"
 import { NextUIProvider } from "@nextui-org/react"
 import { ReactLenis } from "@/utils/lenis"
 import Footer from "@/components/landing/Footer"
-import ThemeHandler from "@/components/Misc/ThemeHandler"
+import ThemeHandler from "@/components/misc/ThemeHandler"
 import ReactQueryProvider from "@/utils/ReactQueryProvider"
 import "./globals.css"
 
