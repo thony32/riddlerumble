@@ -70,6 +70,16 @@ const disableRoom = async (id_room: string) => {
     return await response.json()
 }
 
+const updateUserScore = async (user_id: string, player_score: number) => {
+    const response = await fetch("/api/updateUserScore", {
+        body: JSON.stringify({ user_id, player_score }),
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) throw new Error("Failed to update user score")
+    return await response.json()
+}
+
 function Party({ params }: { params: { id: string } }) {
     const { isPending: isRoomPending, data: roomData } = useQuery({
         queryKey: ["roomData"],
@@ -319,6 +329,19 @@ function Party({ params }: { params: { id: string } }) {
         },
     })
 
+    const updateUserScoreMutation = useMutation({
+        mutationKey: ["updateUserScoreMutatiom"],
+        mutationFn: async () => {
+            return await updateUserScore(user?.id, totalScore)
+        },
+        onError: (error) => {
+            console.log(error)
+        },
+        onSuccess: (data) => {
+            console.log("User score updated successfully! ", data)
+        },
+    })
+
     const submitResult = () => {
         const elapsedTime = Date.now() - (startTime || Date.now())
         const elapsedMinutes = Math.floor(elapsedTime / 60000)
@@ -338,14 +361,16 @@ function Party({ params }: { params: { id: string } }) {
 
         const totalScore = Math.round((scoreDistance * distanceWeight + timeScore * timeWeight) / (distanceWeight + timeWeight))
         setShowTarget(true)
-        setTotalScore(roomData.level == "high-level" ? totalScore : totalScore + 10)
+        setTotalScore(roomData.level == 'high-level' ? totalScore - penalityPoints : totalScore - penalityPoints + 10)
         mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
         createTempRoom.mutate()
         createPlayerStat.mutate()
+        updateUserScoreMutation.mutate()
         localStorage.removeItem(PARTY_START_TIME_KEY)
     }
 
     // NOTE: prevent dev tools and context menus
+    const [penalityPoints, setPenalityPoints] = useState(0)
     useEffect(() => {
         const handleContextMenu = (e: MouseEvent) => {
             e.preventDefault()
@@ -359,7 +384,7 @@ function Party({ params }: { params: { id: string } }) {
 
         const handleTabNavSwitch = () => {
             if (document.hidden) {
-                console.log("add penality points")
+                setPenalityPoints(penalityPoints + 10)
             }
         }
 
