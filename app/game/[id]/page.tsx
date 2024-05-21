@@ -383,7 +383,7 @@ function Party({ params }: { params: { id: string } }) {
         }
 
         const handleTabNavSwitch = () => {
-            if (document.hidden) {
+            if (document.hidden && !showTarget) {
                 setPenalityPoints(penalityPoints + 10)
             }
         }
@@ -428,6 +428,12 @@ function Party({ params }: { params: { id: string } }) {
                     </div>
                     <div className="absolute bottom-0 w-full py-2">
                         <div className="space-y-4">
+                            {
+                                penalityPoints != 0 &&
+                                <div className="text-center">
+                                    <label className="text-red-500">Penality Points : - {penalityPoints} pts</label>
+                                </div>
+                            }
                             {showTarget && (
                                 <div className="flex items-center justify-between">
                                     <div>
