@@ -49,6 +49,8 @@ const PlayerProfil = () => {
         staleTime: 1000 * 60 * 60 * 24,
     })
 
+    console.log(allUserData);
+
     const {
         isPending: isCountryPending,
         data: countryData,
@@ -71,7 +73,7 @@ const PlayerProfil = () => {
         onSubmit: async (values, { resetForm }) => {
             try {
                 setIsUpdating(true);
-                const response = await fetch('/api/your-api-route', {
+                const response = await fetch('/api/updateUser', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -150,7 +152,7 @@ const PlayerProfil = () => {
                                                                             <span className="loading loading-dots loading-md"></span>
                                                                         </SelectItem>
                                                                         :
-                                                                        countryData && countryData.data.map((country: any) => (
+                                                                        countryData && countryData.map((country: any) => (
                                                                             <SelectItem className="flex justify-between" key={country.name + ', ' + country.Iso2} value={country.name + ', ' + country.Iso2}>
                                                                                 {country.name + ', ' + country.Iso2}
                                                                             </SelectItem>
@@ -202,7 +204,7 @@ const PlayerProfil = () => {
                                                 <span className="loading loading-dots loading-md"></span>
                                                 :
                                                 <>
-                                                    {allUserData.findIndex((user: any) => user.pseudo === user.pseudo) + 1} / {allUserData.length} players
+                                                    {allUserData.findIndex((userData: any) => userData.pseudo === user.pseudo) + 1} / {allUserData.length} players
                                                 </>
                                         }
                                     </span>
