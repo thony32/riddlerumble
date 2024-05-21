@@ -1,8 +1,8 @@
 "use client"
-import getCountryCode from '@/utils/getCountryCode';
-import getInitial from '@/utils/getInitials';
 import { Avatar } from '@nextui-org/avatar';
 import { useQuery } from '@tanstack/react-query';
+import getCountryCode from '@/utils/getCountryCode';
+import getInitial from '@/utils/getInitials';
 import Image from 'next/image';
 
 type Player = {

@@ -1,14 +1,14 @@
 "use client"
+import { pusherClient } from "@/lib/pusher"
+import { Room } from "@/types/room"
+import { Skeleton } from "@nextui-org/react"
+import { useQuery } from "@tanstack/react-query"
+import { useEffect, useState } from "react"
 import BtnCreateRoom from "@/components/game/BtnCreateRoom"
 import PlayerProfil from "@/components/game/PlayerProfil"
 import PreventSwitch from "@/components/game/PreventSwitch"
 import RoomCard from "@/components/game/RoomCard"
-import { pusherClient } from "@/lib/pusher"
-import { Room } from "@/types/room"
 import useResponsive from "@/utils/useResponsive"
-import { Skeleton } from "@nextui-org/react"
-import { useQuery } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
 
 const getAllRoom = async () => {
     const res = await fetch("/api/getAllRoom")
@@ -18,8 +18,6 @@ const getAllRoom = async () => {
     const jsonData = await res.json()
     return jsonData
 }
-
-// NOTE: StatsDrawer
 
 const StatsDrawer = () => {
     return (

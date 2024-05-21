@@ -1,7 +1,7 @@
-import getInitial from "@/utils/getInitials"
 import { Avatar } from "@nextui-org/avatar"
-import BtnLogout from "./BtnLogout"
 import { useUser } from "@/store/useUser"
+import getInitial from "@/utils/getInitials"
+import BtnLogout from "./BtnLogout"
 
 const Navbar = () => {
     const user = useUser((state) => state.user)

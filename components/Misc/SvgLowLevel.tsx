@@ -4,8 +4,6 @@ const SvgLowLevel = () => {
             width="64px"
             height="64px"
             viewBox="0 0 72 72"
-            id="emoji"
-            xmlns="http://www.w3.org/2000/svg"
             fill="#000000"
         >
             <g

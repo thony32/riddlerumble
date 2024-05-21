@@ -1,12 +1,12 @@
 "use client"
-import Link from "next/link"
 import { Button } from "@nextui-org/button"
 import { Chip } from "@nextui-org/react"
-import Wordz from "../Misc/Wordz"
-import SvgMapDraw from "../Misc/SvgMapDraw"
 import { useQuery } from "@tanstack/react-query"
 import { getOAuthUrl, getSession } from "@/services/user-action"
 import { useState } from "react"
+import Link from "next/link"
+import Wordz from "../Misc/Wordz"
+import SvgMapDraw from "../Misc/SvgMapDraw"
 
 const Heading = () => {
     const [isLoading, setIsLoading] = useState(false)

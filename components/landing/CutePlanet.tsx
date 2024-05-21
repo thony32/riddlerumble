@@ -1,10 +1,10 @@
 /* eslint-disable react/display-name */
 "use client"
-import * as THREE from "three"
-import React, { forwardRef, useImperativeHandle, useRef, useState, useEffect } from "react"
 import { useGLTF, useAnimations } from "@react-three/drei"
 import { GLTF } from "three-stdlib"
 import { useSpring, animated, config } from "@react-spring/three"
+import React, { forwardRef, useImperativeHandle, useRef, useState, useEffect } from "react"
+import * as THREE from "three"
 
 type GLTFResult = GLTF & {
     nodes: {

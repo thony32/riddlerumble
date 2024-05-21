@@ -1,11 +1,8 @@
 "use client"
 import Image from "next/image"
 import SvgDecoEnigme from "../Misc/SvgDecoEnigme"
-import useResponsive from "@/utils/useResponsive"
 
 const Footer = () => {
-    const { isMobile, isTablet } = useResponsive()
-
     return (
         <div className="px-[10%] py-10 bg-base-200/20 relative">
             <div className="text-center my-20">
