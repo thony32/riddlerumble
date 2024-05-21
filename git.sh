@@ -1,4 +1,4 @@
-#!/bin/sh"v
+#!/bin/sh
 
 error_exit() {
     echo "Error: $1" >&2
