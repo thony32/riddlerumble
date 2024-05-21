@@ -3,7 +3,7 @@ import { Card, Chip } from "@nextui-org/react"
 import { useUser } from "@/store/useUser"
 import { useMutation } from "@tanstack/react-query"
 import { useCallback, useEffect, useState } from "react"
-import { pusherClient } from "@/lib/pusher"
+// import { pusherClient } from "@/lib/pusher"
 import { useRouter } from "next/navigation"
 import { formatDistanceToNow } from "date-fns"
 import { AnimatePresence, motion } from "framer-motion"
@@ -93,13 +93,41 @@ function RoomCard({ room: room_props }: { room: Room }) {
         updateRoomMutation.mutate({ room, given_action })
     }
 
-    useEffect(() => {
-        pusherClient.subscribe(room_props.id)
+    // useEffect(() => {
+    //     pusherClient.subscribe(room_props.id)
 
-        pusherClient.bind("join-room", handleJoinRoom)
+    //     pusherClient.bind("join-room", handleJoinRoom)
+
+    //     return () => {
+    //         pusherClient.unsubscribe(room_props.id)
+    //     }
+    // }, [room_props, handleJoinRoom])
+    useEffect(() => {
+        const wsProtocol = process.env.NODE_ENV === "production" ? "wss" : "ws"
+        const wsHost = process.env.NODE_ENV === "production" ? "riddlerumble.vercel.app" : "localhost"
+        const wsPort = process.env.NODE_ENV === "production" ? "443" : "8080"
+        const wsUrl = `${wsProtocol}://${wsHost}:${wsPort}`
+
+        const ws = new WebSocket(wsUrl)
+
+        ws.onopen = () => {
+            console.log("WebSocket connected")
+            ws.send(JSON.stringify({ event: "subscribe", data: room_props.id }))
+        }
+
+        ws.onmessage = (event: MessageEvent) => {
+            const { event: eventName, data } = JSON.parse(event.data as string) as { event: string; data: any }
+            if (eventName === "join-room") {
+                handleJoinRoom(data)
+            }
+        }
+
+        ws.onclose = () => {
+            console.log("WebSocket disconnected")
+        }
 
         return () => {
-            pusherClient.unsubscribe(room_props.id)
+            ws.close()
         }
     }, [room_props, handleJoinRoom])
 
@@ -117,11 +145,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
     }, [selectedRoom, router, room_props, countdown])
 
     return (
-        <motion.div
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full flex relative"
-        >
+        <motion.div initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} className="w-full flex relative">
             {/* COUNTDOWN */}
             <AnimatePresence>
                 {countdown !== null && (
@@ -139,10 +163,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
                     </div>
                 )}
             </AnimatePresence>
-            <Card
-                key={room.id}
-                className="w-full group"
-            >
+            <Card key={room.id} className="w-full group">
                 <div className="w-full top-0 left-0 absolute bg-[url('/images/room-map.png')] bg-cover bg-center h-full opacity-45 group-hover:opacity-100 duration-700 ease-soft-spring" />
                 <div className="relative justify-end items-center gap-52 flex text-white p-7 w-full bg-gradient-to-r from-transparent to-black">
                     <div className="w-full">
@@ -167,22 +188,11 @@ function RoomCard({ room: room_props }: { room: Room }) {
                         </div>
                     </div>
                     {!selectedRoom ? (
-                        <Button
-                            size="lg"
-                            variant="shadow"
-                            color="primary"
-                            isLoading={updateRoomMutation.isPending}
-                            onClick={() => handleClick(room, "join")}
-                        >
+                        <Button size="lg" variant="shadow" color="primary" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "join")}>
                             Join
                         </Button>
                     ) : room.id == selectedRoom ? (
-                        <Button
-                            size="lg"
-                            variant="shadow"
-                            isLoading={updateRoomMutation.isPending}
-                            onClick={() => handleClick(room, "leave")}
-                        >
+                        <Button size="lg" variant="shadow" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "leave")}>
                             Leave
                         </Button>
                     ) : (
@@ -190,12 +200,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
                     )}
                 </div>
 
-                <Chip
-                    variant="faded"
-                    color="primary"
-                    className="absolute top-1 left-1"
-                    size="sm"
-                >
+                <Chip variant="faded" color="primary" className="absolute top-1 left-1" size="sm">
                     {formatDistanceToNow(new Date(room.created_at || new Date()), { includeSeconds: true, addSuffix: true })}
                 </Chip>
 
