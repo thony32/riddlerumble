@@ -1,7 +1,8 @@
 "use client"
 import { Canvas } from "@react-three/fiber"
 import { useRef } from "react"
-import CuteModel from "./CutePlanet"
+import CutePlanet from "./CutePlanet"
+
 import { useQuery } from "@tanstack/react-query"
 import { getSession } from "@/services/user-action"
 import useResponsive from "@/utils/useResponsive"
@@ -39,7 +40,7 @@ const ModelContainer = () => {
                     shadow-mapSize={[2048, 2048]}
                 />
                 <directionalLight />
-                <CuteModel
+                <CutePlanet
                     ref={planet_ref}
                     scale={isMobile ? [0.5, 0.5, 0.5] : isTablet ? [0.75, 0.75, 0.75] : [1, 1, 1]}
                 />
