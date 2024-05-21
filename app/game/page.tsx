@@ -45,7 +45,7 @@ const StatsDrawer = () => {
                     ></label>
                     <div className="p-2 space-y-10 bg-base-200 h-screen">
                         <div className="flex items-center gap-5">
-                            <h1 className="text-xl">Vos Statistiques</h1>
+                            <h1 className="text-xl">Your Stats</h1>
                             <svg
                                 fill="none"
                                 viewBox="0 0 24 24"
@@ -75,7 +75,7 @@ const Stats = () => {
         <div className="p-5">
             <div className="space-y-10 sticky top-0">
                 <div className="flex items-center gap-5">
-                    <h1 className="text-3xl">Vos Statistiques</h1>
+                    <h1 className="text-3xl">Your Stats</h1>
                     <svg
                         fill="none"
                         viewBox="0 0 24 24"

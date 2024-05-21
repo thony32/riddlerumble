@@ -15,6 +15,7 @@ import getCountryCode from "@/utils/getCountryCode"
 import * as turf from "@turf/turf"
 import "mapbox-gl/dist/mapbox-gl.css"
 import { redirect } from "next/navigation"
+import { MAX_PLAYERS } from "@/utils/constants"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -410,7 +411,11 @@ function Party({ params }: { params: { id: string } }) {
         )
     }
 
-    if (roomData && !roomData.user_pseudo.split(", ").includes(user?.pseudo) && process.env.NODE_ENV !== "production") {
+    const checkUnauthorization = () => {
+        return roomData && roomData.nb_players !== MAX_PLAYERS && !roomData.user_pseudo.split(", ").includes(user?.pseudo) && process.env.NODE_ENV === "production"
+    }
+
+    if (checkUnauthorization()) {
         redirect("/game/")
     }
 
