@@ -10,8 +10,8 @@ module default {
   );
   
   type Temp_room {
-    id_room: Room;
-    id_user: Users;
+    Room: Room;
+    User: Users;
     required property latitude -> float32;
     required property longitude -> float32;
     required property time -> str;
@@ -62,8 +62,8 @@ module default {
   };
 
   type Player_stats {
-    required id_room: Room;
-    required id_user: Users;
+    required Room: Room;
+    required User: Users;
     required property score -> float32;
     created_at: datetime {
       rewrite insert using (datetime_of_statement())

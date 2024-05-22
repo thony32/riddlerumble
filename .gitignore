@@ -37,3 +37,6 @@ pnpm-lock.yaml
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#temporary
+vercel.json

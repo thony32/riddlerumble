@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 nationality: true,
                 avatar: true,
             },
-            filter: e.op(temp_room.id_room.id, '=', e.uuid(params.id_room)),
+            filter: e.op(temp_room.id, '=', e.uuid(params.id_room)),
         }));
     
         const response = await tempRoomQuery.run(client);

@@ -1,3 +1,5 @@
+// RoomCard.tsx
+
 import { Button } from "@nextui-org/button"
 import { Card, Chip } from "@nextui-org/react"
 import { useUser } from "@/store/useUser"
@@ -117,11 +119,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
     }, [selectedRoom, router, room_props, countdown])
 
     return (
-        <motion.div
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full flex relative"
-        >
+        <motion.div initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} className="w-full flex relative">
             {/* COUNTDOWN */}
             <AnimatePresence>
                 {countdown !== null && (
@@ -139,10 +137,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
                     </div>
                 )}
             </AnimatePresence>
-            <Card
-                key={room.id}
-                className="w-full group"
-            >
+            <Card key={room.id} className="w-full group">
                 <div className="w-full top-0 left-0 absolute bg-[url('/images/room-map.png')] bg-cover bg-center h-full opacity-45 group-hover:opacity-100 duration-700 ease-soft-spring" />
                 <div className="relative justify-end items-center gap-52 flex text-white p-7 w-full bg-gradient-to-r from-transparent to-black">
                     <div className="w-full">
@@ -167,22 +162,11 @@ function RoomCard({ room: room_props }: { room: Room }) {
                         </div>
                     </div>
                     {!selectedRoom ? (
-                        <Button
-                            size="lg"
-                            variant="shadow"
-                            color="primary"
-                            isLoading={updateRoomMutation.isPending}
-                            onClick={() => handleClick(room, "join")}
-                        >
+                        <Button size="lg" variant="shadow" color="primary" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "join")}>
                             Join
                         </Button>
                     ) : room.id == selectedRoom ? (
-                        <Button
-                            size="lg"
-                            variant="shadow"
-                            isLoading={updateRoomMutation.isPending}
-                            onClick={() => handleClick(room, "leave")}
-                        >
+                        <Button size="lg" variant="shadow" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "leave")}>
                             Leave
                         </Button>
                     ) : (
@@ -190,12 +174,7 @@ function RoomCard({ room: room_props }: { room: Room }) {
                     )}
                 </div>
 
-                <Chip
-                    variant="faded"
-                    color="primary"
-                    className="absolute top-1 left-1"
-                    size="sm"
-                >
+                <Chip variant="faded" color="primary" className="absolute top-1 left-1" size="sm">
                     {formatDistanceToNow(new Date(room.created_at || new Date()), { includeSeconds: true, addSuffix: true })}
                 </Chip>
 

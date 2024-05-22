@@ -18,6 +18,8 @@ import "mapbox-gl/dist/mapbox-gl.css"
 import { redirect } from "next/navigation"
 import { MAX_PLAYERS } from "@/utils/constants"
 import useSelectedRoom from "@/store/useSelectedRoom"
+import SvgMarker from "@/components/misc/SvgMarker"
+import SvgMarkerTarget from "@/components/misc/SvgMarkerTarget"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -162,16 +164,16 @@ function Party({ params }: { params: { id: string } }) {
                                                 <tr key={index} className="border-b border-current">
                                                     <td className="px-4 py-2 flex items-center gap-2 justify-between">
                                                         <div className="flex flex-col gap-1">
-                                                            <Avatar className="w-5 h-5" showFallback name={tempRoom.id_user.pseudo} src={tempRoom.id_user.avatar} alt="Avatar" />
+                                                            <Avatar className="w-5 h-5" showFallback name={tempRoom.User.pseudo} src={tempRoom.User.avatar} alt="Avatar" />
                                                             <Image
                                                                 width={64}
                                                                 height={64}
-                                                                src={`https://flagsapi.com/${getCountryCode(tempRoom.id_user.nationality)}/shiny/64.png`}
-                                                                alt={tempRoom.id_user.pseudo}
+                                                                src={`https://flagsapi.com/${getCountryCode(tempRoom.User.nationality)}/shiny/64.png`}
+                                                                alt={tempRoom.User.pseudo}
                                                                 className="w-4"
                                                             />
                                                         </div>
-                                                        <span>{tempRoom.id_user.pseudo}</span>
+                                                        <span>{tempRoom.User.pseudo}</span>
                                                     </td>
                                                     <td className="px-4 py-2 text-right">{tempRoom.time}</td>
                                                     <td className="px-4 py-2 text-right">
@@ -392,10 +394,10 @@ function Party({ params }: { params: { id: string } }) {
     }
 
     const checkUnauthorization = () => {
-        return roomData && roomData.nb_players !== MAX_PLAYERS && !roomData.user_pseudo.split(", ").includes(user?.pseudo) && process.env.NODE_ENV === "production"
+        return roomData && (!roomData.isActive || roomData.nb_players !== MAX_PLAYERS || !roomData.user_pseudo.split(", ").includes(user?.pseudo))
     }
 
-    if (checkUnauthorization()) {
+    if (checkUnauthorization() && process.env.NODE_ENV === "production") {
         redirect("/game/")
     }
 
@@ -488,58 +490,20 @@ function Party({ params }: { params: { id: string } }) {
                     >
                         {!showTarget && (
                             <Marker longitude={marker.longitude} latitude={marker.latitude} anchor="bottom" draggable={!showTarget ? true : false} onDrag={onMarkerDrag} onDragEnd={onMarkerDragEnd}>
-                                <svg className="stroke-black w-10" viewBox="0 0 264.018 264.018">
-                                    <g>
-                                        <path
-                                            d="M132.009,0c-42.66,0-77.366,34.706-77.366,77.366c0,11.634,2.52,22.815,7.488,33.24c0.1,0.223,0.205,0.442,0.317,0.661
-		l58.454,113.179c2.146,4.154,6.431,6.764,11.106,6.764c4.676,0,8.961-2.609,11.106-6.764l58.438-113.148
-		c0.101-0.195,0.195-0.392,0.285-0.591c5.001-10.455,7.536-21.67,7.536-33.341C209.375,34.706,174.669,0,132.009,0z
-		 M132.009,117.861c-22.329,0-40.495-18.166-40.495-40.495c0-22.328,18.166-40.494,40.495-40.494s40.495,18.166,40.495,40.494
-		C172.504,99.695,154.338,117.861,132.009,117.861z"
-                                        />
-                                        <path
-                                            d="M161.81,249.018h-59.602c-4.143,0-7.5,3.357-7.5,7.5c0,4.143,3.357,7.5,7.5,7.5h59.602c4.143,0,7.5-3.357,7.5-7.5
-		C169.31,252.375,165.952,249.018,161.81,249.018z"
-                                        />
-                                    </g>
-                                </svg>
+                                <SvgMarker />
                             </Marker>
                         )}
                         {/* result marker */}
                         {showTarget && (
                             <Marker longitude={targetMarker.longitude} latitude={targetMarker.latitude} anchor="bottom">
-                                <svg className="stroke-black w-14 animate-bounce" viewBox="0 0 296.999 296.999">
-                                    <g>
-                                        <path
-                                            d="M141.914,185.802c1.883,1.656,4.234,2.486,6.587,2.486c2.353,0,4.705-0.83,6.587-2.486
-		c2.385-2.101,58.391-52.021,58.391-103.793c0-35.842-29.148-65.002-64.977-65.002c-35.83,0-64.979,29.16-64.979,65.002
-		C83.521,133.781,139.529,183.701,141.914,185.802z M148.501,65.025c9.302,0,16.845,7.602,16.845,16.984
-		c0,9.381-7.543,16.984-16.845,16.984c-9.305,0-16.847-7.604-16.847-16.984C131.654,72.627,139.196,65.025,148.501,65.025z"
-                                        />
-                                        <path
-                                            d="M273.357,185.773l-7.527-26.377c-1.222-4.281-5.133-7.232-9.583-7.232h-53.719c-1.942,2.887-3.991,5.785-6.158,8.699
-		c-15.057,20.23-30.364,33.914-32.061,35.41c-4.37,3.848-9.983,5.967-15.808,5.967c-5.821,0-11.434-2.117-15.81-5.969
-		c-1.695-1.494-17.004-15.18-32.06-35.408c-2.167-2.914-4.216-5.813-6.158-8.699h-53.72c-4.45,0-8.361,2.951-9.583,7.232
-		l-8.971,31.436l200.529,36.73L273.357,185.773z"
-                                        />
-                                        <path
-                                            d="M296.617,267.291l-19.23-67.396l-95.412,80.098h105.06c3.127,0,6.072-1.467,7.955-3.963
-		C296.873,273.533,297.474,270.297,296.617,267.291z"
-                                        />
-                                        <path
-                                            d="M48.793,209.888l-30.44-5.576L0.383,267.291c-0.857,3.006-0.256,6.242,1.628,8.738c1.883,2.496,4.828,3.963,7.955,3.963
-		h38.827V209.888z"
-                                        />
-                                        <polygon points="62.746,212.445 62.746,279.992 160.273,279.992 208.857,239.207 	" />
-                                    </g>
-                                </svg>
+                                <SvgMarkerTarget />
                             </Marker>
                         )}
                         {/* all players markers */}
                         {markerAllPlayers &&
                             markerAllPlayers.map((marker: any, index: number) => (
                                 <Marker key={index} longitude={marker.longitude} latitude={marker.latitude} anchor="bottom">
-                                    <Avatar isBordered color="primary" showFallback name="M" src={marker.id_user.avatar!} />
+                                    <Avatar isBordered color="primary" showFallback name="M" src={marker.User.avatar!} />
                                 </Marker>
                             ))}
                     </Map>
