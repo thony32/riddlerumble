@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next"
+import requestIp from 'request-ip'
 
 interface LocationResponse {
     countryCode?: string
 }
 
 interface ApiResponse {
-    ip: string
     localisation: LocationResponse
     flag: string
 }
@@ -16,9 +16,9 @@ interface ApiError {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse | ApiError>) {
     try {
-        const [ipResponse, locationResponse] = await Promise.all([
-            fetch("https://api.ipify.org").then((response) => response.text()),
-            fetch("http://ip-api.com/json/").then((response) => response.json()),
+        const detectedIp = requestIp.getClientIp(req) as any
+        const [locationResponse] = await Promise.all([
+            fetch(`http://ip-api.com/json/${detectedIp}`).then((response) => response.json()),
         ])
 
         const { countryCode } = locationResponse
@@ -35,7 +35,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const flagUrl = flagResponse.url
 
         res.status(200).json({
-            ip: ipResponse,
             localisation: locationResponse,
             flag: flagUrl,
         })
