@@ -11,6 +11,7 @@ const PlayerProfil = dynamic(() => import("@/components/game/PlayerProfil"))
 const RoomCard = dynamic(() => import("@/components/game/RoomCard"))
 import useResponsive from "@/utils/useResponsive"
 import { useEffect } from "react"
+import useSelectedRoom from "@/store/useSelectedRoom"
 
 const getAllRoom = async () => {
     const res = await fetch("/api/getAllRoom")
@@ -80,6 +81,8 @@ const Stats = () => {
 // NOTE:  Main Component
 const Game = () => {
     const { isMobile, isTablet } = useResponsive()
+    const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
+    const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
     const {
         isPending: isInitialRoomsPending,
         data: allRooms,
@@ -88,6 +91,9 @@ const Game = () => {
         queryKey: ["allRooms"],
         queryFn: async () => {
             const data: Room[] = await getAllRoom()
+            if (data && !data.some((r) => r.id === selectedRoom)) {
+                setSelectedRoom(null)
+            }
             return data
         },
         staleTime: 100 * 60 * 60 * 24,

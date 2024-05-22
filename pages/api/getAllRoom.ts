@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import e, { createClient } from "@/dbschema/edgeql-js"
 import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
+import { MAX_PLAYERS } from "@/utils/constants"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const client = createClient({
@@ -24,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             expression: room.modified_at,
             direction: e.DESC,
         },
-        filter: e.op(room.isActive, "=", true),
+        filter: e.op(e.op(room.isActive, "=", true), "and", e.op(room.nb_players, "<", MAX_PLAYERS)),
     }))
     const rooms = await roomsQuery.run(client)
 
