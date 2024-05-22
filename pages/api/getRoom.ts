@@ -19,6 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         nb_players: true,
         created_at: true,
         modified_at: true,
+        isActive: true,
         filter_single: { id: req.body.room_id },
     }))
     const room = await roomQuery.run(client)

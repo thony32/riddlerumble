@@ -394,10 +394,10 @@ function Party({ params }: { params: { id: string } }) {
     }
 
     const checkUnauthorization = () => {
-        return roomData && roomData.nb_players !== MAX_PLAYERS && !roomData.user_pseudo.split(", ").includes(user?.pseudo) && process.env.NODE_ENV === "production"
+        return roomData && (!roomData.isActive || roomData.nb_players !== MAX_PLAYERS || !roomData.user_pseudo.split(", ").includes(user?.pseudo))
     }
 
-    if (checkUnauthorization()) {
+    if (checkUnauthorization() && process.env.NODE_ENV === "production") {
         redirect("/game/")
     }
 
