@@ -15,12 +15,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 latitude,
                 longitude,
                 time,
-                id_user: {
+                User: {
                   pseudo,
                   nationality,
                   avatar
                 },
-              }filter .id_room.id = <uuid>$id_room;
+              }filter .Room.id = <uuid>$id_room;
             `
         const params = {
             id_room: req.body.id_room,

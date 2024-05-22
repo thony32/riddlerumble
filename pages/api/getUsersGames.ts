@@ -14,12 +14,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             id,
             score,
             created_at,
-            id_room: {
+            Room: {
               level,
               nb_players
             },
           }
-          filter .id_user.id = <uuid>$id_user
+          filter .User.id = <uuid>$id_user
           order by .created_at desc;
         `
         const params = {

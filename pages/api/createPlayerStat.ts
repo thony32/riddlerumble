@@ -18,10 +18,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const insertQuery = e.insert(e.Player_stats, {
             score: e.float32(score),
-            id_user: e.select(e.Users, () => ({
+            User: e.select(e.Users, () => ({
                 filter_single: { id: e.uuid(id_user) },
             })),
-            id_room: e.select(e.Room, () => ({
+            Room: e.select(e.Room, () => ({
                 filter_single: { id: e.uuid(id_room) },
             })),
         })
