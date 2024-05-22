@@ -12,6 +12,9 @@ const RoomCard = dynamic(() => import("@/components/game/RoomCard"))
 import useResponsive from "@/utils/useResponsive"
 import { useEffect, useState } from "react"
 import useSelectedRoom from "@/store/useSelectedRoom"
+import { useRoomCountdown } from "@/store/useRoomCountdown"
+import { useRouter } from "next/navigation"
+import { AnimatePresence, motion } from "framer-motion"
 
 const getAllRoom = async () => {
     const res = await fetch("/api/getAllRoom")
@@ -85,8 +88,11 @@ const Stats = () => {
 // NOTE:  Main Component
 const Game = () => {
     const { isMobile, isTablet } = useResponsive()
+    const router = useRouter()
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
+    const countdown = useRoomCountdown((state) => state.roomCountdown)
+    const setCountdown = useRoomCountdown((state) => state.setRoomCountdown)
     const {
         isPending: isInitialRoomsPending,
         data: allRooms,
@@ -95,8 +101,13 @@ const Game = () => {
         queryKey: ["allRooms"],
         queryFn: async () => {
             const data: Room[] = await getAllRoom()
-            if (data && !data.some((r) => r.id === selectedRoom)) {
-                setSelectedRoom(null)
+            if (data) {
+                const findedRoom = data.find((r) => r.id === selectedRoom)
+                if (!findedRoom) {
+                    setSelectedRoom(null)
+                } else {
+                    setSelectedRoom(findedRoom.id)
+                }
             }
             return data
         },
@@ -116,8 +127,38 @@ const Game = () => {
         }
     }, [refetchRooms])
 
+    useEffect(() => {
+        if (countdown !== null) {
+            if (countdown > 0) {
+                const timer = setTimeout(() => {
+                    setCountdown(countdown !== null ? countdown - 1 : null)
+                }, 1000)
+                return () => clearTimeout(timer)
+            } else {
+                router.push(`/game/${selectedRoom}`)
+            }
+        }
+    }, [selectedRoom, router, countdown, setCountdown])
+
     return (
-        <div className="min-h-[100vh] flex flex-col xl:grid xl:grid-cols-3 xl:gap-14">
+        <div className="min-h-[100vh] flex flex-col-reverse xl:grid xl:grid-cols-3 gap-14">
+            {/* COUNTDOWN */}
+            <AnimatePresence>
+                {countdown !== null && (
+                    <div className="fixed z-50 inset-0 w-dvw h-dvh grid place-items-center backdrop-blur-sm">
+                        <motion.span
+                            key={countdown}
+                            initial={{ opacity: 0, scale: 0 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="text-[70dvh]"
+                        >
+                            {countdown == 0 ? "GO!" : countdown}
+                        </motion.span>
+                    </div>
+                )}
+            </AnimatePresence>
             <div className="xl:col-span-2 p-5 space-y-10">
                 <div className="flex items-center gap-5">
                     <h1 className="text-3xl text-center">List of room</h1>

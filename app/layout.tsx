@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { NextUIProvider } from "@nextui-org/react"
-import { ReactLenis } from "@/utils/lenis"
 import Footer from "@/components/landing/Footer"
 import ThemeHandler from "@/components/misc/ThemeHandler"
 import ReactQueryProvider from "@/utils/ReactQueryProvider"
@@ -27,11 +26,9 @@ export default function RootLayout({
             <body className={inter.className}>
                 <NextUIProvider>
                     <main className="px-[2%] py-3">
-                        <ReactLenis root>
                             <ReactQueryProvider>
                                 {children}
                             </ReactQueryProvider>
-                        </ReactLenis>
                     </main>
                     <footer className="mt-20">
                         <Footer />
