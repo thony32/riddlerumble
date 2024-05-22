@@ -1,9 +1,10 @@
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { useUser } from "@/store/useUser"
 import { Button } from "@nextui-org/button"
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
 import { useMutation } from "@tanstack/react-query"
 import React from "react"
+import useResponsive from "@/utils/useResponsive"
 
 const create_room = async (level: string, pseudo: string) => {
     const response = await fetch("/api/createRoom", {
@@ -45,84 +46,91 @@ function BtnCreateRoom() {
     })
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure()
+
+    const { isMobile, isTablet } = useResponsive()
+
     return (
         <div className="flex justify-between items-center">
             <div>
-                <div className="dropdown dropdown-hover  dropdown-right">
-                    <div
-                        tabIndex={0}
-                        role="button"
-                        className="m-1"
-                    >
-                        <Button className="py-10 px-6 gap-5">
-                            <span className="text-2xl">Create</span>
-                            <svg
-                                className="w-7 fill-current"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M10,13H4a1,1,0,0,0-1,1v6a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V14A1,1,0,0,0,10,13ZM9,19H5V15H9ZM20,3H14a1,1,0,0,0-1,1v6a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V4A1,1,0,0,0,20,3ZM19,9H15V5h4Zm1,7H18V14a1,1,0,0,0-2,0v2H14a1,1,0,0,0,0,2h2v2a1,1,0,0,0,2,0V18h2a1,1,0,0,0,0-2ZM10,3H4A1,1,0,0,0,3,4v6a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V4A1,1,0,0,0,10,3ZM9,9H5V5H9Z" />
-                            </svg>
-                        </Button>
-                    </div>
-                    <ul
-                        tabIndex={0}
-                        className="dropdown-content -translate-y-2 z-[1] menu p-2 shadow bg-base-100 rounded-box w-96"
-                    >
-                        <div className="px-1 py-2">
-                            <div className="flex w-full">
-                                <div className="grid h-20 flex-grow card rounded-box place-items-center">
-                                    <Button
-                                        size="lg"
-                                        onClick={() => createLowMutation.mutate()}
-                                        className="py-10"
-                                        color="warning"
-                                        disabled={!!selectedRoom}
-                                    >
-                                        {createLowMutation.isPending ? (
-                                            <div className="flex justify-center">
-                                                <span className="loading loading-dots loading-lg"></span>
-                                            </div>
-                                        ) : (
-                                            <span>Normal Level</span>
-                                        )}
-                                    </Button>
-                                </div>
-                                <div className="divider divider-horizontal">OR</div>
-                                <div className="grid h-20 flex-grow card rounded-box place-items-center">
-                                    <Button
-                                        size="lg"
-                                        onClick={() => createHighMutation.mutate()}
-                                        className="py-10"
-                                        color="danger"
-                                        disabled={!!selectedRoom}
-                                    >
-                                        {createHighMutation.isPending ? (
-                                            <div className="flex justify-center">
-                                                <span className="loading loading-dots loading-lg"></span>
-                                            </div>
-                                        ) : (
-                                            <span>High Level</span>
-                                        )}
-                                    </Button>
+                {/* Eto izy refa desktop */}
+                {isMobile || isTablet ? (
+                    <Dropdown className="-z-[999]">
+                        <DropdownTrigger>
+                            <Button variant="bordered">Create</Button>
+                        </DropdownTrigger>
+                        <div className="-z-50">
+                            <DropdownMenu variant="faded" className="space-y-3">
+                                <DropdownItem className="space-x-4">
+                                    <div className="flex items-center gap-4">
+                                        <Button size="md" onClick={() => createLowMutation.mutate()} className="py-4" color="warning" disabled={!!selectedRoom}>
+                                            {createLowMutation.isPending ? (
+                                                <div className="flex justify-center">
+                                                    <span className="loading loading-dots loading-lg"></span>
+                                                </div>
+                                            ) : (
+                                                <span>Normal Level</span>
+                                            )}
+                                        </Button>
+                                        <span>Or</span>
+                                        <Button size="md" onClick={() => createHighMutation.mutate()} className="py-4" color="danger" disabled={!!selectedRoom}>
+                                            {createHighMutation.isPending ? (
+                                                <div className="flex justify-center">
+                                                    <span className="loading loading-dots loading-lg"></span>
+                                                </div>
+                                            ) : (
+                                                <span>High Level</span>
+                                            )}
+                                        </Button>
+                                    </div>
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </div>
+                    </Dropdown>
+                ) : (
+                    <div className="dropdown dropdown-hover  dropdown-right">
+                        <div tabIndex={0} role="button" className="m-1">
+                            <Button className="py-10 px-6 gap-5">
+                                <span className="text-2xl">Create</span>
+                                <svg className="w-7 fill-current" viewBox="0 0 24 24">
+                                    <path d="M10,13H4a1,1,0,0,0-1,1v6a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V14A1,1,0,0,0,10,13ZM9,19H5V15H9ZM20,3H14a1,1,0,0,0-1,1v6a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V4A1,1,0,0,0,20,3ZM19,9H15V5h4Zm1,7H18V14a1,1,0,0,0-2,0v2H14a1,1,0,0,0,0,2h2v2a1,1,0,0,0,2,0V18h2a1,1,0,0,0,0-2ZM10,3H4A1,1,0,0,0,3,4v6a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V4A1,1,0,0,0,10,3ZM9,9H5V5H9Z" />
+                                </svg>
+                            </Button>
+                        </div>
+                        <ul tabIndex={0} className="dropdown-content -translate-y-2 z-[1] menu p-2 shadow bg-base-100 rounded-box w-96">
+                            <div className="px-1 py-2">
+                                <div className="flex w-full">
+                                    <div className="grid h-20 flex-grow card rounded-box place-items-center">
+                                        <Button size="lg" onClick={() => createLowMutation.mutate()} className="py-10" color="warning" disabled={!!selectedRoom}>
+                                            {createLowMutation.isPending ? (
+                                                <div className="flex justify-center">
+                                                    <span className="loading loading-dots loading-lg"></span>
+                                                </div>
+                                            ) : (
+                                                <span>Normal Level</span>
+                                            )}
+                                        </Button>
+                                    </div>
+                                    <div className="divider divider-horizontal">OR</div>
+                                    <div className="grid h-20 flex-grow card rounded-box place-items-center">
+                                        <Button size="lg" onClick={() => createHighMutation.mutate()} className="py-10" color="danger" disabled={!!selectedRoom}>
+                                            {createHighMutation.isPending ? (
+                                                <div className="flex justify-center">
+                                                    <span className="loading loading-dots loading-lg"></span>
+                                                </div>
+                                            ) : (
+                                                <span>High Level</span>
+                                            )}
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </ul>
-                </div>
+                        </ul>
+                    </div>
+                )}
             </div>
             <div>
-                <Button
-                    isIconOnly
-                    onPress={onOpen}
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                    >
+                <Button isIconOnly onPress={onOpen}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -130,11 +138,7 @@ function BtnCreateRoom() {
                         />
                     </svg>
                 </Button>
-                <Modal
-                    isOpen={isOpen}
-                    onOpenChange={onOpenChange}
-                    backdrop="blur"
-                >
+                <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
                     <ModalContent>
                         {(onClose) => (
                             <>
@@ -155,10 +159,7 @@ function BtnCreateRoom() {
                                     </p>
                                 </ModalBody>
                                 <ModalFooter>
-                                    <Button
-                                        variant="light"
-                                        onPress={onClose}
-                                    >
+                                    <Button variant="light" onPress={onClose}>
                                         Close
                                     </Button>
                                 </ModalFooter>
