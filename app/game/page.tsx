@@ -81,32 +81,21 @@ const Stats = () => {
 // NOTE:  Main Component
 const Game = () => {
     const { isMobile, isTablet } = useResponsive()
-    const [allRooms, setAllRooms] = useState<Room[]>([])
-    const { isPending: isInitialRoomsPending } = useQuery({
-        queryKey: ["allRoom"],
+    const { isPending: isInitialRoomsPending , data: allRooms , refetch : refetchRooms } = useQuery({
+        queryKey: ["allRooms"],
         queryFn: async () => {
             const data: Room[] = await getAllRoom()
-
-            setAllRooms(data)
-
             return data
         },
-
         staleTime: 100 * 60 * 60 * 24,
     })
 
     useEffect(() => {
-        const handleNewRoom = (room: Room) => {
-            setAllRooms((prevRooms) => {
-                if (prevRooms.find((r) => r.id === room.id)) {
-                    return prevRooms
-                }
-                return [room, ...prevRooms]
-            })
+        const handleNewRoom = () => {
+            refetchRooms()
         }
 
         pusherClient.subscribe("lobby")
-
         pusherClient.bind("new-room", handleNewRoom)
 
         return () => {
@@ -176,11 +165,11 @@ const Game = () => {
                                 <Skeleton className="rounded-lg w-full h-44" />
                             </>
                         ) : (
-                            allRooms.map((room: Room) => {
+                            allRooms && allRooms.map((room: Room) => {
                                 return <RoomCard room={room} key={room.id} />
                             })
                         )}
-                        {allRooms.length == 0 && !isInitialRoomsPending && <div className="text-center text-current/50 my-5 text-xl">No room available yet !</div>}
+                        {allRooms && allRooms.length == 0 && !isInitialRoomsPending && <div className="text-center text-current/50 my-5 text-xl">No room available yet !</div>}
                     </div>
                 </div>
             </div>

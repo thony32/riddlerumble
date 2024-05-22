@@ -55,16 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }))
         .run(client)
 
-    pusherServer.trigger("lobby", "new-room", {
-        id: room.id,
-        delay: room.delay,
-        latitude: room.latitude,
-        longitude: room.longitude,
-        level: room.level,
-        nb_players: room.nb_players,
-        prompt: room.prompt,
-        user_pseudo: room.user_pseudo,
-    })
+    pusherServer.trigger("lobby", "new-room", {})
 
     // broadcastMessage("lobby", "new-room", {
     //     id: room.id,
