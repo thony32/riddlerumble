@@ -42,15 +42,3 @@ export async function getLogoutUrl() {
     const logoutUrl = auth.getSignoutUrl()
     return logoutUrl
 }
-
-export async function updatePseudo(identity: string, pseudo: string) {
-    const update = e.update(e.Users, (user) => ({
-        filter_single: e.op(user.identity.id, "=", e.uuid(identity)),
-        set: {
-            pseudo: e.str(pseudo),
-        },
-    }))
-    const userId = await update.run(client)
-
-    return { userId, status: "ok" }
-}

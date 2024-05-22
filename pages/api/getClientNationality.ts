@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next"
 
 interface LocationResponse {
     countryCode?: string
-    // NOTE: tsy haiko ze ambiny eto fa ampio
 }
 
 interface ApiResponse {
