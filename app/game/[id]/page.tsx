@@ -164,16 +164,16 @@ function Party({ params }: { params: { id: string } }) {
                                                 <tr key={index} className="border-b border-current">
                                                     <td className="px-4 py-2 flex items-center gap-2 justify-between">
                                                         <div className="flex flex-col gap-1">
-                                                            <Avatar className="w-5 h-5" showFallback name={tempRoom.id_user.pseudo} src={tempRoom.id_user.avatar} alt="Avatar" />
+                                                            <Avatar className="w-5 h-5" showFallback name={tempRoom.User.pseudo} src={tempRoom.User.avatar} alt="Avatar" />
                                                             <Image
                                                                 width={64}
                                                                 height={64}
-                                                                src={`https://flagsapi.com/${getCountryCode(tempRoom.id_user.nationality)}/shiny/64.png`}
-                                                                alt={tempRoom.id_user.pseudo}
+                                                                src={`https://flagsapi.com/${getCountryCode(tempRoom.User.nationality)}/shiny/64.png`}
+                                                                alt={tempRoom.User.pseudo}
                                                                 className="w-4"
                                                             />
                                                         </div>
-                                                        <span>{tempRoom.id_user.pseudo}</span>
+                                                        <span>{tempRoom.User.pseudo}</span>
                                                     </td>
                                                     <td className="px-4 py-2 text-right">{tempRoom.time}</td>
                                                     <td className="px-4 py-2 text-right">
@@ -503,7 +503,7 @@ function Party({ params }: { params: { id: string } }) {
                         {markerAllPlayers &&
                             markerAllPlayers.map((marker: any, index: number) => (
                                 <Marker key={index} longitude={marker.longitude} latitude={marker.latitude} anchor="bottom">
-                                    <Avatar isBordered color="primary" showFallback name="M" src={marker.id_user.avatar!} />
+                                    <Avatar isBordered color="primary" showFallback name="M" src={marker.User.avatar!} />
                                 </Marker>
                             ))}
                     </Map>

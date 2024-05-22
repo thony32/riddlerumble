@@ -20,10 +20,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             latitude: e.float32(latitude),
             longitude: e.float32(longitude),
             time: e.str(time),
-            id_user: e.select(e.Users, () => ({
+            User: e.select(e.Users, () => ({
                 filter_single: { id: e.uuid(id_user) },
             })),
-            id_room: e.select(e.Room, () => ({
+            Room: e.select(e.Room, () => ({
                 filter_single: { id: e.uuid(id_room) },
             })),
         })

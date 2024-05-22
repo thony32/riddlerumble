@@ -78,9 +78,9 @@ const LastGames = ({ id_user }: { id_user: string }) => {
                                             {formatDistanceToNow(new Date(game.created_at || new Date()), { includeSeconds: true, addSuffix: true })}
                                         </span>
                                     </td>
-                                    <td className="py-2 px-3 text-right">{game.id_room.level == 'normal-level' ? 'Normal' : 'High'}</td>
+                                    <td className="py-2 px-3 text-right">{game.Room.level == 'normal-level' ? 'Normal' : 'High'}</td>
                                     <td className="py-2 px-3 text-center">{game.score}</td>
-                                    <td className="py-2 px-3 text-center">{game.id_room.nb_players}</td>
+                                    <td className="py-2 px-3 text-center">{game.Room.nb_players}</td>
                                 </tr>
                             ))
                     }
