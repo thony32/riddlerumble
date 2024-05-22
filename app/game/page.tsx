@@ -2,7 +2,6 @@
 
 "use client"
 import { pusherClient } from "@/lib/pusher"
-// import { io, Socket } from "socket.io-client"
 import { Room } from "@/types/room"
 import { Skeleton } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
@@ -11,7 +10,7 @@ const BtnCreateRoom = dynamic(() => import("@/components/game/BtnCreateRoom"))
 const PlayerProfil = dynamic(() => import("@/components/game/PlayerProfil"))
 const RoomCard = dynamic(() => import("@/components/game/RoomCard"))
 import useResponsive from "@/utils/useResponsive"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 const getAllRoom = async () => {
     const res = await fetch("/api/getAllRoom")
@@ -81,7 +80,11 @@ const Stats = () => {
 // NOTE:  Main Component
 const Game = () => {
     const { isMobile, isTablet } = useResponsive()
-    const { isPending: isInitialRoomsPending , data: allRooms , refetch : refetchRooms } = useQuery({
+    const {
+        isPending: isInitialRoomsPending,
+        data: allRooms,
+        refetch: refetchRooms,
+    } = useQuery({
         queryKey: ["allRooms"],
         queryFn: async () => {
             const data: Room[] = await getAllRoom()
@@ -101,40 +104,7 @@ const Game = () => {
         return () => {
             pusherClient.unsubscribe("lobby")
         }
-    }, [])
-
-    // const [socket, setSocket] = useState<Socket | null>(null)
-    // useEffect(() => {
-    //     const wsProtocol = process.env.NODE_ENV === "production" ? "wss" : "ws"
-    //     const wsHost = process.env.NODE_ENV === "production" ? "riddlerumble.vercel.app" : "localhost"
-    //     const wsPort = process.env.NODE_ENV === "production" ? "443" : "8080"
-    //     const socketUrl = `${wsProtocol}://${wsHost}${process.env.NODE_ENV === "production" ? "" : `:${wsPort}`}`
-
-    //     const socket = io(socketUrl)
-
-    //     socket.on("connect", () => {
-    //         console.log("WebSocket connected")
-    //         setSocket(socket)
-    //         socket.emit("subscribe", "lobby")
-    //     })
-
-    //     socket.on("new-room", (room: Room) => {
-    //         setAllRooms((prevRooms) => {
-    //             if (prevRooms.find((r) => r.id === room.id)) {
-    //                 return prevRooms
-    //             }
-    //             return [room, ...prevRooms]
-    //         })
-    //     })
-
-    //     socket.on("disconnect", () => {
-    //         console.log("WebSocket disconnected")
-    //     })
-
-    //     return () => {
-    //         socket.disconnect()
-    //     }
-    // }, [])
+    }, [refetchRooms])
 
     return (
         <div className="min-h-[100vh] flex flex-col-reverse xl:grid xl:grid-cols-3 gap-14">
@@ -165,7 +135,8 @@ const Game = () => {
                                 <Skeleton className="rounded-lg w-full h-44" />
                             </>
                         ) : (
-                            allRooms && allRooms.map((room: Room) => {
+                            allRooms &&
+                            allRooms.map((room: Room) => {
                                 return <RoomCard room={room} key={room.id} />
                             })
                         )}

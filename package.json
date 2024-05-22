@@ -44,8 +44,6 @@
     "react-map-gl": "^7.1.7",
     "react-responsive": "^10.0.0",
     "react-typed": "^2.0.12",
-    "socket.io": "^4.7.5",
-    "socket.io-client": "^4.7.5",
     "three": "^0.164.1",
     "three-stdlib": "^2.30.0",
     "yup": "^1.4.0",
