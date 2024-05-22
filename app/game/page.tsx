@@ -3,14 +3,13 @@
 "use client"
 import { pusherClient } from "@/lib/pusher"
 import { Room } from "@/types/room"
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Skeleton, useDisclosure } from "@nextui-org/react"
+import { Button, Modal, ModalBody, ModalContent, Skeleton, useDisclosure } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
 import dynamic from "next/dynamic"
 const BtnCreateRoom = dynamic(() => import("@/components/game/BtnCreateRoom"))
 const PlayerProfil = dynamic(() => import("@/components/game/PlayerProfil"))
 const RoomCard = dynamic(() => import("@/components/game/RoomCard"))
-import useResponsive from "@/utils/useResponsive"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { useRoomCountdown } from "@/store/useRoomCountdown"
 import { useRouter } from "next/navigation"
@@ -28,7 +27,7 @@ const getAllRoom = async () => {
 const StatsDrawer = () => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure()
     return (
-        <>
+        <div className="flex py-4 justify-end min-[1501px]:hidden">
             <Button onPress={onOpen} className="max-w-fit">
                 Stats
             </Button>
@@ -59,13 +58,13 @@ const StatsDrawer = () => {
                     )}
                 </ModalContent>
             </Modal>
-        </>
+        </div>
     )
 }
 
 const Stats = () => {
     return (
-        <div className="p-5">
+        <div className="p-5 max-[1500px]:hidden">
             <div className="space-y-10 sticky top-0">
                 <div className="flex items-center gap-5">
                     <h1 className="text-3xl">Your Stats</h1>
@@ -87,7 +86,6 @@ const Stats = () => {
 
 // NOTE:  Main Component
 const Game = () => {
-    const { isMobile, isTablet } = useResponsive()
     const router = useRouter()
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
@@ -141,7 +139,7 @@ const Game = () => {
     }, [selectedRoom, router, countdown, setCountdown])
 
     return (
-        <div className="min-h-[100vh] flex flex-col-reverse xl:grid xl:grid-cols-3 gap-14">
+        <div className="min-h-[100vh] flex flex-col xl:grid xl:grid-cols-3 gap-14">
             {/* COUNTDOWN */}
             <AnimatePresence>
                 {countdown !== null && (
@@ -159,6 +157,7 @@ const Game = () => {
                     </div>
                 )}
             </AnimatePresence>
+            <StatsDrawer /> 
             <div className="xl:col-span-2 p-5 space-y-10">
                 <div className="flex items-center gap-5">
                     <h1 className="text-3xl text-center">List of room</h1>
@@ -195,7 +194,7 @@ const Game = () => {
                     </div>
                 </div>
             </div>
-            {isMobile || isTablet ? <StatsDrawer /> : <Stats />}
+            <Stats />
         </div>
     )
 }

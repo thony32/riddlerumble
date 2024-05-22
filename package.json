@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"next dev --turbo\" \"tailwindcss --input ./app/globals.css --output ./styles/output.css --watch\"",
     "dev:host": "next dev --hostname 0.0.0.0",
     "build": "next build",
     "start": "next start",
