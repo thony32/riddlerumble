@@ -49,35 +49,19 @@ function BtnCreateRoom() {
         <div className="flex justify-between items-center">
             <div>
                 <div className="dropdown dropdown-hover  dropdown-right">
-                    <div
-                        tabIndex={0}
-                        role="button"
-                        className="m-1"
-                    >
+                    <div tabIndex={0} role="button" className="m-1">
                         <Button className="py-10 px-6 gap-5">
                             <span className="text-2xl">Create</span>
-                            <svg
-                                className="w-7 fill-current"
-                                viewBox="0 0 24 24"
-                            >
+                            <svg className="w-7 fill-current" viewBox="0 0 24 24">
                                 <path d="M10,13H4a1,1,0,0,0-1,1v6a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V14A1,1,0,0,0,10,13ZM9,19H5V15H9ZM20,3H14a1,1,0,0,0-1,1v6a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V4A1,1,0,0,0,20,3ZM19,9H15V5h4Zm1,7H18V14a1,1,0,0,0-2,0v2H14a1,1,0,0,0,0,2h2v2a1,1,0,0,0,2,0V18h2a1,1,0,0,0,0-2ZM10,3H4A1,1,0,0,0,3,4v6a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V4A1,1,0,0,0,10,3ZM9,9H5V5H9Z" />
                             </svg>
                         </Button>
                     </div>
-                    <ul
-                        tabIndex={0}
-                        className="dropdown-content -translate-y-2 z-[1] menu p-2 shadow bg-base-100 rounded-box w-96"
-                    >
+                    <ul tabIndex={0} className="dropdown-content -translate-y-2 z-[1] menu p-2 shadow bg-base-100 rounded-box w-96">
                         <div className="px-1 py-2">
                             <div className="flex w-full">
                                 <div className="grid h-20 flex-grow card rounded-box place-items-center">
-                                    <Button
-                                        size="lg"
-                                        onClick={() => createLowMutation.mutate()}
-                                        className="py-10"
-                                        color="warning"
-                                        disabled={!!selectedRoom}
-                                    >
+                                    <Button size="lg" onClick={() => createLowMutation.mutate()} className="py-10" color="warning" disabled={!!selectedRoom}>
                                         {createLowMutation.isPending ? (
                                             <div className="flex justify-center">
                                                 <span className="loading loading-dots loading-lg"></span>
@@ -89,13 +73,7 @@ function BtnCreateRoom() {
                                 </div>
                                 <div className="divider divider-horizontal">OR</div>
                                 <div className="grid h-20 flex-grow card rounded-box place-items-center">
-                                    <Button
-                                        size="lg"
-                                        onClick={() => createHighMutation.mutate()}
-                                        className="py-10"
-                                        color="danger"
-                                        disabled={!!selectedRoom}
-                                    >
+                                    <Button size="lg" onClick={() => createHighMutation.mutate()} className="py-10" color="danger" disabled={!!selectedRoom}>
                                         {createHighMutation.isPending ? (
                                             <div className="flex justify-center">
                                                 <span className="loading loading-dots loading-lg"></span>
@@ -111,18 +89,8 @@ function BtnCreateRoom() {
                 </div>
             </div>
             <div>
-                <Button
-                    isIconOnly
-                    onPress={onOpen}
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                    >
+                <Button isIconOnly onPress={onOpen}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -130,11 +98,7 @@ function BtnCreateRoom() {
                         />
                     </svg>
                 </Button>
-                <Modal
-                    isOpen={isOpen}
-                    onOpenChange={onOpenChange}
-                    backdrop="blur"
-                >
+                <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
                     <ModalContent>
                         {(onClose) => (
                             <>
@@ -155,10 +119,7 @@ function BtnCreateRoom() {
                                     </p>
                                 </ModalBody>
                                 <ModalFooter>
-                                    <Button
-                                        variant="light"
-                                        onPress={onClose}
-                                    >
+                                    <Button variant="light" onPress={onClose}>
                                         Close
                                     </Button>
                                 </ModalFooter>

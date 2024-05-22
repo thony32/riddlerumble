@@ -3,18 +3,18 @@
 import { Button } from "@nextui-org/button"
 import { Card, Chip } from "@nextui-org/react"
 import { useUser } from "@/store/useUser"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useCallback, useEffect, useState } from "react"
 import { pusherClient } from "@/lib/pusher"
-import { useRouter } from "next/navigation"
 import { formatDistanceToNow } from "date-fns"
-import { AnimatePresence, motion } from "framer-motion"
+import { motion } from "framer-motion"
 import { Room } from "@/types/room"
 import UsersSVG from "../misc/UsersSVG"
 import SvgHighLevel from "../misc/SvgHighLevel"
 import SvgLowLevel from "../misc/SvgLowLevel"
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { MAX_PLAYERS } from "@/utils/constants"
+import { useRoomCountdown } from "@/store/useRoomCountdown"
 
 const update_room = async (room: Room, pseudo: string) => {
     const nbPlayersInt32 = room.nb_players + 1
@@ -52,14 +52,13 @@ const leave_room = async (room: Room, pseudo: string) => {
     return data
 }
 
-function RoomCard({ room: room_props }: { room: Room }) {
-    const router = useRouter()
+function RoomCard({ room }: { room: Room }) {
     const user = useUser((state) => state.user)
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
-    const [room, setRoom] = useState<Room>(room_props)
+    // const [room, setRoom] = useState<Room>(room)
     const [action, setAction] = useState<"join" | "leave">("join")
-    const [countdown, setCountdown] = useState<number | null>(null)
+    const setCountdown = useRoomCountdown((state) => state.setRoomCountdown)
     const updateRoomMutation = useMutation({
         mutationKey: ["updateRoom"],
         mutationFn: async ({ room, given_action }: { room: Room; given_action: "join" | "leave" }) => {
@@ -78,16 +77,27 @@ function RoomCard({ room: room_props }: { room: Room }) {
         },
     })
 
+    const queryClient = useQueryClient()
+
     const handleJoinRoom = useCallback(
         ({ id, nb_players, user_pseudo }: { id: string; nb_players: number; user_pseudo: string }) => {
-            if (id == room_props.id) {
-                setRoom((prevRoom) => ({ ...prevRoom, nb_players, user_pseudo }))
-                if (nb_players == MAX_PLAYERS) {
-                    setCountdown(5)
+            if (id == room.id) {
+                queryClient.setQueryData(["allRooms"], (oldRooms: Room[]) => oldRooms.map((r) => (r.id === id ? { ...r, nb_players, user_pseudo } : r)))
+                if (user_pseudo.split(", ").includes(user?.pseudo || "")) {
+                    setSelectedRoom(id)
+                    if (nb_players == MAX_PLAYERS) {
+                        setCountdown(5)
+                        // queryClient.setQueryData(["allRooms"], (oldRooms: Room[]) => oldRooms.filter((r) => r.id !== id))
+                    }
+                } else {
+                    setSelectedRoom(selectedRoom === id ? null : selectedRoom)
+                    if (nb_players == MAX_PLAYERS) {
+                        // queryClient.setQueryData(["allRooms"], (oldRooms: Room[]) => oldRooms.filter((r) => r.id !== id))
+                    }
                 }
             }
         },
-        [room_props]
+        [room, queryClient, setCountdown, user, selectedRoom, setSelectedRoom]
     )
 
     const handleClick = (room: Room, given_action: "join" | "leave") => {
@@ -96,47 +106,17 @@ function RoomCard({ room: room_props }: { room: Room }) {
     }
 
     useEffect(() => {
-        pusherClient.subscribe(room_props.id)
+        pusherClient.subscribe(room.id)
 
         pusherClient.bind("join-room", handleJoinRoom)
 
         return () => {
-            pusherClient.unsubscribe(room_props.id)
+            pusherClient.unsubscribe(room.id)
         }
-    }, [room_props, handleJoinRoom])
-
-    useEffect(() => {
-        if (countdown !== null) {
-            if (countdown > 0) {
-                const timer = setTimeout(() => {
-                    setCountdown((prev) => (prev !== null ? prev - 1 : null))
-                }, 1000)
-                return () => clearTimeout(timer)
-            } else {
-                router.push(`/game/${room_props.id}`)
-            }
-        }
-    }, [selectedRoom, router, room_props, countdown])
+    }, [room, handleJoinRoom])
 
     return (
         <motion.div initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} className="w-full flex relative">
-            {/* COUNTDOWN */}
-            <AnimatePresence>
-                {countdown !== null && (
-                    <div className="fixed z-50 inset-0 w-dvw h-dvh grid place-items-center backdrop-blur-sm">
-                        <motion.span
-                            key={countdown}
-                            initial={{ opacity: 0, scale: 0 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0 }}
-                            transition={{ duration: 0.5 }}
-                            className="text-[70dvh]"
-                        >
-                            {countdown == 0 ? "GO!" : countdown}
-                        </motion.span>
-                    </div>
-                )}
-            </AnimatePresence>
             <Card key={room.id} className="w-full group">
                 <div className="w-full top-0 left-0 absolute bg-[url('/images/room-map.png')] bg-cover bg-center h-full opacity-45 group-hover:opacity-100 duration-700 ease-soft-spring" />
                 <div className="relative justify-end items-center gap-52 flex text-white p-7 w-full bg-gradient-to-r from-transparent to-black">
