@@ -425,7 +425,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                             zoom: 4,
                         }}
                         onClick={clickPostion}
-                        mapboxAccessToken={MAPBOX_TOKEN}
+                        mapboxAccessToken={MAPBOX_TOKEN!}
                         style={{ width: "100%", height: "85dvh", margin: 0, padding: 0, borderRadius: "1rem", overflow: "hidden" }}
                     >
                         {!showTarget && (
