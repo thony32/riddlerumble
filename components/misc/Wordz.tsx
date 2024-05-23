@@ -80,9 +80,9 @@ export default function Wordz() {
     }
 
     return (
-        <div className="absolute top-0 xl:-top-20 left-0">
+        <div className="absolute top-16 sm:top-0 xl:-top-20 left-0">
             <div className="relative h-[100%] flex items-center">
-                <div className="bannertxt text-[4em] sm:text-[6em] md:text-[10em] xl:text-[18rem] opacity-5">
+                <div className="bannertxt text-[4em] sm:text-[6em] md:text-[10em] xl:text-[18rem] opacity-20 sm:opacity-5">
                     <label>
                         <span className="word font-title">Mysteries</span>
                         <span className="word font-title">Challenges</span>
