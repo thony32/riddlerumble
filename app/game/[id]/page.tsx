@@ -21,122 +21,123 @@ import useSelectedRoom from "@/store/useSelectedRoom"
 const SvgMarker = dynamic(() => import("@/components/misc/SvgMarker"))
 const SvgMarkerTarget = dynamic(() => import("@/components/misc/SvgMarkerTarget"))
 import { create_player_stat, create_temp_room, disableRoom, fetchRoom, getTempRoom, updateUserScore } from "@/services/party-service"
+import Completionist from "@/components/game/Completionist"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
 const Party = ({ params }: { params: { id: string } }) => {
-    
     const { isPending: isRoomPending, data: roomData } = useQuery({
         queryKey: ["roomData"],
         queryFn: () => fetchRoom(params.id),
         staleTime: 1000 * 60 * 60 * 24,
     })
     const [markerAllPlayers, setMarkerAllPlayers] = useState([])
-    const Completionist = () => {
-        localStorage.removeItem(PARTY_START_TIME_KEY)
-        const { isOpen, onOpen, onOpenChange } = useDisclosure()
+    // const Completionist = () => {
+    //     localStorage.removeItem(PARTY_START_TIME_KEY)
+    //     const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-        const { isPending: isTempRoomPending, data: tempRoomData } = useQuery({
-            queryKey: ["tempRoomData"],
-            queryFn: () => getTempRoom(params.id),
-        })
+    //     const { isPending: isTempRoomPending, data: tempRoomData } = useQuery({
+    //         queryKey: ["tempRoomData"],
+    //         queryFn: () => getTempRoom(params.id),
+    //     })
 
-        setMarkerAllPlayers(tempRoomData)
+    //     setMarkerAllPlayers(tempRoomData)
 
-        const disableRoomFun = useMutation({
-            mutationKey: ["disableRoomFun"],
-            mutationFn: async () => {
-                return await disableRoom(params.id)
-            },
-            onError: (error) => {
-                console.log(error)
-            },
-            onSuccess: (data) => {
-                console.log("Room disabled! ", data)
-            },
-        })
+    //     const disableRoomFun = useMutation({
+    //         mutationKey: ["disableRoomFun"],
+    //         mutationFn: async () => {
+    //             return await disableRoom(params.id)
+    //         },
+    //         onError: (error) => {
+    //             console.log(error)
+    //         },
+    //         onSuccess: (data) => {
+    //             console.log("Room disabled! ", data)
+    //         },
+    //     })
 
-        useEffect(() => {
-            setShowTarget(true)
-            onOpen()
-            mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
-            disableRoomFun.mutate()
-        }, [])
-        return (
-            <Modal className="-translate-x-[100%]" placement="bottom-center" isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
-                <ModalContent>
-                    {() => (
-                        <>
-                            <ModalHeader className="flex flex-col gap-1">Result</ModalHeader>
-                            <ModalBody>
-                                <table className="w-full text-sm">
-                                    <thead>
-                                        <tr>
-                                            <th className="px-4 py-2 text-left">Pseudo</th>
-                                            <th className="px-4 py-2 text-right">Time</th>
-                                            <th className="px-4 py-2 text-right">Coordonates</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {isTempRoomPending ? (
-                                            <tr className="border-b border-current w-full">
-                                                <td colSpan={1} className="py-2">
-                                                    <div className="flex justify-start">
-                                                        <span className="loading loading-dots loading-md"></span>
-                                                    </div>
-                                                </td>
-                                                <td colSpan={1} className="py-2">
-                                                    <div className="flex justify-end">
-                                                        <span className="loading loading-dots loading-md"></span>
-                                                    </div>
-                                                </td>
-                                                <td colSpan={1} className="py-2">
-                                                    <div className="flex justify-end px-4">
-                                                        <span className="loading loading-dots loading-md"></span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ) : (
-                                            tempRoomData?.map((tempRoom: any, index: number) => (
-                                                <tr key={index} className="border-b border-current">
-                                                    <td className="px-4 py-2 flex items-center gap-2 justify-between">
-                                                        <div className="flex flex-col gap-1">
-                                                            <Avatar className="w-5 h-5" showFallback name={tempRoom.User.pseudo} src={tempRoom.User.avatar} alt="Avatar" />
-                                                            <Image
-                                                                width={64}
-                                                                height={64}
-                                                                src={`https://flagsapi.com/${getCountryCode(tempRoom.User.nationality)}/shiny/64.png`}
-                                                                alt={tempRoom.User.pseudo}
-                                                                className="w-4"
-                                                            />
-                                                        </div>
-                                                        <span>{tempRoom.User.pseudo}</span>
-                                                    </td>
-                                                    <td className="px-4 py-2 text-right">{tempRoom.time}</td>
-                                                    <td className="px-4 py-2 text-right">
-                                                        Lat: {tempRoom.latitude.toFixed(2)} , Long: {tempRoom.longitude.toFixed(2)}
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        )}
-                                    </tbody>
-                                </table>
-                            </ModalBody>
-                            <ModalFooter>
-                                <Link href={"/game"}>
-                                    <Button>Close</Button>
-                                </Link>
-                            </ModalFooter>
-                        </>
-                    )}
-                </ModalContent>
-            </Modal>
-        )
-    }
+    //     useEffect(() => {
+    //         setShowTarget(true)
+    //         onOpen()
+    //         mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
+    //         disableRoomFun.mutate()
+    //     }, [])
+    //     return (
+    //         <Modal className="-translate-x-[100%]" placement="bottom-center" isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+    //             <ModalContent>
+    //                 {() => (
+    //                     <>
+    //                         <ModalHeader className="flex flex-col gap-1">Result</ModalHeader>
+    //                         <ModalBody>
+    //                             <table className="w-full text-sm">
+    //                                 <thead>
+    //                                     <tr>
+    //                                         <th className="px-4 py-2 text-left">Pseudo</th>
+    //                                         <th className="px-4 py-2 text-right">Time</th>
+    //                                         <th className="px-4 py-2 text-right">Coordonates</th>
+    //                                     </tr>
+    //                                 </thead>
+    //                                 <tbody>
+    //                                     {isTempRoomPending ? (
+    //                                         <tr className="border-b border-current w-full">
+    //                                             <td colSpan={1} className="py-2">
+    //                                                 <div className="flex justify-start">
+    //                                                     <span className="loading loading-dots loading-md"></span>
+    //                                                 </div>
+    //                                             </td>
+    //                                             <td colSpan={1} className="py-2">
+    //                                                 <div className="flex justify-end">
+    //                                                     <span className="loading loading-dots loading-md"></span>
+    //                                                 </div>
+    //                                             </td>
+    //                                             <td colSpan={1} className="py-2">
+    //                                                 <div className="flex justify-end px-4">
+    //                                                     <span className="loading loading-dots loading-md"></span>
+    //                                                 </div>
+    //                                             </td>
+    //                                         </tr>
+    //                                     ) : (
+    //                                         tempRoomData?.map((tempRoom: any, index: number) => (
+    //                                             <tr key={index} className="border-b border-current">
+    //                                                 <td className="px-4 py-2 flex items-center gap-2 justify-between">
+    //                                                     <div className="flex flex-col gap-1">
+    //                                                         <Avatar className="w-5 h-5" showFallback name={tempRoom.User.pseudo} src={tempRoom.User.avatar} alt="Avatar" />
+    //                                                         <Image
+    //                                                             width={64}
+    //                                                             height={64}
+    //                                                             src={`https://flagsapi.com/${getCountryCode(tempRoom.User.nationality)}/shiny/64.png`}
+    //                                                             alt={tempRoom.User.pseudo}
+    //                                                             className="w-4"
+    //                                                         />
+    //                                                     </div>
+    //                                                     <span>{tempRoom.User.pseudo}</span>
+    //                                                 </td>
+    //                                                 <td className="px-4 py-2 text-right">{tempRoom.time}</td>
+    //                                                 <td className="px-4 py-2 text-right">
+    //                                                     Lat: {tempRoom.latitude.toFixed(2)} , Long: {tempRoom.longitude.toFixed(2)}
+    //                                                 </td>
+    //                                             </tr>
+    //                                         ))
+    //                                     )}
+    //                                 </tbody>
+    //                             </table>
+    //                         </ModalBody>
+    //                         <ModalFooter>
+    //                             <Link href={"/game"}>
+    //                                 <Button>Close</Button>
+    //                             </Link>
+    //                         </ModalFooter>
+    //                     </>
+    //                 )}
+    //             </ModalContent>
+    //         </Modal>
+    //     )
+    // }
 
     const timerRender: CountdownRendererFn = ({ minutes, seconds, completed }) => {
         if (completed) {
-            return <Completionist />
+            return <Completionist params={params} setMarkerAllPlayers={setMarkerAllPlayers} setShowTarget={setShowTarget} mapRef={mapRef} targetMarker={targetMarker} />
+            // return <Completionist />
         } else {
             const formattedMinutes = String(minutes).padStart(2, "0")
             const formattedSeconds = String(seconds).padStart(2, "0")
@@ -353,11 +354,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                             </div>
                         ) : (
                             <>
-                                <ReactTyped
-                                    startWhenVisible
-                                    strings={[roomData.prompt]}
-                                    typeSpeed={40}
-                                />
+                                <ReactTyped startWhenVisible strings={[roomData.prompt]} typeSpeed={40} />
                             </>
                         )}
                         <SvgDecoEnigme />
