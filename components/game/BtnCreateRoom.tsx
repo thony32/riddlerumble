@@ -5,16 +5,7 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Modal, ModalBody
 import { useMutation } from "@tanstack/react-query"
 import React from "react"
 import useResponsive from "@/utils/useResponsive"
-
-const create_room = async (level: string, pseudo: string) => {
-    const response = await fetch("/api/createRoom", {
-        body: JSON.stringify({ level, user_pseudo: pseudo }),
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-    })
-    if (!response.ok) throw new Error("Failed to create room")
-    return await response.json()
-}
+import { createRoom } from "@/services/lobby-service"
 
 function BtnCreateRoom() {
     const user = useUser((state) => state.user)
@@ -23,7 +14,7 @@ function BtnCreateRoom() {
     const createLowMutation = useMutation({
         mutationKey: ["createLow"],
         mutationFn: async () => {
-            return await create_room("normal-level", user?.pseudo || "")
+            return await createRoom("normal-level", user?.pseudo || "")
         },
         onError: (error) => {
             console.log(error)
@@ -35,7 +26,7 @@ function BtnCreateRoom() {
     const createHighMutation = useMutation({
         mutationKey: ["createHigh"],
         mutationFn: async () => {
-            return await create_room("high-level", user?.pseudo || "")
+            return await createRoom("high-level", user?.pseudo || "")
         },
         onError: (error) => {
             console.log(error)
