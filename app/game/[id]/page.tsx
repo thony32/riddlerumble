@@ -124,6 +124,13 @@ const Party = ({ params }: { params: { id: string } }) => {
                                                 </tr>
                                             ))
                                         )}
+                                        {
+                                            !isTempRoomPending && tempRoomData.length == 0 && (
+                                                <tr className="border-b border-current">
+                                                    <td colSpan={3} className="px-4 py-2 text-center">No players found</td>
+                                                </tr>
+                                            )
+                                        }
                                     </tbody>
                                 </table>
                             </ModalBody>
