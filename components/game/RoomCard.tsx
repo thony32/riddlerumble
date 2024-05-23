@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // RoomCard.tsx
 
 import { Button } from "@nextui-org/button"
