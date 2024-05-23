@@ -9,9 +9,10 @@ import { pusherClient } from "@/lib/pusher"
 import { formatDistanceToNow } from "date-fns"
 import { motion } from "framer-motion"
 import { Room } from "@/types/room"
-import UsersSVG from "../misc/UsersSVG"
-import SvgHighLevel from "../misc/SvgHighLevel"
-import SvgLowLevel from "../misc/SvgLowLevel"
+import dynamic from "next/dynamic"
+const UsersSVG = dynamic(() => import("../misc/UsersSVG"))
+const SvgHighLevel = dynamic(() => import("../misc/SvgHighLevel"))
+const SvgLowLevel = dynamic(() => import("../misc/SvgLowLevel"))
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { MAX_PLAYERS } from "@/utils/constants"
 import { useRoomCountdown } from "@/store/useRoomCountdown"
@@ -97,7 +98,7 @@ function RoomCard({ room }: { room: Room }) {
                 }
             }
         },
-        [room, queryClient, setCountdown, user, selectedRoom, setSelectedRoom]
+        [room, queryClient, setCountdown, user, selectedRoom, setSelectedRoom],
     )
 
     const handleClick = (room: Room, given_action: "join" | "leave") => {
@@ -116,8 +117,13 @@ function RoomCard({ room }: { room: Room }) {
     }, [room, handleJoinRoom])
 
     return (
-        <motion.div initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} className="w-full flex relative">
-            <Card key={room.id} className="w-full group">
+        <motion.div
+            initial={{ opacity: 0, scale: 0.7 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full flex relative">
+            <Card
+                key={room.id}
+                className="w-full group">
                 <div className="w-full top-0 left-0 absolute bg-[url('/images/room-map.png')] bg-cover bg-center h-full opacity-45 group-hover:opacity-100 duration-700 ease-soft-spring" />
                 <div className="relative justify-end items-center gap-52 flex text-white p-7 w-full bg-gradient-to-r from-transparent to-black">
                     <div className="w-full">
@@ -142,11 +148,20 @@ function RoomCard({ room }: { room: Room }) {
                         </div>
                     </div>
                     {!selectedRoom ? (
-                        <Button size="lg" variant="shadow" color="primary" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "join")}>
+                        <Button
+                            size="lg"
+                            variant="shadow"
+                            color="primary"
+                            isLoading={updateRoomMutation.isPending}
+                            onClick={() => handleClick(room, "join")}>
                             Join
                         </Button>
                     ) : room.id == selectedRoom ? (
-                        <Button size="lg" variant="shadow" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "leave")}>
+                        <Button
+                            size="lg"
+                            variant="shadow"
+                            isLoading={updateRoomMutation.isPending}
+                            onClick={() => handleClick(room, "leave")}>
                             Leave
                         </Button>
                     ) : (
@@ -154,7 +169,11 @@ function RoomCard({ room }: { room: Room }) {
                     )}
                 </div>
 
-                <Chip variant="faded" color="primary" className="absolute top-1 left-1" size="sm">
+                <Chip
+                    variant="faded"
+                    color="primary"
+                    className="absolute top-1 left-1"
+                    size="sm">
                     {formatDistanceToNow(new Date(room.created_at || new Date()), { includeSeconds: true, addSuffix: true })}
                 </Chip>
 

@@ -3,7 +3,7 @@ import { Inter } from "next/font/google"
 import { NextUIProvider } from "@nextui-org/react"
 import dynamic from "next/dynamic"
 const Footer = dynamic(() => import("@/components/landing/Footer"))
-import ThemeHandler from "@/components/misc/ThemeHandler"
+const ThemeHandler = dynamic(() => import("@/components/misc/ThemeHandler"))
 import ReactQueryProvider from "@/utils/ReactQueryProvider"
 import "./globals.css"
 
