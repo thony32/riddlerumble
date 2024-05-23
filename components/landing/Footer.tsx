@@ -12,12 +12,12 @@ const Footer = () => {
                     <h5>The Map Quest</h5>
                 </div>
                 <div className="absolute top-0 left-0 w-full flex justify-center -z-50">
-                    <SvgDecoEnigme width="w-1/3" />
+                    <SvgDecoEnigme width="w-1/2 sm:w-1/3" />
                 </div>
             </div>
             <div className="flex flex-col xl:grid xl:grid-cols-3">
                 <div className="space-y-2">
-                    <h1 className="text-xl">Build With</h1>
+                    <h1 className="text-xl text-center sm:text-left">Build With</h1>
                     <div className="flex gap-4">
                         <svg className="w-10 fill-current" viewBox="0 0 24 24">
                             <path d="M18.665 21.978C16.758 23.255 14.465 24 12 24 5.377 24 0 18.623 0 12S5.377 0 12 0s12 5.377 12 12c0 3.583-1.574 6.801-4.067 9.001L9.219 7.2H7.2v9.596h1.615V9.251l9.85 12.727Zm-3.332-8.533 1.6 2.061V7.2h-1.6v6.245Z" />
@@ -46,7 +46,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="flex justify-center items-end">© 2024 CodeIpsum. All rights reserved</div>
-                <div className="flex justify-end items-center">
+                <div className="flex justify-center sm:justify-end items-center">
                     <Image width={50} height={50} src="/images/pegi.png" alt="logo" />
                 </div>
             </div>
