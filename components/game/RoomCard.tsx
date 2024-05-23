@@ -117,7 +117,7 @@ function RoomCard({ room }: { room: Room }) {
                         <div className="flex gap-3 text-3xl items-center">
                             <UsersSVG className="size-16" />{" "}
                             <span>
-                                {room.nb_players} / {MAX_PLAYERS}
+                                {room.user_pseudo.split(', ').filter(Boolean).length} / {MAX_PLAYERS}
                             </span>
                         </div>
                     </div>
