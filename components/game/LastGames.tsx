@@ -57,8 +57,8 @@ const LastGames = ({ id_user }: { id_user: string }) => {
                             <tr key={game.id} className="border-b border-current w-full">
                                 <td className="py-2 px-3 text-center">{index + 1}</td>
                                 <td className="py-2 px-3 text-right flex max-sm:flex-col justify-between items-center gap-2">
-                                    <span>{new Date(game.created_at).toLocaleDateString()}</span>
-                                    <span className="text-xs badge badge-info">{formatDistanceToNow(new Date(game.created_at || new Date()), { includeSeconds: true, addSuffix: true })}</span>
+                                    <span className="text-xs">{new Date(game.created_at).toLocaleDateString()}</span>
+                                    <span className="text-[6pt] sm:text-xs badge badge-info">{formatDistanceToNow(new Date(game.created_at || new Date()), { includeSeconds: true, addSuffix: true })}</span>
                                 </td>
                                 <td className="py-2 px-3 text-right">{game.Room.level == "normal-level" ? "Normal" : "High"}</td>
                                 <td className="py-2 px-3 text-center">{game.score}</td>
