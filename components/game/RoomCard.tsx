@@ -16,7 +16,7 @@ const SvgLowLevel = dynamic(() => import("../misc/SvgLowLevel"))
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { MAX_PLAYERS } from "@/utils/constants"
 import { useRoomCountdown } from "@/store/useRoomCountdown"
-import { leaveRoom, joinRoom } from "@/services/lobby-service"
+import { leaveRoom, joinRoom } from "@/services/game-service"
 
 function RoomCard({ room }: { room: Room }) {
     const user = useUser((state) => state.user)

@@ -5,7 +5,7 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Modal, ModalBody
 import { useMutation } from "@tanstack/react-query"
 import React from "react"
 import useResponsive from "@/utils/useResponsive"
-import { createRoom } from "@/services/lobby-service"
+import { createRoom } from "@/services/game-service"
 
 function BtnCreateRoom() {
     const user = useUser((state) => state.user)
