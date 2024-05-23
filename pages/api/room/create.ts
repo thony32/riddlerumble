@@ -2,6 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import e from "@/dbschema/edgeql-js"
 import { pusherServer } from "@/lib/pusher"
 import client from "@/lib/edgedb-client"
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:3001');
 
 const room_api = async (level: string) => {
     let url: string
@@ -50,7 +53,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }))
         .run(client)
 
-    pusherServer.trigger("lobby", "new-room", {})
+    // pusherServer.trigger("lobby", "new-room", {})
+    socket.emit('message1', 'Sync Process Completed');
 
     res.status(200).json({ success: true, room: room })
 }
