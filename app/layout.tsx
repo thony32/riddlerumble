@@ -1,13 +1,10 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
 import { NextUIProvider } from "@nextui-org/react"
 import dynamic from "next/dynamic"
 const Footer = dynamic(() => import("@/components/landing/Footer"))
 const ThemeHandler = dynamic(() => import("@/components/misc/ThemeHandler"))
 import ReactQueryProvider from "@/utils/ReactQueryProvider"
 import "./globals.css"
-
-const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
     title: "RR - The Map Quest",
@@ -21,7 +18,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" data-theme="light">
-            <body className={inter.className}>
+            <body>
                 <NextUIProvider>
                     <main className="px-[2%] py-3">
                         <ReactQueryProvider>{children}</ReactQueryProvider>
