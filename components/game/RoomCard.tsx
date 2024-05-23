@@ -127,7 +127,7 @@ function RoomCard({ room }: { room: Room }) {
                 <div className="w-full top-0 left-0 absolute bg-[url('/images/room-map.png')] bg-cover bg-center h-full opacity-45 group-hover:opacity-100 duration-700 ease-soft-spring" />
                 <div className="relative justify-end items-center gap-52 flex text-white p-7 w-full bg-gradient-to-r from-transparent to-black">
                     <div className="w-full">
-                        <h1 className="text-3xl flex items-center text-nowrap gap-3 font-extrabold [text-shadow:_1px_3px_5px_rgba(0,0,0,1)]">
+                        <h1 className="text-xl xl:text-3xl flex items-center text-nowrap gap-3 font-extrabold [text-shadow:_1px_3px_5px_rgba(0,0,0,1)]">
                             {room.level == "high-level" ? (
                                 <>
                                     <SvgHighLevel />
