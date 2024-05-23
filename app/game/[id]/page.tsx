@@ -274,7 +274,7 @@ const Party = ({ params }: { params: { id: string } }) => {
 
         const maxTime = 300000
         const timePercentage = (elapsedTime / maxTime) * 100
-        const timeScore = Math.round(Math.max(0, 100 - timePercentage))
+        const timeScore = Math.round(Math.max(0, 90 - timePercentage * 1.5))
 
         const scoreDistance = calculateScoreDistance(distance)
 
