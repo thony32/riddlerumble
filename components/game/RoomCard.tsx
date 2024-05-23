@@ -16,42 +16,7 @@ const SvgLowLevel = dynamic(() => import("../misc/SvgLowLevel"))
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { MAX_PLAYERS } from "@/utils/constants"
 import { useRoomCountdown } from "@/store/useRoomCountdown"
-
-const update_room = async (room: Room, pseudo: string) => {
-    const nbPlayersInt32 = room.nb_players + 1
-
-    const response = await fetch("/api/updateRoom", {
-        body: JSON.stringify({ ...room, nb_players: nbPlayersInt32, user_pseudo: `${room.user_pseudo}, ${pseudo}` }),
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-    })
-    if (!response.ok) {
-        throw new Error("Failed to join the room")
-    }
-
-    const data = await response.json()
-    return data
-}
-
-const leave_room = async (room: Room, pseudo: string) => {
-    const nbPlayersInt32 = room.nb_players - 1
-    const user_pseudo = room.user_pseudo
-        .split(", ")
-        .filter((p) => p !== pseudo)
-        .join(", ")
-
-    const response = await fetch("/api/updateRoom", {
-        body: JSON.stringify({ ...room, nb_players: nbPlayersInt32, user_pseudo }),
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-    })
-    if (!response.ok) {
-        throw new Error("Failed to leave the room")
-    }
-
-    const data = await response.json()
-    return data
-}
+import { leaveRoom, joinRoom } from "@/services/game-service"
 
 function RoomCard({ room }: { room: Room }) {
     const user = useUser((state) => state.user)
@@ -63,8 +28,8 @@ function RoomCard({ room }: { room: Room }) {
     const updateRoomMutation = useMutation({
         mutationKey: ["updateRoom"],
         mutationFn: async ({ room, given_action }: { room: Room; given_action: "join" | "leave" }) => {
-            if (given_action == "join") return await update_room(room, user?.pseudo || "")
-            else return await leave_room(room, user?.pseudo || "")
+            if (given_action == "join") return await joinRoom(room, user?.pseudo || "")
+            else return await leaveRoom(room, user?.pseudo || "")
         },
         onError: (error) => {
             console.log(error)
@@ -98,7 +63,7 @@ function RoomCard({ room }: { room: Room }) {
                 }
             }
         },
-        [room, queryClient, setCountdown, user, selectedRoom, setSelectedRoom],
+        [room, queryClient, setCountdown, user, selectedRoom, setSelectedRoom]
     )
 
     const handleClick = (room: Room, given_action: "join" | "leave") => {
@@ -117,13 +82,8 @@ function RoomCard({ room }: { room: Room }) {
     }, [room, handleJoinRoom])
 
     return (
-        <motion.div
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full flex relative">
-            <Card
-                key={room.id}
-                className="w-full group">
+        <motion.div initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} className="w-full flex relative">
+            <Card key={room.id} className="w-full group">
                 <div className="w-full top-0 left-0 absolute bg-[url('/images/room-map.png')] bg-cover bg-center h-full opacity-45 group-hover:opacity-100 duration-700 ease-soft-spring" />
                 <div className="relative justify-end items-center gap-52 flex text-white p-7 w-full bg-gradient-to-r from-transparent to-black">
                     <div className="w-full">
@@ -148,20 +108,11 @@ function RoomCard({ room }: { room: Room }) {
                         </div>
                     </div>
                     {!selectedRoom ? (
-                        <Button
-                            size="lg"
-                            variant="shadow"
-                            color="primary"
-                            isLoading={updateRoomMutation.isPending}
-                            onClick={() => handleClick(room, "join")}>
+                        <Button size="lg" variant="shadow" color="primary" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "join")}>
                             Join
                         </Button>
                     ) : room.id == selectedRoom ? (
-                        <Button
-                            size="lg"
-                            variant="shadow"
-                            isLoading={updateRoomMutation.isPending}
-                            onClick={() => handleClick(room, "leave")}>
+                        <Button size="lg" variant="shadow" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "leave")}>
                             Leave
                         </Button>
                     ) : (
@@ -169,11 +120,7 @@ function RoomCard({ room }: { room: Room }) {
                     )}
                 </div>
 
-                <Chip
-                    variant="faded"
-                    color="primary"
-                    className="absolute top-1 left-1"
-                    size="sm">
+                <Chip variant="faded" color="primary" className="absolute top-1 left-1" size="sm">
                     {formatDistanceToNow(new Date(room.created_at || new Date()), { includeSeconds: true, addSuffix: true })}
                 </Chip>
 

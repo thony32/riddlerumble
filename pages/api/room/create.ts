@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import e, { createClient } from "@/dbschema/edgeql-js"
+import e from "@/dbschema/edgeql-js"
 import { pusherServer } from "@/lib/pusher"
-import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
+import client from "@/lib/edgedb-client"
 
 const room_api = async (level: string) => {
     let url: string
@@ -19,10 +19,6 @@ const room_api = async (level: string) => {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const client = createClient({
-        instanceName: EDGEDB_INSTANCE,
-        secretKey: EDGEDB_SECRET_KEY,
-    })
     const { level, user_pseudo } = req.body
     const room_data = await room_api(level)
     const delay_party = level == "high-level" ? 420000 : 300000

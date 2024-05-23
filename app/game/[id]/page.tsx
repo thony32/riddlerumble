@@ -15,7 +15,7 @@ import Image from "next/image"
 import getCountryCode from "@/utils/getCountryCode"
 import * as turf from "@turf/turf"
 import "mapbox-gl/dist/mapbox-gl.css"
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { MAX_PLAYERS } from "@/utils/constants"
 import useSelectedRoom from "@/store/useSelectedRoom"
 const SvgMarker = dynamic(() => import("@/components/misc/SvgMarker"))
@@ -353,9 +353,9 @@ const Party = ({ params }: { params: { id: string } }) => {
                                 <span className="loading loading-bars loading-md"></span>
                             </div>
                         ) : (
-                            <>
+                            <div className="text-center sm:text-left">
                                 <ReactTyped startWhenVisible strings={[roomData.prompt]} typeSpeed={40} />
-                            </>
+                            </div>
                         )}
                         <SvgDecoEnigme />
                     </div>
