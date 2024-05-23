@@ -22,6 +22,7 @@ const SvgMarker = dynamic(() => import("@/components/misc/SvgMarker"))
 const SvgMarkerTarget = dynamic(() => import("@/components/misc/SvgMarkerTarget"))
 import { create_player_stat, create_temp_room, disableRoom, fetchRoom, getTempRoom, updateUserScore } from "@/services/party-service"
 import Completionist from "@/components/game/Completionist"
+import { MAPBOX_TOKEN } from "@/env"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -424,7 +425,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                             zoom: 4,
                         }}
                         onClick={clickPostion}
-                        mapboxAccessToken="pk.eyJ1IjoidGhvbnkzMiIsImEiOiJjbHc5azQ5bWQwNWhjMmtxa2Q5dTcyNWxhIn0.pXpGUWi_9wWY3zwfflmzSQ"
+                        mapboxAccessToken={MAPBOX_TOKEN}
                         style={{ width: "100%", height: "85dvh", margin: 0, padding: 0, borderRadius: "1rem", overflow: "hidden" }}
                     >
                         {!showTarget && (
