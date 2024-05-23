@@ -24,8 +24,8 @@ import { create_player_stat, create_temp_room, disableRoom, fetchRoom, getTempRo
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
-
 const Party = ({ params }: { params: { id: string } }) => {
+    
     const { isPending: isRoomPending, data: roomData } = useQuery({
         queryKey: ["roomData"],
         queryFn: () => fetchRoom(params.id),
@@ -291,37 +291,37 @@ const Party = ({ params }: { params: { id: string } }) => {
         localStorage.removeItem(PARTY_START_TIME_KEY)
         setSelectedRoom(null)
     }
-    
+
     const [penalityPoints, setPenalityPoints] = useState(0)
 
     // NOTE: prevent dev tools and context menus
-    useEffect(() => {
-        const handleContextMenu = (e: MouseEvent) => {
-            e.preventDefault()
-        }
+    // useEffect(() => {
+    //     const handleContextMenu = (e: MouseEvent) => {
+    //         e.preventDefault()
+    //     }
 
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if ((e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.key === "u") || e.key === "F12") {
-                e.preventDefault()
-            }
-        }
+    //     const handleKeyDown = (e: KeyboardEvent) => {
+    //         if ((e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.key === "u") || e.key === "F12") {
+    //             e.preventDefault()
+    //         }
+    //     }
 
-        const handleTabNavSwitch = () => {
-            if (document.hidden && !showTarget) {
-                setPenalityPoints(penalityPoints + 10)
-            }
-        }
+    //     const handleTabNavSwitch = () => {
+    //         if (document.hidden && !showTarget) {
+    //             setPenalityPoints(penalityPoints + 10)
+    //         }
+    //     }
 
-        document.addEventListener("contextmenu", handleContextMenu)
-        document.addEventListener("keydown", handleKeyDown)
-        document.addEventListener("visibilitychange", handleTabNavSwitch)
+    //     document.addEventListener("contextmenu", handleContextMenu)
+    //     document.addEventListener("keydown", handleKeyDown)
+    //     document.addEventListener("visibilitychange", handleTabNavSwitch)
 
-        return () => {
-            document.removeEventListener("contextmenu", handleContextMenu)
-            document.removeEventListener("keydown", handleKeyDown)
-            document.removeEventListener("visibilitychange", handleTabNavSwitch)
-        }
-    }, [])
+    //     return () => {
+    //         document.removeEventListener("contextmenu", handleContextMenu)
+    //         document.removeEventListener("keydown", handleKeyDown)
+    //         document.removeEventListener("visibilitychange", handleTabNavSwitch)
+    //     }
+    // }, [])
 
     if (startTime === null) {
         return (
@@ -340,10 +340,10 @@ const Party = ({ params }: { params: { id: string } }) => {
     }
 
     return (
-        <div className="w-full h-screen py-6 overflow-hidden fixed z-50 bg-base-100">
-            <div className="grid grid-cols-12 gap-10">
-                <div className="col-span-2 relative space-y-4">
-                    <div className="translate-y-14">
+        <div className="w-full min-h-screen py-6 xl:overflow-hidden z-50 bg-base-100">
+            <div className="flex flex-col xl:grid xl:grid-cols-12 gap-10">
+                <div className="xl:col-span-2 relative space-y-8">
+                    <div className="xl:translate-y-14">
                         {roomData && <h1 className={`text-center ${roomData.level == "high-level" && "text-red-500"}`}>{roomData.level == "high-level" ? "High Level (+10 pts)" : "Normal Level"}</h1>}
                         <h1 className="text-3xl text-center">Find the place</h1>
                         <SvgDecoEnigme />
@@ -353,12 +353,17 @@ const Party = ({ params }: { params: { id: string } }) => {
                             </div>
                         ) : (
                             <>
-                                <ReactTyped startWhenVisible strings={[roomData.prompt]} typeSpeed={40} />
+                                <ReactTyped
+                                    startWhenVisible
+                                    // strings={[roomData.prompt]}
+                                    strings={["zavadoza", "pory"]}
+                                    typeSpeed={40}
+                                />
                             </>
                         )}
                         <SvgDecoEnigme />
                     </div>
-                    <div className="absolute bottom-0 w-full py-2">
+                    <div className="w-full py-2">
                         <div className="space-y-4">
                             {penalityPoints != 0 && (
                                 <div className="text-center translate-y-2">
@@ -412,8 +417,8 @@ const Party = ({ params }: { params: { id: string } }) => {
                         </div>
                     </div>
                 </div>
-                <div className="col-span-10 rounded-2xl relative">
-                    <div className="absolute z-50 top-3 left-3">{roomData && <Countdown date={startTime + roomData.delay} renderer={timerRender} />}</div>
+                <div className="xl:col-span-10 rounded-2xl relative">
+                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime + roomData.delay} renderer={timerRender} />}</div>
                     <Map
                         ref={mapRef as React.RefObject<MapRef>}
                         mapStyle="mapbox://styles/mapbox/streets-v12"
