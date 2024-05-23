@@ -17,6 +17,9 @@ import { useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { getAllRoom } from "@/services/game-service"
 
+import io from 'socket.io-client';
+const socket = io('http://localhost:3001');
+
 // NOTE:  Main Component
 const Game = () => {
     const router = useRouter()
@@ -58,18 +61,24 @@ const Game = () => {
         }
     }, [refetchRooms])
 
+    // useEffect(() => {
+    //     if (countdown !== null) {
+    //         if (countdown > 0) {
+    //             const timer = setTimeout(() => {
+    //                 setCountdown(countdown !== null ? countdown - 1 : null)
+    //             }, 1000)
+    //             return () => clearTimeout(timer)
+    //         } else {
+    //             router.push(`/game/${selectedRoom}`)
+    //         }
+    //     }
+    // }, [selectedRoom, router, countdown, setCountdown])
+
     useEffect(() => {
-        if (countdown !== null) {
-            if (countdown > 0) {
-                const timer = setTimeout(() => {
-                    setCountdown(countdown !== null ? countdown - 1 : null)
-                }, 1000)
-                return () => clearTimeout(timer)
-            } else {
-                router.push(`/game/${selectedRoom}`)
-            }
-        }
-    }, [selectedRoom, router, countdown, setCountdown])
+        socket.on('message2', (data) => {
+            console.log("Recieved from SERVER ::", data)
+        })
+    }, [socket]);
 
     return (
         <div className="min-h-[100vh] flex flex-col xl:grid xl:grid-cols-3 gap-14">
