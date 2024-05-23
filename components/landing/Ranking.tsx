@@ -130,7 +130,7 @@ const Ranking = () => {
             </div>
             <div className='flex items-center relative order-1 sm:order-2'>
                 <h1 className='sm:text-right text-4xl md:text-6xl xl:text-8xl font-title-bold text-center'>
-                    Player Rankings: Discover <span className='text-primary'>the top</span> scores in real time!
+                    Player Rankings: Discover <span className='text-primary font-title-bold'>the top</span> scores in real time!
                 </h1>
             </div>
         </div>

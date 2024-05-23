@@ -7,6 +7,8 @@ import Link from "next/link"
 import Wordz from "../misc/Wordz"
 import dynamic from "next/dynamic"
 const SvgMapDraw = dynamic(() => import("../misc/SvgMapDraw"))
+const SvgCompass = dynamic(() => import("../misc/SvgCompass"))
+const SvgMapOne = dynamic(() => import("../misc/SvgMapOne"))
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/modal"
 import { Input, Select, SelectItem } from "@nextui-org/react"
 import { setCookie } from "cookies-next"
@@ -22,7 +24,7 @@ const Heading = () => {
         },
     })
 
-    const { data: urlsData, isPending: urlsPending } = useQuery({
+    const { data: urlsData } = useQuery({
         queryKey: ["oauth_url"],
         queryFn: async () => {
             const urls = await getOAuthUrl()
@@ -58,6 +60,12 @@ const Heading = () => {
 
     return (
         <div className="h-screen flex justify-center items-center relative">
+            <div className="fixed top-5 left-5 w-full h-full flex justify-start items-start">
+                <SvgMapOne />
+            </div>
+            <div className="fixed bottom-5 right-10 w-full h-full flex justify-end items-end">
+                <SvgCompass />
+            </div>
             <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
                 <SvgMapDraw />
             </div>
@@ -67,7 +75,7 @@ const Heading = () => {
                     <div>
                         <div>
                             <h1 className="text-[3em] md:text-[7rem] xl:text-[9rem] font-title-bold">RiddleRumble</h1>
-                            <h5 className="text-[1em] md:text-[3rem] xl:text-[5rem] font-title-bold">The Map Quest</h5>
+                            <h5 className="text-[1em] md:text-[3rem] xl:text-[5rem] font-title-bold text-primary">The Map Quest</h5>
                         </div>
                     </div>
                     <div className="w-full flex flex-col md:flex-row justify-between gap-5 md:gap-[30%]">

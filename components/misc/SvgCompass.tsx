@@ -1,6 +1,6 @@
 const SvgCompass = () => {
     return (
-        <svg viewBox="0 0 512 512">
+        <svg className="w-[10%] opacity-20 -z-50" viewBox="0 0 512 512">
             <g>
                 <g>
                     <g>
