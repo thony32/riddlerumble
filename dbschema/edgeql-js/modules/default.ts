@@ -29,6 +29,7 @@ export type $RoomλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c2
   "created_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "modified_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "isActive": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;
+  "joker": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "<Room[is Temp_room]": $.LinkDesc<$Temp_room, $.Cardinality.Many, {}, false, false,  false, false>;
   "<Room[is Player_stats]": $.LinkDesc<$Player_stats, $.Cardinality.Many, {}, false, false,  false, false>;
   "<Room": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

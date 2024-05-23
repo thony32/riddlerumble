@@ -54,3 +54,13 @@ export const leaveRoom = async (room: Room, pseudo: string) => {
     const data = await response.json()
     return data
 }
+
+export const setJoker = async (id: string, user_pseudo: string) => {
+    const response = await fetch("/api/room/setJoker", {
+        body: JSON.stringify({ id, user_pseudo }),
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) throw new Error("Failed to create room")
+    return await response.json()
+}

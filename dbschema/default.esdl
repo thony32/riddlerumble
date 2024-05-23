@@ -52,6 +52,7 @@ module default {
     required property user_pseudo -> str;
     required property level -> str;
     required property isActive -> bool;
+    property joker -> str;
     created_at: datetime {
       rewrite insert using (datetime_of_statement())
     }
