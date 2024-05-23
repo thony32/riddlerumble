@@ -64,14 +64,14 @@ function RoomCard({ room }: { room: Room }) {
                 queryClient.setQueryData(["allRooms"], (oldRooms: Room[]) => oldRooms.map((r) => (r.id === id ? { ...r, nb_players, user_pseudo } : r)))
                 if (user_pseudo.split(", ").includes(user?.pseudo || "")) {
                     setSelectedRoom(id)
-                    if (nb_players == MAX_PLAYERS) {
+                    if (user_pseudo.split(', ').filter(Boolean).length == MAX_PLAYERS) {
                         setJokerMutation.mutate()
                         setCountdown(5)
                         // queryClient.setQueryData(["allRooms"], (oldRooms: Room[]) => oldRooms.filter((r) => r.id !== id))
                     }
                 } else {
                     setSelectedRoom(selectedRoom === id ? null : selectedRoom)
-                    if (nb_players == MAX_PLAYERS) {
+                    if (user_pseudo.split(', ').filter(Boolean).length == MAX_PLAYERS) {
                         // queryClient.setQueryData(["allRooms"], (oldRooms: Room[]) => oldRooms.filter((r) => r.id !== id))
                     }
                 }
