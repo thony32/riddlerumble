@@ -60,20 +60,14 @@ function RoomCard({ room }: { room: Room }) {
     })
 
     const handleJoinRoom = useCallback(
-        ({ id, nb_players, user_pseudo }: { id: string; nb_players: number; user_pseudo: string }) => {
+        ({ id, user_pseudo }: { id: string; user_pseudo: string }) => {
             if (id == room.id) {
-                queryClient.setQueryData(["allRooms"], (oldRooms: Room[]) => oldRooms.map((r) => (r.id === id ? { ...r, nb_players, user_pseudo } : r)))
+                queryClient.refetchQueries({ queryKey: ['allRooms'], type: 'active', exact: true })
                 if (user_pseudo.split(", ").includes(user?.pseudo || "")) {
                     setSelectedRoom(id)
                     if (user_pseudo.split(', ').filter(Boolean).length == MAX_PLAYERS) {
                         setJokerMutation.mutate()
                         setCountdown(5)
-                        // queryClient.setQueryData(["allRooms"], (oldRooms: Room[]) => oldRooms.filter((r) => r.id !== id))
-                    }
-                } else {
-                    setSelectedRoom(selectedRoom === id ? null : selectedRoom)
-                    if (user_pseudo.split(', ').filter(Boolean).length == MAX_PLAYERS) {
-                        // queryClient.setQueryData(["allRooms"], (oldRooms: Room[]) => oldRooms.filter((r) => r.id !== id))
                     }
                 }
             }
