@@ -15,7 +15,7 @@ import Image from "next/image"
 import getCountryCode from "@/utils/getCountryCode"
 import * as turf from "@turf/turf"
 import "mapbox-gl/dist/mapbox-gl.css"
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { MAX_PLAYERS } from "@/utils/constants"
 import useSelectedRoom from "@/store/useSelectedRoom"
 const SvgMarker = dynamic(() => import("@/components/misc/SvgMarker"))
@@ -25,13 +25,18 @@ import { create_player_stat, create_temp_room, disableRoom, fetchRoom, getTempRo
 const PARTY_START_TIME_KEY = "partyStartTime"
 
 const Party = ({ params }: { params: { id: string } }) => {
-    
-    const { isPending: isRoomPending, data: roomData } = useQuery({
+    const {
+        isPending: isRoomPending,
+        data: roomData,
+        isError,
+    } = useQuery({
         queryKey: ["roomData"],
         queryFn: () => fetchRoom(params.id),
         staleTime: 1000 * 60 * 60 * 24,
     })
     const [markerAllPlayers, setMarkerAllPlayers] = useState([])
+
+    if (isError) notFound()
     const Completionist = () => {
         localStorage.removeItem(PARTY_START_TIME_KEY)
         const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -49,7 +54,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                 return await disableRoom(params.id)
             },
             onError: (error) => {
-                console.log(error)
+                console.error(error)
             },
             onSuccess: (data) => {
                 console.log("Room disabled! ", data)
@@ -353,11 +358,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                             </div>
                         ) : (
                             <>
-                                <ReactTyped
-                                    startWhenVisible
-                                    strings={[roomData.prompt]}
-                                    typeSpeed={40}
-                                />
+                                <ReactTyped startWhenVisible strings={[roomData.prompt]} typeSpeed={40} />
                             </>
                         )}
                         <SvgDecoEnigme />
