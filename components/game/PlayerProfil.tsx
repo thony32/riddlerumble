@@ -4,9 +4,9 @@ import { Avatar } from "@nextui-org/avatar"
 import { Button } from "@nextui-org/button"
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/modal"
 import { Input, Select, SelectItem } from "@nextui-org/react"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useFormik } from "formik"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import getCountryCode from "@/utils/getCountryCode"
 import getInitial from "@/utils/getInitials"
 import Image from "next/image"
@@ -42,6 +42,17 @@ const getAllCountry = async () => {
     const jsonData = await response.json();
     return jsonData;
 }
+
+const syncUserScore = async (id_user: string) => {
+    const response = await fetch("/api/syncUserScore", {
+        body: JSON.stringify({ id_user }),
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) throw new Error("Failed to update user score")
+    return await response.json()
+}
+
 
 const PlayerProfil = () => {
     const user = useUser((state) => state.user)
@@ -102,6 +113,23 @@ const PlayerProfil = () => {
             }
         }
     })
+
+    const syncUserScoreMutation = useMutation({
+        mutationKey: ["syncUserScoreMutation"],
+        mutationFn: async () => {
+            return await syncUserScore(user?.id)
+        },
+        onError: (error) => {
+            console.log(error)
+        },
+        onSuccess: (data) => {
+            console.log("User score updated successfully! ", data)
+        },
+    })
+
+    useEffect(() => {
+        syncUserScoreMutation.mutate()
+    }, [])
     return (
         <>
             {
