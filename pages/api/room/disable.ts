@@ -1,14 +1,9 @@
-import e, { createClient } from "@/dbschema/edgeql-js"
-import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
+import e from "@/dbschema/edgeql-js"
+import client from "@/lib/edgedb-client"
 import { NextApiRequest, NextApiResponse } from "next"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const client = createClient({
-            instanceName: EDGEDB_INSTANCE,
-            secretKey: EDGEDB_SECRET_KEY,
-        })
-
         const { id_room } = req.body
 
         const disableRoomQuery = e.update(e.Room, () => ({

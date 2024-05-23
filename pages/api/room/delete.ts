@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { createClient } from "@/dbschema/edgeql-js"
 import { pusherServer } from "@/lib/pusher"
-import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
+import client from "@/lib/edgedb-client"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "DELETE") {
@@ -10,11 +9,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const client = createClient({
-            instanceName: EDGEDB_INSTANCE,
-            secretKey: EDGEDB_SECRET_KEY,
-        })
-
         const { id } = req.body
 
         if (!id) {

@@ -1,11 +1,5 @@
 const fetchRoom = async (roomId: string) => {
-    const response = await fetch("/api/getRoom", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ room_id: roomId }),
-    })
+    const response = await fetch(`/api/room/${roomId}`)
     if (!response.ok) {
         throw new Error("Failed to fetch room data")
     }
@@ -13,7 +7,7 @@ const fetchRoom = async (roomId: string) => {
 }
 
 const create_temp_room = async (latitude: number, longitude: number, time: string, id_user: string, id_room: string) => {
-    const response = await fetch("/api/createTempRoom", {
+    const response = await fetch("/api/party/temp-room/create", {
         body: JSON.stringify({ latitude, longitude, time, id_user, id_room }),
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -23,7 +17,7 @@ const create_temp_room = async (latitude: number, longitude: number, time: strin
 }
 
 const create_player_stat = async (score: number, id_user: string, id_room: string) => {
-    const response = await fetch("/api/createPlayerStat", {
+    const response = await fetch("/api/party/player-stat", {
         body: JSON.stringify({ score, id_user, id_room }),
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -33,18 +27,14 @@ const create_player_stat = async (score: number, id_user: string, id_room: strin
 }
 
 const getTempRoom = async (id_room: string) => {
-    const response = await fetch("/api/getTempRoomPerRoom", {
-        body: JSON.stringify({ id_room }),
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-    })
+    const response = await fetch(`/api/party/temp-room/${id_room}`)
     if (!response.ok) throw new Error("Failed to fetch temp room")
     const jsonData = await response.json()
     return jsonData
 }
 
 const disableRoom = async (id_room: string) => {
-    const response = await fetch("/api/disableRoom", {
+    const response = await fetch("/api/room/disable", {
         body: JSON.stringify({ id_room }),
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -54,7 +44,7 @@ const disableRoom = async (id_room: string) => {
 }
 
 const updateUserScore = async (user_id: string, player_score: number) => {
-    const response = await fetch("/api/updateUserScore", {
+    const response = await fetch("/api/user/update-score", {
         body: JSON.stringify({ user_id, player_score }),
         method: "PUT",
         headers: { "Content-Type": "application/json" },

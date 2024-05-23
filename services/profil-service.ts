@@ -1,5 +1,5 @@
 const getAllUser = async () => {
-    const response = await fetch("/api/getAllUser")
+    const response = await fetch("/api/user")
     if (!response.ok) {
         throw new Error("Failed to fetch IP info")
     }
@@ -17,7 +17,7 @@ const getAllCountry = async () => {
 }
 
 const syncUserScore = async (id_user: string) => {
-    const response = await fetch("/api/syncUserScore", {
+    const response = await fetch("/api/user/sync-score", {
         body: JSON.stringify({ id_user }),
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -26,4 +26,15 @@ const syncUserScore = async (id_user: string) => {
     return await response.json()
 }
 
-export { getAllUser, getAllCountry, syncUserScore }
+const getUserGames = async (id_user: string) => {
+    const response = await fetch("/api/user/games", {
+        body: JSON.stringify({ id_user }),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) throw new Error("Failed to fetch temp room")
+    const jsonData = await response.json()
+    return jsonData
+}
+
+export { getAllUser, getAllCountry, syncUserScore, getUserGames }
