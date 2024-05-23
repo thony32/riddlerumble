@@ -1,7 +1,7 @@
 import { create } from "zustand"
 
 export type User = {
-    id: string | null
+    id: string | null 
     email: string | null
     full_name: string | null
     nationality: string | null

@@ -1,11 +1,11 @@
 "use server"
 import { BuiltinProviderNames, TokenData } from "@edgedb/auth-nextjs/app"
 import { auth, client } from "@/edgedb"
+import { cookies } from "next/headers";
 
 export const { signout, emailPasswordSignIn, emailPasswordSignUp, emailPasswordSendPasswordResetEmail, emailPasswordResetPassword, emailPasswordResendVerificationEmail } = auth.createServerActions()
 
-export async function createUser(tokenData: TokenData, nationality: string, provider?: BuiltinProviderNames,) {
-    let pseudo: string | null = null;
+export async function createUser(tokenData: TokenData, provider?: BuiltinProviderNames,) {
     let fullname: string | null = null;
     let email: string | null = null;
     let avatar: string | null = null;
@@ -17,7 +17,6 @@ export async function createUser(tokenData: TokenData, nationality: string, prov
             throw new Error('Failed to fetch IP info');
         }
         const data = await response.json();
-        pseudo = data.name.toLowerCase().replace(/\s/g, '') + Math.floor(1000 + Math.random() * 9000);
         fullname = data.name;
         email = data.email;
         avatar = data.picture;
@@ -37,9 +36,9 @@ export async function createUser(tokenData: TokenData, nationality: string, prov
         };`,
         {
             identity_id: tokenData.identity_id,
-            nationality: nationality,
+            nationality: cookies().get('nationality')?.value ?? "Madagascar, MG",
             avatar: avatar,
-            pseudo: pseudo,
+            pseudo: cookies().get('pseudo')?.value ?? "Anonymous",
             fullname: fullname,
             email: email,
         }

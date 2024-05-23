@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { NextUIProvider } from "@nextui-org/react"
-import { ReactLenis } from "@/utils/lenis"
-import Footer from "@/components/landing/Footer"
-import ThemeHandler from "@/components/misc/ThemeHandler"
+import dynamic from "next/dynamic"
+const Footer = dynamic(() => import("@/components/landing/Footer"))
+const ThemeHandler = dynamic(() => import("@/components/misc/ThemeHandler"))
 import ReactQueryProvider from "@/utils/ReactQueryProvider"
 import "./globals.css"
 
@@ -20,18 +20,11 @@ export default function RootLayout({
     children: React.ReactNode
 }>) {
     return (
-        <html
-            lang="en"
-            data-theme="light"
-        >
+        <html lang="en" data-theme="light">
             <body className={inter.className}>
                 <NextUIProvider>
                     <main className="px-[2%] py-3">
-                        <ReactLenis root>
-                            <ReactQueryProvider>
-                                {children}
-                            </ReactQueryProvider>
-                        </ReactLenis>
+                        <ReactQueryProvider>{children}</ReactQueryProvider>
                     </main>
                     <footer className="mt-20">
                         <Footer />

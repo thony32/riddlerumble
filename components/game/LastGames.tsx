@@ -26,7 +26,7 @@ const LastGames = ({ id_user }: { id_user: string }) => {
 
     return (
         <div>
-            <table className="w-full text-sm">
+            <table className="w-full text-sm overflow-x-auto">
                 <thead>
                     <tr>
                         <th className="py-2 px-3"></th>
@@ -70,7 +70,7 @@ const LastGames = ({ id_user }: { id_user: string }) => {
                             userGamesData?.map((game: any, index: number) => (
                                 <tr key={game.id} className="border-b border-current w-full">
                                     <td className="py-2 px-3 text-center">{index + 1}</td>
-                                    <td className="py-2 px-3 text-right flex justify-between items-center gap-2">
+                                    <td className="py-2 px-3 text-right flex max-sm:flex-col justify-between items-center gap-2">
                                         <span>
                                             {new Date(game.created_at).toLocaleDateString()}
                                         </span>

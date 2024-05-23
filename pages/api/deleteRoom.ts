@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const params = { id: id }
 
-        const result: any = await client.query(query, params)
+        const result = await client.query(query, params)
 
         pusherServer.trigger(id, "delete-room", { id })
 

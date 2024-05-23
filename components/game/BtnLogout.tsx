@@ -21,6 +21,7 @@ const BtnLogout = () => {
                 className="rounded-full"
                 isIconOnly
                 aria-label="Logout"
+                color="danger"
             >
                 <svg
                     fill="none"
