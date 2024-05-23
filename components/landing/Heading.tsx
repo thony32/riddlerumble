@@ -117,7 +117,7 @@ const Heading = () => {
                                 </Button>
                             </Link>
                         ) : (
-                            <div className="flex gap-5 items-center">
+                            <div className="flex max-md:flex-col flex-row gap-5 items-center">
                                 <Link href={urlsData?.googleUrl ?? ""}>
                                     <Button
                                         onClick={() => setIsLoading(true)}
