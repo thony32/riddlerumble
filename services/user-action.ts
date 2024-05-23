@@ -3,6 +3,7 @@ import e, { createClient } from "@/dbschema/edgeql-js"
 import { auth } from "@/edgedb"
 import { EDGEDB_INSTANCE, EDGEDB_SECRET_KEY } from "@/env"
 import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
 const client = createClient({
     instanceName: EDGEDB_INSTANCE,
@@ -17,6 +18,9 @@ export async function getSession() {
 export async function getData() {
     const isSignedIn = await getSession()
     const identityCookie = cookies().get("identity")?.value as string
+    if (!identityCookie) {
+        redirect(auth.getSignoutUrl())
+    }
     const identity = identityCookie.replace(/"/g, "")
     const getUserData = e.select(e.Users, (user) => ({
         id: true,
