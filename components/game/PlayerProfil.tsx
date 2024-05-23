@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import { useUser } from "@/store/useUser"
 import { Avatar } from "@nextui-org/avatar"
@@ -13,6 +14,7 @@ import Image from "next/image"
 import * as Yup from "yup"
 import LastGames from "./LastGames"
 import dynamic from "next/dynamic"
+import { getAllCountry, getAllUser, syncUserScore } from "@/services/profil-service"
 const SvgMedalNovice = dynamic(() => import("../misc/SvgMedalNovice"))
 const SvgMedalCasual = dynamic(() => import("../misc/SvgMedalCasual"))
 const SvgMedalPro = dynamic(() => import("../misc/SvgMedalPro"))
@@ -24,35 +26,6 @@ const validationSchema = Yup.object({
     full_name: Yup.string().required("Full name is required"),
     nationality: Yup.string().required("Nationality is required"),
 })
-
-const getAllUser = async () => {
-    const response = await fetch('/api/getAllUser');
-    if (!response.ok) {
-        throw new Error('Failed to fetch IP info');
-    }
-    const jsonData = await response.json();
-    return jsonData;
-}
-
-const getAllCountry = async () => {
-    const response = await fetch('/api/getAllCountry');
-    if (!response.ok) {
-        throw new Error('Failed to fetch IP info');
-    }
-    const jsonData = await response.json();
-    return jsonData;
-}
-
-const syncUserScore = async (id_user: string) => {
-    const response = await fetch("/api/syncUserScore", {
-        body: JSON.stringify({ id_user }),
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-    })
-    if (!response.ok) throw new Error("Failed to update user score")
-    return await response.json()
-}
-
 
 const PlayerProfil = () => {
     const user = useUser((state) => state.user)
