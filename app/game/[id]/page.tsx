@@ -20,7 +20,7 @@ import { MAX_PLAYERS } from "@/utils/constants"
 import useSelectedRoom from "@/store/useSelectedRoom"
 import SvgMarker from "@/components/misc/SvgMarker"
 import SvgMarkerTarget from "@/components/misc/SvgMarkerTarget"
-import { create_player_stat, create_temp_room, disableRoom, fetchRoom, getTempRoom, updateUserScore } from "@/services/party"
+import { create_player_stat, create_temp_room, disableRoom, fetchRoom, getTempRoom, updateUserScore } from "@/services/party-service"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
