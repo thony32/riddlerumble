@@ -16,7 +16,7 @@ const SvgLowLevel = dynamic(() => import("../misc/SvgLowLevel"))
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { MAX_PLAYERS } from "@/utils/constants"
 import { useRoomCountdown } from "@/store/useRoomCountdown"
-import { leaveRoom, joinRoom } from "@/services/game-service"
+import { leaveRoom, joinRoom, setJoker } from "@/services/game-service"
 
 function RoomCard({ room }: { room: Room }) {
     const user = useUser((state) => state.user)
@@ -45,6 +45,19 @@ function RoomCard({ room }: { room: Room }) {
 
     const queryClient = useQueryClient()
 
+    const setJokerMutation = useMutation({
+        mutationKey: ["createPlayerStat"],
+        mutationFn: async () => {
+            return await setJoker(room.id, room.user_pseudo)
+        },
+        onError: (error) => {
+            console.log(error)
+        },
+        onSuccess: (data) => {
+            console.log("Joker set created successfully! ", data)
+        },
+    })
+
     const handleJoinRoom = useCallback(
         ({ id, nb_players, user_pseudo }: { id: string; nb_players: number; user_pseudo: string }) => {
             if (id == room.id) {
@@ -52,6 +65,7 @@ function RoomCard({ room }: { room: Room }) {
                 if (user_pseudo.split(", ").includes(user?.pseudo || "")) {
                     setSelectedRoom(id)
                     if (nb_players == MAX_PLAYERS) {
+                        setJokerMutation.mutate()
                         setCountdown(5)
                         // queryClient.setQueryData(["allRooms"], (oldRooms: Room[]) => oldRooms.filter((r) => r.id !== id))
                     }

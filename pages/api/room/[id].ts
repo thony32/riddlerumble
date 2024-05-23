@@ -13,6 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             level: true,
             user_pseudo: true,
             nb_players: true,
+            joker: true,
             created_at: true,
             modified_at: true,
             isActive: true,
