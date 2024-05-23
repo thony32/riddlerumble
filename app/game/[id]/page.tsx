@@ -355,8 +355,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                             <>
                                 <ReactTyped
                                     startWhenVisible
-                                    // strings={[roomData.prompt]}
-                                    strings={["zavadoza", "pory"]}
+                                    strings={[roomData.prompt]}
                                     typeSpeed={40}
                                 />
                             </>
