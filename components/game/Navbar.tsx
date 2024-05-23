@@ -11,7 +11,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center border-b-1 border-current pb-4">
             <div>
                 <Link href="/">
-                    <h1 className="text-2xl">RR - The Map Quest</h1>
+                    <h1 className="sm:text-2xl">RR - The Map Quest</h1>
                 </Link>
             </div>
             <div className="flex gap-8 items-center">
@@ -26,7 +26,7 @@ const Navbar = () => {
                                 src={user.avatar!}
                             />
                             <div className="flex flex-col text-right">
-                                <span>{user.full_name}</span>
+                                <span className="text-sm sm:text-base">{user.full_name}</span>
                                 <span className="font-sans text-xs font-semibold">{user.pseudo}</span>
                             </div>
                         </>

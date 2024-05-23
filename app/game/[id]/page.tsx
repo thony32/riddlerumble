@@ -357,9 +357,9 @@ const Party = ({ params }: { params: { id: string } }) => {
                                 <span className="loading loading-bars loading-md"></span>
                             </div>
                         ) : (
-                            <>
+                            <div className="text-center sm:text-left">
                                 <ReactTyped startWhenVisible strings={[roomData.prompt]} typeSpeed={40} />
-                            </>
+                            </div>
                         )}
                         <SvgDecoEnigme />
                     </div>

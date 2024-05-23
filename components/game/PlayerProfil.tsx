@@ -108,7 +108,7 @@ const PlayerProfil = () => {
             {
                 user &&
                 <div className="md:px-3 py-2 space-y-7">
-                    <div className="flex flex-col xl:flex-row justify-between items-center">
+                    <div className="flex justify-between items-center">
                         <div className="relative max-md:space-y-5">
                             <div className="md:absolute md:-top-5 md:-left-3 flex justify-center">
                                 <Image
@@ -120,7 +120,7 @@ const PlayerProfil = () => {
                                 />
                             </div>
                             <Avatar
-                                className="w-16 h-16 md:w-24 md:h-24 xl:w-36 xl:h-36 text-large shadow-xl"
+                                className="w-28 h-28 xl:w-36 xl:h-36 text-large shadow-xl"
                                 showFallback
                                 name={getInitial(user.full_name)}
                                 src={user.avatar!}
@@ -201,9 +201,9 @@ const PlayerProfil = () => {
                                     </ModalContent>
                                 </Modal>
                             </div>
-                            <h1 className="text-xl md:text-3xl">{user.pseudo}</h1>
-                            <p>{user.full_name}</p>
-                            <p className="opacity-40 break-words">{user.email}</p>
+                            <h1 className="text-xl md:text-3xl text-right">{user.pseudo}</h1>
+                            <p className="text-right">{user.full_name}</p>
+                            <p className="opacity-40 break-words text-right">{user.email}</p>
                             <hr className="my-5" />
                             <div className="space-y-1">
                                 <div className="flex justify-between items-center">
