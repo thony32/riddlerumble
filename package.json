@@ -35,7 +35,6 @@
     "formik": "^2.4.6",
     "framer-motion": "^11.1.9",
     "inquirer": "^9.2.20",
-    "lenis": "^1.0.45",
     "mapbox-gl": "^3.3.0",
     "next": "14.2.3",
     "pusher": "^5.2.0",
