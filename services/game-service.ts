@@ -1,4 +1,5 @@
 import { Room } from "@/types/room"
+import getUsersPseudo from "@/utils/getUsersPseudo"
 
 export const getAllRoom = async () => {
     const res = await fetch("/api/room")
@@ -20,10 +21,8 @@ export const createRoom = async (level: string, pseudo: string) => {
 }
 
 export const joinRoom = async (room: Room, pseudo: string) => {
-    const nbPlayersInt32 = room.nb_players + 1
-
     const response = await fetch("/api/room/update", {
-        body: JSON.stringify({ ...room, nb_players: nbPlayersInt32, user_pseudo: `${room.user_pseudo}, ${pseudo}` }),
+        body: JSON.stringify({ ...room, user_pseudo: `${room.user_pseudo}, ${pseudo}` }),
         method: "PUT",
         headers: { "Content-Type": "application/json" },
     })
@@ -36,14 +35,12 @@ export const joinRoom = async (room: Room, pseudo: string) => {
 }
 
 export const leaveRoom = async (room: Room, pseudo: string) => {
-    const nbPlayersInt32 = room.nb_players - 1
-    const user_pseudo = room.user_pseudo
-        .split(", ")
+    const user_pseudo = getUsersPseudo(room.user_pseudo)
         .filter((p) => p !== pseudo)
         .join(", ")
 
     const response = await fetch("/api/room/update", {
-        body: JSON.stringify({ ...room, nb_players: nbPlayersInt32, user_pseudo }),
+        body: JSON.stringify({ ...room, user_pseudo }),
         method: "PUT",
         headers: { "Content-Type": "application/json" },
     })

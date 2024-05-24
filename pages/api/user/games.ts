@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             created_at: true,
             Room: {
                 level: true,
-                nb_players: true,
+                user_pseudo: true,
             },
             filter: e.op(player_stats.User.id, "=", e.uuid(id_user)),
             order_by: {

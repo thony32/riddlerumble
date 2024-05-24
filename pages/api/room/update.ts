@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const { id, delay, latitude, longitude, nb_players, prompt, user_pseudo } = req.body
+        const { id, delay, latitude, longitude, prompt, user_pseudo } = req.body
 
         if (!id) {
             res.status(400).json({ success: false, error: "Missing required field: id" })
@@ -23,28 +23,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 delay: e.int32(delay ?? 0),
                 latitude: e.float32(latitude ?? 0),
                 longitude: e.float32(longitude ?? 0),
-                nb_players: e.int32(nb_players ?? 0),
+                nb_players: 1, // mila ovaina refa vita migration
                 prompt: e.str(prompt ?? ""),
                 user_pseudo: e.str(user_pseudo ?? ""),
             },
         }))
 
-        await updateQuery.run(client)
-
-        const selectQuery = e.select(e.Room, () => ({
+        const selectQuery = e.select(updateQuery, () => ({
             filter_single: { id: e.uuid(id) },
             id: true,
             delay: true,
             latitude: true,
             longitude: true,
-            nb_players: true,
             prompt: true,
             user_pseudo: true,
         }))
 
         const result = await selectQuery.run(client)
 
-        socket.emit('message1', JSON.stringify(result));
+        socket.emit("message1", JSON.stringify(result))
 
         res.status(200).json({ success: true, result })
     } catch (error) {

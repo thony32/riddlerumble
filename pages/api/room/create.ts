@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         latitude: latitude,
         longitude: longitude,
         level: level,
-        nb_players: 1,
+        nb_players: 1, // mila ovaina refa vita migration
         prompt: room_data.enigm,
         user_pseudo: user_pseudo,
         isActive: true,
@@ -44,13 +44,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             latitude: true,
             longitude: true,
             level: true,
-            nb_players: true,
             prompt: true,
             user_pseudo: true,
         }))
         .run(client)
 
-    socket.emit('message1', 'Sync Process Completed');
+    socket.emit("message1", JSON.stringify(room))
 
-    res.status(200).json({ success: true, room: room })
+    res.status(200).json({ success: true, room })
 }

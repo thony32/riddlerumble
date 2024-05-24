@@ -21,6 +21,8 @@ const SvgMarkerTarget = dynamic(() => import("@/components/misc/SvgMarkerTarget"
 import { create_player_stat, create_temp_room, disableRoom, fetchRoom, getTempRoom, updateUserScore } from "@/services/party-service"
 import Completionist from "@/components/game/Completionist"
 import { MAPBOX_TOKEN } from "@/env"
+import checkIfJoined from "@/utils/checkIfJoined"
+import getUsersPseudo from "@/utils/getUsersPseudo"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -229,7 +231,10 @@ const Party = ({ params }: { params: { id: string } }) => {
     }
 
     const checkUnauthorization = () => {
-        return roomData && (!roomData.isActive || roomData.nb_players !== MAX_PLAYERS || !roomData.user_pseudo.split(", ").includes(user?.pseudo))
+        if (roomData) {
+            const pseudoArray = getUsersPseudo(roomData?.user_pseudo)
+            return !roomData.isActive || pseudoArray.length !== MAX_PLAYERS || checkIfJoined(pseudoArray, user?.pseudo)
+        }
     }
 
     if (checkUnauthorization() && process.env.NODE_ENV === "production") {
@@ -241,9 +246,7 @@ const Party = ({ params }: { params: { id: string } }) => {
             <div className="flex flex-col xl:grid xl:grid-cols-12 gap-10">
                 <div className="xl:col-span-2 relative space-y-8">
                     <div className="xl:translate-y-14">
-                        {roomData?.joker == user?.pseudo &&
-                            <h1 className="text-center text-success text-xl">You got the Joker !!!</h1>
-                        }
+                        {roomData?.joker == user?.pseudo && <h1 className="text-center text-success text-xl">You got the Joker !!!</h1>}
                         {roomData && <h1 className={`text-center ${roomData.level == "high-level" && "text-red-500"}`}>{roomData.level == "high-level" ? "High Level (+10 pts)" : "Normal Level"}</h1>}
                         <h1 className="text-3xl text-center">Find the place</h1>
                         <SvgDecoEnigme />
