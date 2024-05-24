@@ -221,7 +221,7 @@ const Party = ({ params }: { params: { id: string } }) => {
     const checkUnauthorization = () => {
         if (roomData) {
             const pseudoArray = getUsersPseudo(roomData?.user_pseudo)
-            return !roomData.isActive || checkIfJoined(pseudoArray, user?.pseudo)
+            return !roomData.isActive
         }
     }
 
