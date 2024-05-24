@@ -45,7 +45,7 @@ const nextConfig = {
         return config
     },
     serverRuntimeConfig: {
-        socketIoUrl: 'http://localhost:3001' // Ensure this is correct
+        socketIoUrl: 'https://ws-riddlerumble.vercel.app'
     },
 }
 
