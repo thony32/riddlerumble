@@ -52,7 +52,9 @@ const Game = () => {
     })
 
     useEffect(() => {
-        socket.on("receive", refetchRooms)
+        socket.on("room-created", () => {
+            refetchRooms()
+        })
     }, [socket])
 
     useEffect(() => {
