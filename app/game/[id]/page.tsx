@@ -221,13 +221,11 @@ const Party = ({ params }: { params: { id: string } }) => {
     const checkUnauthorization = () => {
         if (roomData) {
             const pseudoArray = getUsersPseudo(roomData?.user_pseudo)
-            console.log(!roomData.isActive);
-            return !roomData.isActive
+            return !roomData.isActive || pseudoArray.length !== MAX_PLAYERS || !checkIfJoined(pseudoArray, user?.pseudo)
         }
     }
 
     if (checkUnauthorization() && process.env.NODE_ENV === "production") {
-        localStorage.removeItem(PARTY_START_TIME_KEY);
         redirect("/game/")
     }
 
