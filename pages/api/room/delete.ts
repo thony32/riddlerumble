@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { pusherServer } from "@/lib/pusher"
 import client from "@/lib/edgedb-client"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -25,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const result = await client.query(query, params)
 
-        pusherServer.trigger(id, "delete-room", { id })
+        // pusherServer.trigger(id, "delete-room", { id })
 
         res.status(200).json({ success: true, result })
     } catch (error) {

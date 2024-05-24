@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import e from "@/dbschema/edgeql-js"
-import { pusherServer } from "@/lib/pusher"
 import client from "@/lib/edgedb-client"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -17,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return
         }
 
-        const updateQuery = e.update(e.Room, (room) => ({
+        const updateQuery = e.update(e.Room, () => ({
             filter_single: { id: e.uuid(id) },
             set: {
                 delay: e.int32(delay ?? 0),
@@ -31,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         await updateQuery.run(client)
 
-        const selectQuery = e.select(e.Room, (room) => ({
+        const selectQuery = e.select(e.Room, () => ({
             filter_single: { id: e.uuid(id) },
             id: true,
             delay: true,
@@ -44,11 +43,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const result = await selectQuery.run(client)
 
-        pusherServer.trigger(id, "join-room", {
-            id: id,
-            nb_players: nb_players,
-            user_pseudo: user_pseudo,
-        })
+        // pusherServer.trigger(id, "join-room", {
+        //     id: id,
+        //     nb_players: nb_players,
+        //     user_pseudo: user_pseudo,
+        // })
 
         res.status(200).json({ success: true, result })
     } catch (error) {

@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import e from "@/dbschema/edgeql-js"
-import { pusherServer } from "@/lib/pusher"
 import client from "@/lib/edgedb-client"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
