@@ -31,7 +31,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         latitude: latitude,
         longitude: longitude,
         level: level,
-        nb_players: 1, // mila ovaina refa vita migration
         prompt: room_data.enigm,
         user_pseudo: user_pseudo,
         isActive: true,

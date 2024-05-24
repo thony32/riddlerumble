@@ -25,7 +25,6 @@ export type $RoomλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c2
   "user_pseudo": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "delay": $.PropertyDesc<_std.$int64, $.Cardinality.One, false, false, false, false>;
   "level": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
-  "nb_players": $.PropertyDesc<_std.$int32, $.Cardinality.One, false, false, false, false>;
   "created_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "modified_at": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "isActive": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, false>;

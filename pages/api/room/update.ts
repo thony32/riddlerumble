@@ -23,7 +23,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 delay: e.int32(delay ?? 0),
                 latitude: e.float32(latitude ?? 0),
                 longitude: e.float32(longitude ?? 0),
-                nb_players: 1, // mila ovaina refa vita migration
                 prompt: e.str(prompt ?? ""),
                 user_pseudo: e.str(user_pseudo ?? ""),
             },
