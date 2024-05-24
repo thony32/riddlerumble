@@ -4,7 +4,6 @@ export type Room = {
     latitude: string
     longitude: string
     level: string
-    nb_players: number
     prompt: string
     user_pseudo: string
     isActive: boolean

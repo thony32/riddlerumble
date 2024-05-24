@@ -1,6 +1,7 @@
 "use client"
 
 import { getUserGames } from "@/services/profil-service"
+import getUsersPseudo from "@/utils/getUsersPseudo"
 import { useQuery } from "@tanstack/react-query"
 import { formatDistanceToNow } from "date-fns"
 
@@ -58,11 +59,13 @@ const LastGames = ({ id_user }: { id_user: string }) => {
                                 <td className="py-2 px-3 text-center">{index + 1}</td>
                                 <td className="py-2 px-3 text-right flex max-sm:flex-col justify-between items-center gap-2">
                                     <span className="text-xs">{new Date(game.created_at).toLocaleDateString()}</span>
-                                    <span className="text-[6pt] sm:text-xs badge badge-info">{formatDistanceToNow(new Date(game.created_at || new Date()), { includeSeconds: true, addSuffix: true })}</span>
+                                    <span className="text-[6pt] sm:text-xs badge badge-info">
+                                        {formatDistanceToNow(new Date(game.created_at || new Date()), { includeSeconds: true, addSuffix: true })}
+                                    </span>
                                 </td>
                                 <td className="py-2 px-3 text-right">{game.Room.level == "normal-level" ? "Normal" : "High"}</td>
                                 <td className="py-2 px-3 text-center">{game.score}</td>
-                                <td className="py-2 px-3 text-center">{game.Room.nb_players}</td>
+                                <td className="py-2 px-3 text-center">{getUsersPseudo(game.Room.user_pseudo).length}</td>
                             </tr>
                         ))
                     )}

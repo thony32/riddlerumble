@@ -16,14 +16,18 @@ import { useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { getAllRoom } from "@/services/game-service"
 import { socket } from "@/lib/socket-io"
+import checkIfJoined from "@/utils/checkIfJoined"
+import getUsersPseudo from "@/utils/getUsersPseudo"
+import { useUser } from "@/store/useUser"
 
 // NOTE:  Main Component
-const Game = () => { 
+const Game = () => {
     const router = useRouter()
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
     const countdown = useRoomCountdown((state) => state.roomCountdown)
     const setCountdown = useRoomCountdown((state) => state.setRoomCountdown)
+    const user = useUser((state) => state.user)
     const {
         isPending: isInitialRoomsPending,
         data: allRooms,
@@ -33,7 +37,7 @@ const Game = () => {
         queryFn: async () => {
             const data: Room[] = await getAllRoom()
             if (data) {
-                const findedRoom = data.find((r) => r.id === selectedRoom)
+                const findedRoom = data.find((r) => checkIfJoined(getUsersPseudo(r.user_pseudo), user?.pseudo))
                 if (!findedRoom) {
                     setSelectedRoom(null)
                 } else {
@@ -46,11 +50,11 @@ const Game = () => {
     })
     
     useEffect(() => {
-        socket.on('receive', (data) => {
+        socket.on("receive", (data) => {
             console.log("Recieved from SERVER ::", data)
             refetchRooms()
         })
-    }, [socket]);
+    }, [socket])
 
     return (
         <div className="min-h-[100vh] flex flex-col xl:grid xl:grid-cols-3 gap-14">
