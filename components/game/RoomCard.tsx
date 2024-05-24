@@ -5,7 +5,7 @@ import { Button } from "@nextui-org/button"
 import { Card, Chip } from "@nextui-org/react"
 import { useUser } from "@/store/useUser"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useCallback, useEffect, useState } from "react"
+import {  useState } from "react"
 import { formatDistanceToNow } from "date-fns"
 import { motion } from "framer-motion"
 import { Room } from "@/types/room"
@@ -22,7 +22,6 @@ function RoomCard({ room }: { room: Room }) {
     const user = useUser((state) => state.user)
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
-    // const [room, setRoom] = useState<Room>(room)
     const [action, setAction] = useState<"join" | "leave">("join")
     const setCountdown = useRoomCountdown((state) => state.setRoomCountdown)
     const updateRoomMutation = useMutation({
@@ -58,36 +57,13 @@ function RoomCard({ room }: { room: Room }) {
         },
     })
 
-    // const handleJoinRoom = useCallback(
-    //     ({ id, user_pseudo }: { id: string; user_pseudo: string }) => {
-    //         if (id == room.id) {
-    //             queryClient.refetchQueries({ queryKey: ['allRooms'], type: 'active', exact: true })
-    //             if (user_pseudo.split(", ").includes(user?.pseudo || "")) {
-    //                 setSelectedRoom(id)
-    //                 if (user_pseudo.split(', ').filter(Boolean).length == MAX_PLAYERS) {
-    //                     setJokerMutation.mutate()
-    //                     setCountdown(5)
-    //                 }
-    //             }
-    //         }
-    //     },
-    //     [room, queryClient, setCountdown, user, selectedRoom, setSelectedRoom]
-    // )
+
 
     const handleClick = (room: Room, given_action: "join" | "leave") => {
         setAction(given_action)
         updateRoomMutation.mutate({ room, given_action })
     }
 
-    // useEffect(() => {
-    //     pusherClient.subscribe(room.id)
-
-    //     pusherClient.bind("join-room", handleJoinRoom)
-
-    //     return () => {
-    //         pusherClient.unsubscribe(room.id)
-    //     }
-    // }, [room, handleJoinRoom])
 
     return (
         <motion.div initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} className="w-full flex relative">

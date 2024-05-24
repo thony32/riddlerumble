@@ -44,13 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const result = await selectQuery.run(client)
 
-        // pusherServer.trigger(id, "join-room", {
-        //     id: id,
-        //     nb_players: nb_players,
-        //     user_pseudo: user_pseudo,
-        // })
-        
-        socket.emit('message1', 'Sync Process Completed');
+        socket.emit('message1', JSON.stringify(result));
 
         res.status(200).json({ success: true, result })
     } catch (error) {
