@@ -15,7 +15,7 @@ const SvgHighLevel = dynamic(() => import("../misc/SvgHighLevel"))
 const SvgLowLevel = dynamic(() => import("../misc/SvgLowLevel"))
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { MAX_PLAYERS } from "@/utils/constants"
-import { leaveRoom, joinRoom, setJoker } from "@/services/game-service"
+import { leaveRoom, joinRoom } from "@/services/game-service"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 
 function RoomCard({ room }: { room: Room }) {
@@ -38,19 +38,6 @@ function RoomCard({ room }: { room: Room }) {
             } else {
                 setSelectedRoom(null)
             }
-        },
-    })
-
-    const setJokerMutation = useMutation({
-        mutationKey: ["createPlayerStat"],
-        mutationFn: async () => {
-            return await setJoker(room.id, room.user_pseudo)
-        },
-        onError: (error) => {
-            console.log(error)
-        },
-        onSuccess: (data) => {
-            console.log("Joker set created successfully! ", data)
         },
     })
 

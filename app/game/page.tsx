@@ -4,7 +4,7 @@
 import dynamic from "next/dynamic"
 import { Room } from "@/types/room"
 import { Skeleton } from "@nextui-org/react"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 const BtnCreateRoom = dynamic(() => import("@/components/game/BtnCreateRoom"))
 const RoomCard = dynamic(() => import("@/components/game/RoomCard"))
 const StatsModal = dynamic(() => import("@/components/game/StatsModal"))
@@ -13,7 +13,7 @@ import { useEffect, useState } from "react"
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
-import { getAllRoom } from "@/services/game-service"
+import { getAllRoom, setJoker } from "@/services/game-service"
 import { socket } from "@/lib/socket-io"
 import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
@@ -27,6 +27,20 @@ const Game = () => {
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
     const [countdown, setCountdown] = useState<number | null>(null)
     const user = useUser((state) => state.user)
+
+    const setJokerMutation = useMutation({
+        mutationKey: ["setJokerMutation"],
+        mutationFn: async (user_pseudo: any) => {
+            return await setJoker(selectedRoom as string, user_pseudo)
+        },
+        onError: (error) => {
+            console.log(error)
+        },
+        onSuccess: (data) => {
+            console.log("Joker set created successfully! ", data)
+        },
+    })
+
     const {
         isPending: isInitialRoomsPending,
         data: allRooms,
@@ -40,6 +54,7 @@ const Game = () => {
                 if (!findedRoom) {
                     setSelectedRoom(null)
                 } else {
+                    setJokerMutation.mutate(findedRoom.user_pseudo)
                     setSelectedRoom(findedRoom.id)
                     if (getUsersPseudo(findedRoom.user_pseudo).length === MAX_PLAYERS) {
                         setCountdown(5)
@@ -61,7 +76,7 @@ const Game = () => {
         socket.on("room-updated", () => {
             refetchRooms()
         })
-    },[refetchRooms])
+    }, [refetchRooms])
 
     useEffect(() => {
         if (countdown !== null) {
