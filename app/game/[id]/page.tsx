@@ -21,6 +21,8 @@ const SvgMarkerTarget = dynamic(() => import("@/components/misc/SvgMarkerTarget"
 import { create_player_stat, create_temp_room, disableRoom, fetchRoom, getTempRoom, updateUserScore } from "@/services/party-service"
 import Completionist from "@/components/game/Completionist"
 import { MAPBOX_TOKEN } from "@/env"
+import { SubmitResultParams } from "@/types/submit-result-params"
+import { submitResult } from "@/utils/submitResult"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -113,13 +115,13 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }
 
-    const calculateScoreDistance = (distance: number, maxDistance: number = 1750) => {
-        distance = Math.min(distance, maxDistance)
-        let score = 100 - (distance / maxDistance) * 100
-        score = Math.max(0, Math.min(100, score))
+    // const calculateScoreDistance = (distance: number, maxDistance: number = 1750) => {
+    //     distance = Math.min(distance, maxDistance)
+    //     let score = 100 - (distance / maxDistance) * 100
+    //     score = Math.max(0, Math.min(100, score))
 
-        return Math.round(score)
-    }
+    //     return Math.round(score)
+    // }
 
     const user = useUser((state) => state.user)
     const createTempRoom = useMutation({
@@ -161,32 +163,55 @@ const Party = ({ params }: { params: { id: string } }) => {
         },
     })
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
-    const submitResult = () => {
-        const elapsedTime = Date.now() - (startTime || Date.now())
-        const elapsedMinutes = Math.floor(elapsedTime / 60000)
-        const elapsedSeconds = Math.floor((elapsedTime % 60000) / 1000)
-        const formattedElapsedTime = `${String(elapsedMinutes).padStart(2, "0")}:${String(elapsedSeconds).padStart(2, "0")}`
-        setElapsedTime(formattedElapsedTime)
+    // const submitResult = () => {
+    //     const elapsedTime = Date.now() - (startTime || Date.now())
+    //     const elapsedMinutes = Math.floor(elapsedTime / 60000)
+    //     const elapsedSeconds = Math.floor((elapsedTime % 60000) / 1000)
+    //     const formattedElapsedTime = `${String(elapsedMinutes).padStart(2, "0")}:${String(elapsedSeconds).padStart(2, "0")}`
+    //     setElapsedTime(formattedElapsedTime)
 
-        const maxTime = 300000
-        const timePercentage = (elapsedTime / maxTime) * 100
-        const timeScore = Math.round(Math.max(0, 90 - timePercentage * 1.5))
+    //     const maxTime = 300000
+    //     const timePercentage = (elapsedTime / maxTime) * 100
+    //     const timeScore = Math.round(Math.max(0, 90 - timePercentage * 1.5))
 
-        const scoreDistance = calculateScoreDistance(distance)
+    //     const scoreDistance = calculateScoreDistance(distance)
 
-        const goldenRatio = (1 + Math.sqrt(5)) / 2
-        const distanceWeight = goldenRatio * 0.3
-        const timeWeight = 1 / goldenRatio
+    //     const goldenRatio = (1 + Math.sqrt(5)) / 2
+    //     const distanceWeight = goldenRatio * 0.3
+    //     const timeWeight = 1 / goldenRatio
 
-        const totalScore = Math.round((scoreDistance * distanceWeight + timeScore * timeWeight) / (distanceWeight + timeWeight))
-        setShowTarget(true)
-        setTotalScore(roomData.level == "high-level" ? totalScore - penalityPoints : totalScore - penalityPoints + 10)
-        mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
-        createTempRoom.mutate()
-        createPlayerStat.mutate()
-        updateUserScoreMutation.mutate()
-        localStorage.removeItem(PARTY_START_TIME_KEY)
-        setSelectedRoom(null)
+    //     const totalScore = Math.round((scoreDistance * distanceWeight + timeScore * timeWeight) / (distanceWeight + timeWeight))
+    //     setShowTarget(true)
+    //     setTotalScore(roomData.level == "high-level" ? totalScore - penalityPoints : totalScore - penalityPoints + 10)
+    //     mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
+    //     createTempRoom.mutate()
+    //     createPlayerStat.mutate()
+    //     updateUserScoreMutation.mutate()
+    //     localStorage.removeItem(PARTY_START_TIME_KEY)
+    //     setSelectedRoom(null)
+    // }
+
+    // Fonction pour soumettre le résultat
+
+    const handleSubmitResult = () => {
+        const submitParams: SubmitResultParams = {
+            startTime,
+            distance,
+            setElapsedTime,
+            setShowTarget,
+            setTotalScore,
+            penalityPoints,
+            roomData,
+            targetMarker,
+            mapRef,
+            createTempRoom,
+            createPlayerStat,
+            updateUserScoreMutation,
+            user,
+            setSelectedRoom: setSelectedRoom,
+            PARTY_START_TIME_KEY,
+        }
+        submitResult(submitParams)
     }
 
     const [penalityPoints, setPenalityPoints] = useState(0)
@@ -241,9 +266,7 @@ const Party = ({ params }: { params: { id: string } }) => {
             <div className="flex flex-col xl:grid xl:grid-cols-12 gap-10">
                 <div className="xl:col-span-2 relative space-y-8">
                     <div className="xl:translate-y-14">
-                        {roomData?.joker == user?.pseudo &&
-                            <h1 className="text-center text-success text-xl">You got the Joker !!!</h1>
-                        }
+                        {roomData?.joker == user?.pseudo && <h1 className="text-center text-success text-xl">You got the Joker !!!</h1>}
                         {roomData && <h1 className={`text-center ${roomData.level == "high-level" && "text-red-500"}`}>{roomData.level == "high-level" ? "High Level (+10 pts)" : "Normal Level"}</h1>}
                         <h1 className="text-3xl text-center">Find the place</h1>
                         <SvgDecoEnigme />
@@ -300,7 +323,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                             )}
                             <div className="flex justify-center">
                                 {!showTarget ? (
-                                    <Button onClick={submitResult} className="bg-green-500 text-white font-semibold">
+                                    <Button onClick={handleSubmitResult} className="bg-green-500 text-white font-semibold">
                                         Submit
                                     </Button>
                                 ) : (
@@ -313,7 +336,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                     </div>
                 </div>
                 <div className="xl:col-span-10 rounded-2xl relative">
-                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime + roomData.delay} renderer={timerRender} />}</div>
+                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime + 50000} renderer={timerRender} />}</div>
                     <Map
                         ref={mapRef as React.RefObject<MapRef>}
                         mapStyle="mapbox://styles/mapbox/streets-v12"
