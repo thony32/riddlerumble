@@ -28,6 +28,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 user_pseudo: e.str(user_pseudo ?? ""),
             },
         }))
+
+        await updateQuery.run(client)
+
         socket.emit("room-update")
 
         res.status(200).json({ success: true, message: "Room update" })
