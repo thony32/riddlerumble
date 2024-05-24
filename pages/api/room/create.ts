@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }))
         .run(client)
 
-    socket.emit('message1', 'Sync Process Completed');
+    socket.emit('send', 'Sync Process Completed');
 
     res.status(200).json({ success: true, room: room })
 }
