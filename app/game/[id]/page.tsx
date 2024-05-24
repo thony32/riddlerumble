@@ -225,9 +225,9 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }
 
-    if (checkUnauthorization() && process.env.NODE_ENV === "production") {
-        redirect("/game/")
-    }
+    // if (checkUnauthorization() && process.env.NODE_ENV === "production") {
+    //     redirect("/game/")
+    // }
 
     return (
         <div className="w-full min-h-screen py-6 xl:overflow-hidden z-50 bg-base-100">
