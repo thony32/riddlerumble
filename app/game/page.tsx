@@ -49,22 +49,9 @@ const Game = () => {
         },
         staleTime: 100 * 60 * 60 * 24,
     })
-
-    // useEffect(() => {
-    //     if (countdown !== null) {
-    //         if (countdown > 0) {
-    //             const timer = setTimeout(() => {
-    //                 setCountdown(countdown !== null ? countdown - 1 : null)
-    //             }, 1000)
-    //             return () => clearTimeout(timer)
-    //         } else {
-    //             router.push(`/game/${selectedRoom}`)
-    //         }
-    //     }
-    // }, [selectedRoom, router, countdown, setCountdown])
-
+    
     useEffect(() => {
-        socket.on("message2", (data) => {
+        socket.on("receive", (data) => {
             console.log("Recieved from SERVER ::", data)
             refetchRooms()
         })
