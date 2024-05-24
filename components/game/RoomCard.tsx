@@ -56,7 +56,7 @@ function RoomCard({ room }: { room: Room }) {
 
     const handleClick = (room: Room, given_action: "join" | "leave") => {
         setAction(given_action)
-        updateRoomMutation.mutate({ room, given_action })
+        updateRoomMutation.mutate({ room, given_action }) 
     }
 
     return (
