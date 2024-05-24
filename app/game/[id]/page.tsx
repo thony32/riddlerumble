@@ -226,6 +226,7 @@ const Party = ({ params }: { params: { id: string } }) => {
     }
 
     if (checkUnauthorization() && process.env.NODE_ENV === "production") {
+        localStorage.removeItem(PARTY_START_TIME_KEY);
         redirect("/game/")
     }
 
