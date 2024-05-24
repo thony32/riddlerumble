@@ -23,33 +23,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 delay: e.int32(delay ?? 0),
                 latitude: e.float32(latitude ?? 0),
                 longitude: e.float32(longitude ?? 0),
-                nb_players: 1, // mila ovaina refa vita migration
                 prompt: e.str(prompt ?? ""),
                 user_pseudo: e.str(user_pseudo ?? ""),
             },
         }))
 
-        const selectQuery = e.select(updateQuery, () => ({
-            filter_single: { id: e.uuid(id) },
-            id: true,
-            delay: true,
-            latitude: true,
-            longitude: true,
-            prompt: true,
-            user_pseudo: true,
-        }))
+        await updateQuery.run(client)
 
-        const result = await selectQuery.run(client)
+        socket.emit("room-update")
 
-        socket.emit(
-            "send",
-            JSON.stringify({
-                type: "update",
-                success: true,
-            })
-        )
-
-        res.status(200).json({ success: true, result })
+        res.status(200).json({ success: true, message: "Room update" })
     } catch (error) {
         console.error("Error:", error)
         res.status(500).json({ success: false, error: error })

@@ -225,9 +225,9 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }
 
-    if (checkUnauthorization() && process.env.NODE_ENV === "production") {
-        redirect("/game/")
-    }
+    // if (checkUnauthorization() && process.env.NODE_ENV === "production") {
+    //     redirect("/game/")
+    // }
 
     return (
         <div className="w-full min-h-screen py-6 xl:overflow-hidden z-50 bg-base-100">
@@ -314,7 +314,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                             zoom: 4,
                         }}
                         onClick={clickPostion}
-                        mapboxAccessToken={MAPBOX_TOKEN!}
+                        mapboxAccessToken="pk.eyJ1IjoidGhvbnkzMiIsImEiOiJjbHc5azQ5bWQwNWhjMmtxa2Q5dTcyNWxhIn0.pXpGUWi_9wWY3zwfflmzSQ"
                         style={{ width: "100%", height: "85dvh", margin: 0, padding: 0, borderRadius: "1rem", overflow: "hidden" }}
                     >
                         {!showTarget && (

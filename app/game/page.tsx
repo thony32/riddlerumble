@@ -55,7 +55,13 @@ const Game = () => {
         socket.on("room-created", () => {
             refetchRooms()
         })
-    }, [])
+    }, [socket])
+
+    useEffect(() => {
+        socket.on("room-updated", () => {
+            refetchRooms()
+        })
+    },[refetchRooms])
 
     useEffect(() => {
         if (countdown !== null) {
