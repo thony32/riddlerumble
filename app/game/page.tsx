@@ -2,7 +2,6 @@
 
 "use client"
 import dynamic from "next/dynamic"
-import { pusherClient } from "@/lib/pusher"
 import { Room } from "@/types/room"
 import { Skeleton } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
@@ -16,9 +15,7 @@ import { useRoomCountdown } from "@/store/useRoomCountdown"
 import { useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { getAllRoom } from "@/services/game-service"
-
-import io from 'socket.io-client';
-const socket = io('http://localhost:3001');
+import { socket } from "@/lib/socket-io"
 
 // NOTE:  Main Component
 const Game = () => {
@@ -48,19 +45,6 @@ const Game = () => {
         staleTime: 100 * 60 * 60 * 24,
     })
 
-    useEffect(() => {
-        const handleNewRoom = () => {
-            refetchRooms()
-        }
-
-        pusherClient.subscribe("lobby")
-        pusherClient.bind("new-room", handleNewRoom)
-
-        return () => {
-            pusherClient.unsubscribe("lobby")
-        }
-    }, [refetchRooms])
-
     // useEffect(() => {
     //     if (countdown !== null) {
     //         if (countdown > 0) {
@@ -77,6 +61,7 @@ const Game = () => {
     useEffect(() => {
         socket.on('message2', (data) => {
             console.log("Recieved from SERVER ::", data)
+            refetchRooms()
         })
     }, [socket]);
 
