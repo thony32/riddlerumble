@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         modified_at: true,
         isActive: true,
         order_by: {
-            expression: room.modified_at,
+            expression: room.created_at,
             direction: e.DESC,
         },
         filter: e.op(room.isActive, "=", true),

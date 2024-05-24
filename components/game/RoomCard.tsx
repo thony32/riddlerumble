@@ -4,8 +4,8 @@
 import { Button } from "@nextui-org/button"
 import { Card, Chip } from "@nextui-org/react"
 import { useUser } from "@/store/useUser"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import {  useState } from "react"
+import { useMutation } from "@tanstack/react-query"
+import { useState } from "react"
 import { formatDistanceToNow } from "date-fns"
 import { motion } from "framer-motion"
 import { Room } from "@/types/room"
@@ -42,8 +42,6 @@ function RoomCard({ room }: { room: Room }) {
         },
     })
 
-    const queryClient = useQueryClient()
-
     const setJokerMutation = useMutation({
         mutationKey: ["createPlayerStat"],
         mutationFn: async () => {
@@ -57,13 +55,10 @@ function RoomCard({ room }: { room: Room }) {
         },
     })
 
-
-
     const handleClick = (room: Room, given_action: "join" | "leave") => {
         setAction(given_action)
         updateRoomMutation.mutate({ room, given_action })
     }
-
 
     return (
         <motion.div initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} className="w-full flex relative">
@@ -87,7 +82,7 @@ function RoomCard({ room }: { room: Room }) {
                         <div className="flex gap-3 text-3xl items-center">
                             <UsersSVG className="size-16" />{" "}
                             <span>
-                                {room.user_pseudo.split(', ').filter(Boolean).length} / {MAX_PLAYERS}
+                                {room.user_pseudo.split(", ").filter(Boolean).length} / {MAX_PLAYERS}
                             </span>
                         </div>
                     </div>

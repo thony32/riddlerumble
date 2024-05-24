@@ -41,7 +41,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const result = await selectQuery.run(client)
 
-        socket.emit("message1", JSON.stringify(result))
+        socket.emit(
+            "send",
+            JSON.stringify({
+                type: "update",
+                success: true,
+            })
+        )
 
         res.status(200).json({ success: true, result })
     } catch (error) {

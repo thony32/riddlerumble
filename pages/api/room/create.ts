@@ -49,7 +49,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }))
         .run(client)
 
-    socket.emit("send", JSON.stringify(room))
+    socket.emit(
+        "send",
+        JSON.stringify({
+            type: "create",
+            success: true,
+        })
+    )
 
     res.status(200).json({ success: true, room })
 }

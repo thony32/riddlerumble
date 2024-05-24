@@ -9,9 +9,8 @@ const BtnCreateRoom = dynamic(() => import("@/components/game/BtnCreateRoom"))
 const RoomCard = dynamic(() => import("@/components/game/RoomCard"))
 const StatsModal = dynamic(() => import("@/components/game/StatsModal"))
 const Stats = dynamic(() => import("@/components/game/Stats"))
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import useSelectedRoom from "@/store/useSelectedRoom"
-import { useRoomCountdown } from "@/store/useRoomCountdown"
 import { useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { getAllRoom } from "@/services/game-service"
@@ -19,14 +18,14 @@ import { socket } from "@/lib/socket-io"
 import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 import { useUser } from "@/store/useUser"
+import { MAX_PLAYERS } from "@/utils/constants"
 
 // NOTE:  Main Component
 const Game = () => {
     const router = useRouter()
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
-    const countdown = useRoomCountdown((state) => state.roomCountdown)
-    const setCountdown = useRoomCountdown((state) => state.setRoomCountdown)
+    const [countdown, setCountdown] = useState<number | null>(null)
     const user = useUser((state) => state.user)
     const {
         isPending: isInitialRoomsPending,
@@ -42,20 +41,32 @@ const Game = () => {
                     setSelectedRoom(null)
                 } else {
                     setSelectedRoom(findedRoom.id)
-                    setCountdown(5)
+                    if (getUsersPseudo(findedRoom.user_pseudo).length === MAX_PLAYERS) {
+                        setCountdown(5)
+                    }
                 }
             }
             return data
         },
         staleTime: 100 * 60 * 60 * 24,
     })
-    
+
     useEffect(() => {
-        socket.on("receive", (data) => {
-            console.log("Recieved from SERVER ::", data)
-            refetchRooms()
-        })
+        socket.on("receive", refetchRooms)
     }, [socket])
+
+    useEffect(() => {
+        if (countdown !== null) {
+            if (countdown > 0) {
+                const timer = setTimeout(() => {
+                    setCountdown((prev) => (prev !== null ? prev - 1 : null))
+                }, 1000)
+                return () => clearTimeout(timer)
+            } else {
+                router.push(`/game/${selectedRoom}`)
+            }
+        }
+    }, [countdown, router, selectedRoom])
 
     return (
         <div className="min-h-[100vh] flex flex-col xl:grid xl:grid-cols-3 gap-14">
@@ -107,8 +118,8 @@ const Game = () => {
                             </>
                         ) : (
                             allRooms &&
-                            allRooms.map((room: Room) => {
-                                return <RoomCard room={room} key={room.id} />
+                            allRooms.map((room: Room, index) => {
+                                return <RoomCard room={room} key={index} />
                             })
                         )}
                         {allRooms && allRooms.length == 0 && !isInitialRoomsPending && <div className="text-center text-current/50 my-5 text-xl">No room available yet !</div>}
