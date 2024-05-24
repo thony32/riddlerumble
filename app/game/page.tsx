@@ -18,7 +18,7 @@ import { getAllRoom } from "@/services/game-service"
 import { socket } from "@/lib/socket-io"
 
 // NOTE:  Main Component
-const Game = () => {
+const Game = () => { 
     const router = useRouter()
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
