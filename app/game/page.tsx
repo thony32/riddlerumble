@@ -42,6 +42,7 @@ const Game = () => {
                     setSelectedRoom(null)
                 } else {
                     setSelectedRoom(findedRoom.id)
+                    setCountdown(5)
                 }
             }
             return data
