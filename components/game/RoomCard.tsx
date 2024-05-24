@@ -15,15 +15,14 @@ const SvgHighLevel = dynamic(() => import("../misc/SvgHighLevel"))
 const SvgLowLevel = dynamic(() => import("../misc/SvgLowLevel"))
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { MAX_PLAYERS } from "@/utils/constants"
-import { useRoomCountdown } from "@/store/useRoomCountdown"
 import { leaveRoom, joinRoom, setJoker } from "@/services/game-service"
+import getUsersPseudo from "@/utils/getUsersPseudo"
 
 function RoomCard({ room }: { room: Room }) {
     const user = useUser((state) => state.user)
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
     const [action, setAction] = useState<"join" | "leave">("join")
-    const setCountdown = useRoomCountdown((state) => state.setRoomCountdown)
     const updateRoomMutation = useMutation({
         mutationKey: ["updateRoom"],
         mutationFn: async ({ room, given_action }: { room: Room; given_action: "join" | "leave" }) => {
@@ -82,7 +81,7 @@ function RoomCard({ room }: { room: Room }) {
                         <div className="flex gap-3 text-3xl items-center">
                             <UsersSVG className="size-16" />{" "}
                             <span>
-                                {room.user_pseudo.split(", ").filter(Boolean).length} / {MAX_PLAYERS}
+                                {getUsersPseudo(room.user_pseudo).length} / {MAX_PLAYERS}
                             </span>
                         </div>
                     </div>
@@ -90,12 +89,12 @@ function RoomCard({ room }: { room: Room }) {
                         <Button size="lg" variant="shadow" color="primary" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "join")}>
                             Join
                         </Button>
-                    ) : room.id == selectedRoom ? (
+                    ) : room.id != selectedRoom || getUsersPseudo(room.user_pseudo).length == MAX_PLAYERS ? (
+                        <span className="w-20" />
+                    ) : (
                         <Button size="lg" variant="shadow" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "leave")}>
                             Leave
                         </Button>
-                    ) : (
-                        <span className="w-20" />
                     )}
                 </div>
 
