@@ -1,7 +1,6 @@
 // utils/submitResult.ts
 
-import { calculateScoreDistance } from "./scoreUtils"; // Import de la fonction utilitaire
-import * as turf from "@turf/turf";
+import { calculateScoreDistance } from "./scoreUtils";
 import { create_temp_room, create_player_stat, updateUserScore } from "@/services/party-service";
 import { SubmitResultParams } from "@/types/submit-result-params";
 
