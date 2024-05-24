@@ -59,11 +59,11 @@ const Game = () => {
     // }, [selectedRoom, router, countdown, setCountdown])
 
     useEffect(() => {
-        socket.on('message2', (data) => {
+        socket.on("message2", (data) => {
             console.log("Recieved from SERVER ::", data)
             refetchRooms()
         })
-    }, [socket]);
+    }, [socket])
 
     return (
         <div className="min-h-[100vh] flex flex-col xl:grid xl:grid-cols-3 gap-14">
