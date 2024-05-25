@@ -89,22 +89,21 @@ const Party = ({ params }: { params: { id: string } }) => {
     }, [roomData])
 
     const [startTime, setStartTime] = useState<number | null>(null)
+    const [isFinished, setIsFinished] = useState<boolean>(false)
     const [distance, setDistance] = useState(0)
     const [elapsedTime, setElapsedTime] = useState("")
     const [totalScore, setTotalScore] = useState(0)
 
     useEffect(() => {
-        if (roomData && !isRoomPending) {
-            const savedStartTime = localStorage.getItem(PARTY_START_TIME_KEY)
-            if (savedStartTime) {
-                setStartTime(parseInt(savedStartTime, 10))
-            } else {
-                const newStartTime = Date.now() + roomData.delay
-                setStartTime(newStartTime)
-                localStorage.setItem(PARTY_START_TIME_KEY, newStartTime.toString())
-            }
+        const savedStartTime = localStorage.getItem(PARTY_START_TIME_KEY)
+        if (savedStartTime) {
+            setStartTime(parseInt(savedStartTime, 10))
+        } else {
+            const newStartTime = Date.now()
+            setStartTime(newStartTime)
+            localStorage.setItem(PARTY_START_TIME_KEY, newStartTime.toString())
         }
-    }, [roomData, isRoomPending])
+    }, [])
 
     const onMarkerDrag = useCallback((event: MarkerDragEvent) => {
         setMarker({
@@ -220,7 +219,7 @@ const Party = ({ params }: { params: { id: string } }) => {
 
     useEffect(() => {
         socket.on("submit-count", (data) => {
-            if (data === params.id) setStartTime(Date.now())
+            if (data === params.id) setIsFinished(true)
         })
     }, [])
 
@@ -370,7 +369,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                     </div>
                 </div>
                 <div className="xl:col-span-10 rounded-2xl relative">
-                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime} renderer={timerRender} />}</div>
+                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={isFinished ? Date.now() : startTime + roomData.delay} renderer={timerRender} />}</div>
                     <Map
                         ref={mapRef}
                         mapStyle="mapbox://styles/mapbox/streets-v12"
