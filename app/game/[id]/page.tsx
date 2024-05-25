@@ -25,7 +25,7 @@ import { SubmitResultParams } from "@/types/submit-result-params"
 import { submitResult } from "@/utils/submitResult"
 import { socket } from "@/lib/socket-io"
 
-const PARTY_START_TIME_KEY = "partyStartTime"
+export const PARTY_START_TIME_KEY = "partyStartTime"
 
 const Party = ({ params }: { params: { id: string } }) => {
     const { isPending: isRoomPending, data: roomData } = useQuery({
@@ -194,7 +194,7 @@ const Party = ({ params }: { params: { id: string } }) => {
 
     useEffect(() => {
         socket.on("submit-count", (data) => {
-            if (data === params.id) alert("true")
+            if (data === params.id) localStorage.removeItem(PARTY_START_TIME_KEY)
         })
     }, [])
 
