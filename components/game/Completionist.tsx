@@ -7,6 +7,7 @@ import getCountryCode from "@/utils/getCountryCode"
 import { getTempRoom, disableRoom, fetchRoom, updateScoreBomb } from "@/services/party-service"
 import { MapRef } from "react-map-gl"
 import calculDistancePosition from "@/utils/calculDistancePostion"
+import numberSeparator from "@/utils/numberSeparator"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -38,7 +39,7 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
     })
 
     const updateScore = async (tempRoom: any, bombCoordinates: any) => {
-        await updateScoreBomb(tempRoom, bombCoordinates)
+        await updateScoreBomb(tempRoom, params.id, bombCoordinates)
     }
 
     useEffect(() => {
@@ -121,8 +122,8 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
                                                 </td>
                                                 <td className="px-4 py-2 text-right">
                                                     {
-                                                        roomDataFinal?.bombCoordinates && calculDistancePosition({ latitude: tempRoom.latitude, longitude: tempRoom.longitude }, { latitude: roomDataFinal?.bombCoordinates.split(',')[0], longitude: roomDataFinal?.bombCoordinates.split(',')[1] }).toFixed(2) <= 300 &&
-                                                        <span className="text-error">BOOM! -20 pts ({calculDistancePosition({ latitude: tempRoom.latitude, longitude: tempRoom.longitude }, { latitude: roomDataFinal?.bombCoordinates.split(',')[0], longitude: roomDataFinal?.bombCoordinates.split(',')[1] }).toFixed(2)} km)</span>
+                                                        roomDataFinal && roomDataFinal?.bombCoordinates && calculDistancePosition({ latitude: tempRoom.latitude, longitude: tempRoom.longitude }, { latitude: roomDataFinal?.bombCoordinates.split(',')[0], longitude: roomDataFinal?.bombCoordinates.split(',')[1] }).toFixed(2) <= 300 &&
+                                                        <span className="text-error">BOOM! -20 pts ({numberSeparator(calculDistancePosition({ latitude: tempRoom.latitude, longitude: tempRoom.longitude }, { latitude: roomDataFinal?.bombCoordinates.split(',')[0], longitude: roomDataFinal?.bombCoordinates.split(',')[1] }).toFixed(2))} km)</span>
                                                     }
                                                 </td>
                                             </tr>
