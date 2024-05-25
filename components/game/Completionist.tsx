@@ -40,13 +40,17 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setMar
     })
 
     useEffect(() => {
-        setShowTarget(true)
-        mapRef.current?.flyTo({
-            center: [targetMarker.longitude, targetMarker.latitude],
-            duration: 3000,
-            zoom: 6,
-        })
-        onOpen()
+        if (mapRef.current) {
+            setShowTarget(true)
+            setTimeout(() => {
+                mapRef.current?.flyTo({
+                    center: [targetMarker.longitude, targetMarker.latitude],
+                    duration: 3000,
+                    zoom: 6,
+                })
+                onOpen()
+            }, 100) // Délai de 100ms pour attendre que la carte soit prête
+        }
     }, [setMarkerAllPlayers, setShowTarget, mapRef, targetMarker, onOpen])
 
     useEffect(() => {
