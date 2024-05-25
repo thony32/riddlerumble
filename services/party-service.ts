@@ -1,4 +1,3 @@
-// Import the function to calculate distance between positions
 import calculDistancePosition from "@/utils/calculDistancePostion"
 
 // Function to fetch room details by room ID
