@@ -18,6 +18,7 @@ import useSelectedRoom from "@/store/useSelectedRoom"
 import { MAX_PLAYERS } from "@/utils/constants"
 import { updateRoom } from "@/services/game-service"
 import getUsersPseudo from "@/utils/getUsersPseudo"
+import { socket_update } from "@/lib/socket-io"
 
 function RoomCard({ room }: { room: Room }) {
     const user = useUser((state) => state.user)
@@ -40,6 +41,7 @@ function RoomCard({ room }: { room: Room }) {
             console.log(error)
         },
         onSuccess: () => {
+            socket_update.emit("room-update")
             if (action == "join") {
                 setSelectedRoom(room.id)
             } else {
