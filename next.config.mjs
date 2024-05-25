@@ -46,6 +46,7 @@ const nextConfig = {
     },
     serverRuntimeConfig: {
         socketIoUrl: process.env.SOCKETIO_URL,
+        socketIoUrl: 'https://full-ethelda-codeipsum-204d9720.koyeb.app'
     },
 }
 
