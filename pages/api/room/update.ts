@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         await updateQuery.run(client)
 
-        socket.emit("room-create")
+        socket.emit("room-update")
 
         res.status(200).json({ success: true, message: "Room update" })
     } catch (error) {
