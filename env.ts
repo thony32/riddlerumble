@@ -6,4 +6,3 @@ export const PUSHER_KEY = process.env.PUSHER_KEY!
 export const PUSHER_SECRET = process.env.PUSHER_SECRET!
 export const PUSHER_CLUSTER = process.env.PUSHER_CLUSTER!
 export const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN!
-export const SOCKETIO_URL = process.env.SOCKETIO_URL!
