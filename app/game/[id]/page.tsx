@@ -25,7 +25,7 @@ import { SubmitResultParams } from "@/types/submit-result-params"
 import { submitResult } from "@/utils/submitResult"
 import { socket } from "@/lib/socket-io"
 
-export const PARTY_START_TIME_KEY = "partyStartTime"
+const PARTY_START_TIME_KEY = "partyStartTime"
 
 const Party = ({ params }: { params: { id: string } }) => {
     const { isPending: isRoomPending, data: roomData } = useQuery({
