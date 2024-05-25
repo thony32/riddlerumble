@@ -14,29 +14,40 @@ const NoDevToolsProvider = ({ children }: { children: ReactNode }) => {
                 }
             }
 
-            const closeDevTools = () => {
-                const devToolsWindow = window.open("", "_blank")
-                if (devToolsWindow) {
-                    devToolsWindow.close()
-                }
-
-                if (typeof (window as any).chrome !== "undefined" && (window as any).chrome.devtools) {
-                    ;(window as any).chrome.devtools.inspectedWindow.eval("window.close()")
+            const checkDevTools = () => {
+                if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
+                    alert("Veuillez fermer les outils de développement.")
                 }
             }
 
-            const checkDevTools = () => {
-                const threshold = 160
-                const widthThreshold = window.outerWidth - window.innerWidth > threshold
-                const heightThreshold = window.outerHeight - window.innerHeight > threshold
-                if (widthThreshold || heightThreshold) {
-                    closeDevTools()
+            const checkChromeDevTools = () => {
+                if (typeof window.chrome !== "undefined" && window.chrome.runtime) {
+                    window.chrome.runtime.sendMessage("", {}, function (response: any) {
+                        if (response && response.type === "DevToolsOpened") {
+                            alert("Veuillez fermer les outils de développement.")
+                        }
+                    })
+                }
+            }
+
+            const checkFirefoxDevTools = () => {
+                if (typeof window.InstallTrigger !== "undefined") {
+                    window.addEventListener("devtoolschange", function (e: any) {
+                        if (e.detail.open) {
+                            alert("Veuillez fermer les outils de développement.")
+                        }
+                    })
                 }
             }
 
             document.addEventListener("contextmenu", handleContextMenu)
             document.addEventListener("keydown", handleKeyDown)
-            const checkDevToolsInterval = setInterval(checkDevTools, 1000)
+
+            const checkDevToolsInterval = setInterval(() => {
+                checkDevTools()
+                checkChromeDevTools()
+                checkFirefoxDevTools()
+            }, 1000)
 
             return () => {
                 document.removeEventListener("contextmenu", handleContextMenu)
