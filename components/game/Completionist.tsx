@@ -40,11 +40,16 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setMar
     })
 
     useEffect(() => {
+        console.log("useEffect triggered")
+        console.log("mapRef:", mapRef.current)
+        console.log("targetMarker:", targetMarker)
         setShowTarget(true)
         mapRef.current?.flyTo({
+            bearing: 90,
             center: [targetMarker.longitude, targetMarker.latitude],
             duration: 2000,
-            zoom: 6,
+            zoom: 8,
+            pitch: 20,
         })
         onOpen()
     }, [setMarkerAllPlayers, setShowTarget, mapRef, targetMarker, onOpen])
