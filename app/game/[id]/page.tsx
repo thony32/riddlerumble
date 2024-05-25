@@ -23,6 +23,8 @@ import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 import { SubmitResultParams } from "@/types/submit-result-params"
 import { submitResult } from "@/utils/submitResult"
+import toast, { Toaster } from 'react-hot-toast';
+import { setBombCoordonate } from "@/services/game-service"
 import { socket } from "@/lib/socket-io"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
@@ -34,10 +36,14 @@ const Party = ({ params }: { params: { id: string } }) => {
         staleTime: 1000 * 60 * 60 * 24,
     })
     const [markerAllPlayers, setMarkerAllPlayers] = useState([])
+    const [bombMarker, setBombMarker] = useState([]) as any
+    const [bombSet, setBombSet] = useState(false)
+    const [bombSubmitted, setBombSubmitted] = useState(false)
+    const [bombFinalMarker, setBombFinalMarker] = useState([]) as any
 
     const timerRender: CountdownRendererFn = ({ minutes, seconds, completed }) => {
         if (completed) {
-            return <Completionist params={params} setMarkerAllPlayers={setMarkerAllPlayers} setShowTarget={setShowTarget} mapRef={mapRef} targetMarker={targetMarker} />
+            return <Completionist params={params} setBombSubmitted={setBombSubmitted} setBombFinalMarker={setBombFinalMarker} setMarkerAllPlayers={setMarkerAllPlayers} setShowTarget={setShowTarget} mapRef={mapRef} targetMarker={targetMarker} />
         } else {
             const formattedMinutes = String(minutes).padStart(2, "0")
             const formattedSeconds = String(seconds).padStart(2, "0")
@@ -101,6 +107,13 @@ const Party = ({ params }: { params: { id: string } }) => {
         var distance = turf.distance(from, to, options)
 
         setDistance(distance)
+    }, [])
+
+    const onBombMarkerDragEnd = useCallback((event: MarkerDragEvent) => {
+        setBombMarker({
+            longitude: event.lngLat.lng,
+            latitude: event.lngLat.lat,
+        })
     }, [])
 
     const clickPostion = (event: MapMouseEvent) => {
@@ -213,16 +226,71 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }
 
+    const placeBomb = () => {
+        setBombSet(true)
+        setBombSubmitted(false)
+        setBombMarker({
+            latitude: targetMarker.latitude + 0.01,
+            longitude: targetMarker.longitude - 0.2,
+        })
+        mapRef?.current.flyTo({
+            center: [targetMarker.latitude + 0.01, targetMarker.longitude - 0.2],
+            zoom: 10,
+            essential: true,
+        })
+    }
+
+    const submitBomb = () => {
+        var from = turf.point([bombMarker.longitude, bombMarker.latitude])
+        var to = turf.point([targetMarker.longitude, targetMarker.latitude])
+        var options = { units: "kilometers" }
+        var distance = turf.distance(from, to, options)
+
+        if (distance <= 500) {
+            toast.error("You can't place the bomb so close to the target, be FAIR PLAY !!!");
+        } else {
+            setBombCoordonate(roomData.id, `${bombMarker.latitude},${bombMarker.longitude}`);
+            toast.success("Bomb placed successfully, You little devil !!!");
+            setBombSet(false)
+            setBombSubmitted(true)
+        }
+    }
+
     if (checkUnauthorization() && process.env.NODE_ENV === "production") {
         redirect("/game/")
     }
 
     return (
         <div className="w-full min-h-screen py-6 xl:overflow-hidden z-50 bg-base-100">
+            <Toaster />
             <div className="flex flex-col xl:grid xl:grid-cols-12 gap-10">
                 <div className="xl:col-span-2 relative space-y-8">
                     <div className="xl:translate-y-14">
-                        {roomData?.joker == user?.pseudo && <h1 className="text-center text-success text-xl">You got the Joker !!!</h1>}
+                        <div className="flex flex-col justify-center items-center my-5 space-y-2">
+                            {roomData?.joker == user?.pseudo && <h1 className="text-center text-success text-xl">You got the Joker !!!</h1>}
+                            {
+                                !bombSubmitted &&
+                                <>
+                                    {
+                                        !bombSet ?
+                                            <Button onClick={placeBomb} className="bg-warning text-warning-content">
+                                                <span>Place bomb</span>
+                                                <svg className="w-6" viewBox="0 0 24 24">
+                                                    <path d="m18.293 4.293-1.086 1.086-1.086-1.086a.999.999 0 0 0-1.414 0l-1.249 1.249A8.427 8.427 0 0 0 10.499 5C5.813 5 2 8.813 2 13.5S5.813 22 10.499 22s8.5-3.813 8.5-8.5a8.42 8.42 0 0 0-.431-2.654L19.914 9.5a.999.999 0 0 0 0-1.414l-1.293-1.293 1.09-1.09C19.94 5.474 20.556 5 21 5h1V3h-1c-1.4 0-2.584 1.167-2.707 1.293zM10.499 10c-.935 0-1.813.364-2.475 1.025A3.48 3.48 0 0 0 7 13.5H5c0-1.468.571-2.849 1.609-3.888A5.464 5.464 0 0 1 10.499 8v2z"></path>
+                                                </svg>
+                                            </Button>
+                                            :
+                                            <Button onClick={submitBomb} className="bg-success">
+                                                <span>Submit bomb</span>
+                                                <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                                </svg>
+                                            </Button>
+                                    }
+                                </>
+
+                            }
+                        </div>
                         {roomData && <h1 className={`text-center ${roomData.level == "high-level" && "text-red-500"}`}>{roomData.level == "high-level" ? "High Level (+10 pts)" : "Normal Level"}</h1>}
                         <h1 className="text-3xl text-center">Find the place</h1>
                         <SvgDecoEnigme />
@@ -292,7 +360,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                     </div>
                 </div>
                 <div className="xl:col-span-10 rounded-2xl relative">
-                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime + roomData.delay} renderer={timerRender} />}</div>
+                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime + 20000} renderer={timerRender} />}</div>
                     <Map
                         ref={mapRef}
                         mapStyle="mapbox://styles/mapbox/streets-v12"
@@ -321,10 +389,27 @@ const Party = ({ params }: { params: { id: string } }) => {
                                     <Avatar isBordered color="primary" showFallback name="M" src={marker.User.avatar!} />
                                 </Marker>
                             ))}
+
+                        {
+                            roomData?.joker == user?.pseudo && bombSet &&
+                            <Marker draggable={bombSubmitted == false ? true : false} longitude={bombMarker.longitude} latitude={bombMarker.latitude} onDragEnd={onBombMarkerDragEnd} anchor="bottom">
+                                <svg className="w-10 fill-error" viewBox="0 0 24 24">
+                                    <path d="m18.293 4.293-1.086 1.086-1.086-1.086a.999.999 0 0 0-1.414 0l-1.249 1.249A8.427 8.427 0 0 0 10.499 5C5.813 5 2 8.813 2 13.5S5.813 22 10.499 22s8.5-3.813 8.5-8.5a8.42 8.42 0 0 0-.431-2.654L19.914 9.5a.999.999 0 0 0 0-1.414l-1.293-1.293 1.09-1.09C19.94 5.474 20.556 5 21 5h1V3h-1c-1.4 0-2.584 1.167-2.707 1.293zM10.499 10c-.935 0-1.813.364-2.475 1.025A3.48 3.48 0 0 0 7 13.5H5c0-1.468.571-2.849 1.609-3.888A5.464 5.464 0 0 1 10.499 8v2z"></path>
+                                </svg>
+                            </Marker>
+                        }
+                        {
+                            bombFinalMarker && bombFinalMarker.longitude && bombFinalMarker.latitude &&
+                            <Marker longitude={bombFinalMarker.longitude} latitude={bombFinalMarker.latitude} anchor="bottom">
+                                <svg className="w-10 fill-error" viewBox="0 0 24 24">
+                                    <path d="m18.293 4.293-1.086 1.086-1.086-1.086a.999.999 0 0 0-1.414 0l-1.249 1.249A8.427 8.427 0 0 0 10.499 5C5.813 5 2 8.813 2 13.5S5.813 22 10.499 22s8.5-3.813 8.5-8.5a8.42 8.42 0 0 0-.431-2.654L19.914 9.5a.999.999 0 0 0 0-1.414l-1.293-1.293 1.09-1.09C19.94 5.474 20.556 5 21 5h1V3h-1c-1.4 0-2.584 1.167-2.707 1.293zM10.499 10c-.935 0-1.813.364-2.475 1.025A3.48 3.48 0 0 0 7 13.5H5c0-1.468.571-2.849 1.609-3.888A5.464 5.464 0 0 1 10.499 8v2z"></path>
+                                </svg>
+                            </Marker>
+                        }
                     </Map>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 

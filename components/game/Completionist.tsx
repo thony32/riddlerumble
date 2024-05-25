@@ -4,20 +4,23 @@ import { useQuery, useMutation } from "@tanstack/react-query"
 import Link from "next/link"
 import Image from "next/image"
 import getCountryCode from "@/utils/getCountryCode"
-import { getTempRoom, disableRoom } from "@/services/party-service"
+import { getTempRoom, disableRoom, fetchRoom, updateScoreBomb } from "@/services/party-service"
 import { MapRef } from "react-map-gl"
+import calculDistancePosition from "@/utils/calculDistancePostion"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
 interface CompletionistProps {
     params: { id: string }
+    setBombSubmitted: (bomb: boolean) => void
+    setBombFinalMarker: (data: any) => void
     setMarkerAllPlayers: (data: any) => void
     setShowTarget: (show: boolean) => void
     mapRef: MutableRefObject<MapRef | null>
     targetMarker: { latitude: number; longitude: number }
 }
 
-const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setMarkerAllPlayers, setShowTarget, mapRef, targetMarker }, ref) => {
+const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBombSubmitted, setBombFinalMarker, setMarkerAllPlayers, setShowTarget, mapRef, targetMarker }, ref) => {
     useEffect(() => {
         localStorage.removeItem(PARTY_START_TIME_KEY)
     }, [])
@@ -29,7 +32,26 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setMar
         queryFn: () => getTempRoom(params.id),
     })
 
-    setMarkerAllPlayers(tempRoomData)
+    const { data: roomDataFinal, isPending: isRoomDataFinalPending } = useQuery({
+        queryKey: ["roomDataFinal", params.id],
+        queryFn: () => fetchRoom(params.id),
+    })
+
+    const updateScore = async (tempRoom: any, bombCoordinates: any) => {
+        await updateScoreBomb(tempRoom, bombCoordinates)
+    }
+
+    useEffect(() => {
+        setMarkerAllPlayers(tempRoomData)
+        setBombSubmitted(true)
+        if (!isRoomDataFinalPending) {
+            setBombFinalMarker({
+                latitude: roomDataFinal?.bombCoordinates.split(',')[0],
+                longitude: roomDataFinal?.bombCoordinates.split(',')[1],
+            })
+            updateScore(tempRoomData, roomDataFinal?.bombCoordinates)
+        }
+    }, [tempRoomData, isRoomDataFinalPending, setMarkerAllPlayers, setBombSubmitted, setBombFinalMarker, roomDataFinal])
 
     const disableRoomMutation = useMutation({
         mutationKey: ["disableRoom", params.id],
@@ -44,7 +66,6 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setMar
             center: [targetMarker.longitude, targetMarker.latitude],
             duration: 2000,
             zoom: 8,
-            pitch: 20,
         })
         onOpen()
     }, [setMarkerAllPlayers, setShowTarget, mapRef, targetMarker, onOpen])
@@ -56,7 +77,7 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setMar
     }, [isOpen, disableRoomMutation])
 
     return (
-        <Modal className="-translate-x-[100%]" placement="bottom-center" isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+        <Modal size="2xl" className="-translate-x-[50%]" placement="bottom-center" isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
             <ModalContent>
                 {() => (
                     <>
@@ -67,11 +88,12 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setMar
                                     <tr>
                                         <th className="px-4 py-2 text-left">Pseudo</th>
                                         <th className="px-4 py-2 text-right">Time</th>
-                                        <th className="px-4 py-2 text-right">Coordinates</th>
+                                        <th className="px-4 py-2 text-right">Coordinates (Lat,Long)</th>
+                                        <th className="px-4 py-2 text-right">Bomb (km from you)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {isTempRoomPending ? (
+                                    {isTempRoomPending && isRoomDataFinalPending ? (
                                         <tr className="border-b border-current w-full">
                                             <td colSpan={3} className="py-2">
                                                 <div className="flex justify-center">
@@ -95,7 +117,13 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setMar
                                                 </td>
                                                 <td className="px-4 py-2 text-right">{tempRoom.time}</td>
                                                 <td className="px-4 py-2 text-right">
-                                                    Lat: {tempRoom.latitude.toFixed(2)}, Long: {tempRoom.longitude.toFixed(2)}
+                                                    {tempRoom.latitude.toFixed(2)},{tempRoom.longitude.toFixed(2)}
+                                                </td>
+                                                <td className="px-4 py-2 text-right">
+                                                    {
+                                                        roomDataFinal?.bombCoordinates && calculDistancePosition({ latitude: tempRoom.latitude, longitude: tempRoom.longitude }, { latitude: roomDataFinal?.bombCoordinates.split(',')[0], longitude: roomDataFinal?.bombCoordinates.split(',')[1] }).toFixed(2) <= 300 &&
+                                                        <span className="text-error">BOOM! -20 pts ({calculDistancePosition({ latitude: tempRoom.latitude, longitude: tempRoom.longitude }, { latitude: roomDataFinal?.bombCoordinates.split(',')[0], longitude: roomDataFinal?.bombCoordinates.split(',')[1] }).toFixed(2)} km)</span>
+                                                    }
                                                 </td>
                                             </tr>
                                         ))

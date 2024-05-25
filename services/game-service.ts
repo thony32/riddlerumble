@@ -42,3 +42,14 @@ export const setJoker = async (id: string, user_pseudo: string) => {
     if (!response.ok) throw new Error("Failed to create room")
     return await response.json()
 }
+
+
+export const setBombCoordonate = async (id: string, bombCoordonate: string) => {
+    const response = await fetch("/api/room/setBombCoordonate", {
+        body: JSON.stringify({ id, bombCoordonate }),
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) throw new Error("Failed to create room")
+    return await response.json()
+}

@@ -12,6 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             longitude: true,
             time: true,
             User: {
+                id: true,
                 pseudo: true,
                 nationality: true,
                 avatar: true,
