@@ -70,7 +70,7 @@ const TutoVideo = () => {
                         <div className="overflow-hidden w-full rounded-2xl">
                             <iframe
                                 className="w-full h-[75dvh]"
-                                src={`https://www.youtube.com/embed/GUF43rwIQ9E`}
+                                src={`https://www.youtube.com/embed/ongm3woBO6o`}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowFullScreen
                             ></iframe>
