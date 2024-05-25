@@ -1,6 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// RoomCard.tsx
-
 import { Button } from "@nextui-org/button"
 import { Card, Chip } from "@nextui-org/react"
 import { useUser } from "@/store/useUser"

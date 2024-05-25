@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import e from "@/dbschema/edgeql-js"
 import client from "@/lib/edgedb-client"
-import { socket_update } from "@/lib/socket-io"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "PUT") {
