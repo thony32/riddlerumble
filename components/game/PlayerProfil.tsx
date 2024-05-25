@@ -14,6 +14,7 @@ import * as Yup from "yup"
 import LastGames from "./LastGames"
 import dynamic from "next/dynamic"
 import { getAllCountry, getAllUser, syncUserScore } from "@/services/profil-service"
+import toast from "react-hot-toast"
 const SvgMedalNovice = dynamic(() => import("../misc/SvgMedalNovice"))
 const SvgMedalCasual = dynamic(() => import("../misc/SvgMedalCasual"))
 const SvgMedalPro = dynamic(() => import("../misc/SvgMedalPro"))
