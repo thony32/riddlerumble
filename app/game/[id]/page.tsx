@@ -242,7 +242,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                     </div>
                     <div className="w-full py-2">
                         <div className="space-y-4">
-                            {penalityPoints != 0 && (
+                            {!showTarget && penalityPoints != 0 && (
                                 <div className="text-center translate-y-2">
                                     <label className="text-red-500">Penality Points : - {penalityPoints} pts</label>
                                 </div>
