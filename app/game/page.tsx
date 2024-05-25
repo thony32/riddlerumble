@@ -145,7 +145,7 @@ const Game = () => {
                             </>
                         ) : (
                             allRooms &&
-                            allRooms.map((room: Room, index) => {
+                            allRooms.map((room: Room, index: number) => {
                                 return <RoomCard room={room} key={index} />
                             })
                         )}
