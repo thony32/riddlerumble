@@ -45,7 +45,7 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
     useEffect(() => {
         setMarkerAllPlayers(tempRoomData)
         setBombSubmitted(true)
-        if (!isRoomDataFinalPending) {
+        if (!isRoomDataFinalPending && roomDataFinal?.bombCoordinates && roomDataFinal) {
             setBombFinalMarker({
                 latitude: roomDataFinal?.bombCoordinates.split(',')[0],
                 longitude: roomDataFinal?.bombCoordinates.split(',')[1],
