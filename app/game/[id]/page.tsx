@@ -23,6 +23,7 @@ import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 import { SubmitResultParams } from "@/types/submit-result-params"
 import { submitResult } from "@/utils/submitResult"
+import { socket } from "@/lib/socket-io"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -184,6 +185,12 @@ const Party = ({ params }: { params: { id: string } }) => {
         return () => {
             document.removeEventListener("visibilitychange", handleTabNavSwitch)
         }
+    }, [])
+
+    useEffect(() => {
+        socket.on("completed", (data) => {
+            if (data === roomData?.id) localStorage.removeItem(PARTY_START_TIME_KEY)
+        })
     }, [])
 
     if (startTime === null) {
