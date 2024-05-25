@@ -24,6 +24,7 @@ import { Howl } from "howler"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
+// Game component: Manages the main game interface including room listing, creation, and countdown to game start.
 const Game = () => {
     const router = useRouter()
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
@@ -31,6 +32,7 @@ const Game = () => {
     const [countdown, setCountdown] = useState<number | null>(null)
     const user = useUser((state) => state.user)
 
+    // Mutation for setting joker
     const setJokerMutation = useMutation({
         mutationKey: ["setJokerMutation"],
         mutationFn: async (user_pseudo: string) => {
@@ -41,8 +43,9 @@ const Game = () => {
         },
     })
 
+    // Query for fetching all rooms
     const {
-        isPending: isInitialRoomsPending,
+        isPending: isInitialRoomsPending, // Flag indicating initial room loading state
         data: allRooms,
         refetch: refetchRooms,
     } = useQuery({
@@ -52,15 +55,17 @@ const Game = () => {
             if (data) {
                 const findedRoom = data.find((r) => checkIfJoined(getUsersPseudo(r.user_pseudo), user?.pseudo))
                 if (!findedRoom) {
-                    setSelectedRoom(null)
+                    setSelectedRoom(null) // If user has not joined any room, set selected room to null
+               
                 } else {
                     setJokerMutation.mutate(findedRoom.user_pseudo)
                     setSelectedRoom(findedRoom.id)
                     if (getUsersPseudo(findedRoom.user_pseudo).length === MAX_PLAYERS) {
-                        setCountdown(5)
+                        setCountdown(5)  // Start countdown if room is full
                     }
                 }
             }
+            // Filter rooms that are not full
             const room_filtered = data.filter((r) => getUsersPseudo(r.user_pseudo).length != MAX_PLAYERS)
 
             return room_filtered
@@ -68,22 +73,27 @@ const Game = () => {
         staleTime: 100 * 60 * 60 * 24,
     })
 
+    // Sound effect for countdown
     const countdown_audio = new Howl({
-        src: ["/countdown-sound-effect.mp3"],
+        src: ["/countdown-sound-effect.mp3"], // Audio source
     })
 
+     // Effect for listening to room creation socket event
     useEffect(() => {
         socket.on("room-created", () => {
             refetchRooms()
         })
     }, [refetchRooms])
 
+
+     // Effect for listening to room update socket event
     useEffect(() => {
         socket_update.on("room-updated", () => {
             refetchRooms()
         })
     }, [refetchRooms])
 
+    // Effect for countdown timer
     useEffect(() => {
         if (countdown !== null) {
             if (countdown > 0) {
@@ -92,8 +102,11 @@ const Game = () => {
                 }, 1000)
                 return () => clearTimeout(timer)
             } else {
+
+                // Remove party start time from local storage and play countdown audio
                 localStorage.removeItem(PARTY_START_TIME_KEY)
                 countdown_audio.play()
+                // Redirect to game room page
                 router.push(`/game/${selectedRoom}`)
             }
         }
