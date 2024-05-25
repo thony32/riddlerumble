@@ -150,7 +150,7 @@ const Party = ({ params }: { params: { id: string } }) => {
             return await create_temp_room(marker.latitude, marker.longitude, elapsedTime, user?.id, roomData && roomData.id)
         },
         onError: (error) => {
-            console.log(error)
+            toast.error("Failed to create temporary room. Please try again or check your input.")
         },
         onSuccess: ({ temp_room }) => {
             if (temp_room >= MAX_PLAYERS) {
@@ -165,7 +165,7 @@ const Party = ({ params }: { params: { id: string } }) => {
             return await create_player_stat(totalScore, user?.id, roomData && roomData.id)
         },
         onError: (error) => {
-            console.log(error)
+            toast.error("Failed to create player statistics. Please try again.")
         },
     })
 
@@ -175,7 +175,7 @@ const Party = ({ params }: { params: { id: string } }) => {
             return await updateUserScore(user?.id, totalScore)
         },
         onError: (error) => {
-            console.log(error)
+            toast.error("Failed to update user score. Please try again.")
         },
     })
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
@@ -274,7 +274,6 @@ const Party = ({ params }: { params: { id: string } }) => {
 
     return (
         <div className="w-full min-h-screen py-6 xl:overflow-hidden z-50 bg-base-100">
-            <Toaster />
             <div className="flex flex-col xl:grid xl:grid-cols-12 gap-10">
                 <div className="xl:col-span-2 relative space-y-8">
                     <div className="xl:translate-y-14">

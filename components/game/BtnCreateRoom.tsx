@@ -7,6 +7,7 @@ import React, { useEffect } from "react"
 import useResponsive from "@/utils/useResponsive"
 import { createRoom } from "@/services/game-service"
 import introJs from "intro.js"
+import toast from "react-hot-toast"
 
 function BtnCreateRoom() {
     const user = useUser((state) => state.user)
@@ -18,7 +19,7 @@ function BtnCreateRoom() {
             return await createRoom("normal-level", user?.pseudo || "")
         },
         onError: (error) => {
-            console.log(error)
+            toast.error("Failed to create low level room. Please try again.")
         },
         onSuccess: ({ room }) => {
             setSelectedRoom(room.id)
@@ -30,7 +31,7 @@ function BtnCreateRoom() {
             return await createRoom("high-level", user?.pseudo || "")
         },
         onError: (error) => {
-            console.log(error)
+            toast.error("Failed to create high level room. Please try again.")
         },
         onSuccess: ({ room }) => {
             setSelectedRoom(room.id)
@@ -152,25 +153,40 @@ function BtnCreateRoom() {
                         />
                     </svg>
                 </Button>
-                <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
+                <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur" scrollBehavior="inside">
                     <ModalContent>
                         {(onClose) => (
                             <>
-                                <ModalHeader className="flex flex-col gap-1">Asio instruction avao ato</ModalHeader>
+                                <ModalHeader className="flex flex-col gap-1">Instructions and rules</ModalHeader>
                                 <ModalBody>
+                                    <h6 className="font-bold">DevTools Usage</h6>
                                     <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non risus hendrerit venenatis. Pellentesque sit amet hendrerit risus, sed
-                                        porttitor quam.
+                                        Please refrain from opening DevTools while playing.
                                     </p>
+                                    <h6 className="font-bold">Time limits</h6>
+                                    <ol>
+                                        <li><strong>High-Level Room: </strong>Each player has 7 minutes to reach the target.</li>
+                                        <li><strong>Normal-Level Room: </strong>Each player has 5 minutes to reach the target.</li>
+                                    </ol>
+                                    <h6 className="font-bold">Scoring</h6>
+                                    <ol>
+                                        <li>Playing in a high-level room earns each player 10 points.</li>
+                                        <li>Players who do not submit their results will receive 0 points.</li>
+                                        <li>Switching tabs during the game results in a penalty of -10 points.</li>
+                                    </ol>
+                                    <h6 className="font-bold">Room Capacity</h6>
                                     <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non risus hendrerit venenatis. Pellentesque sit amet hendrerit risus, sed
-                                        porttitor quam.
+                                        Each room can accommodate a maximum of 4 players.
                                     </p>
+                                    <h6 className="font-bold">Joining Rooms</h6>
                                     <p>
-                                        Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. Velit duis
-                                        sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur proident Lorem eiusmod et.
-                                        Culpa deserunt nostrud ad veniam.
+                                        A player can only join one room at a time.
                                     </p>
+                                    <h6 className="font-bold">Joker Mechanic</h6>
+                                    <ol>
+                                        <li>If a player has a joker, they can drag and submit a bomb to hinder other players.</li>
+                                        <li>Bombs cannot be placed within 500 kilometers of the target.</li>
+                                    </ol>
                                 </ModalBody>
                                 <ModalFooter>
                                     <Button variant="light" onPress={onClose}>

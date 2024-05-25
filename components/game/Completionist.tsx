@@ -8,6 +8,7 @@ import { getTempRoom, disableRoom, fetchRoom, updateScoreBomb } from "@/services
 import { MapRef } from "react-map-gl"
 import calculDistancePosition from "@/utils/calculDistancePostion"
 import numberSeparator from "@/utils/numberSeparator"
+import toast from "react-hot-toast"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -47,8 +48,8 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
         setBombSubmitted(true)
         if (!isRoomDataFinalPending && roomDataFinal?.bombCoordinates && roomDataFinal) {
             setBombFinalMarker({
-                latitude: roomDataFinal?.bombCoordinates.split(',')[0],
-                longitude: roomDataFinal?.bombCoordinates.split(',')[1],
+                latitude: roomDataFinal?.bombCoordinates.split(",")[0],
+                longitude: roomDataFinal?.bombCoordinates.split(",")[1],
             })
             updateScore(tempRoomData, roomDataFinal?.bombCoordinates)
         }
@@ -57,7 +58,9 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
     const disableRoomMutation = useMutation({
         mutationKey: ["disableRoom", params.id],
         mutationFn: async () => disableRoom(params.id),
-        onError: (error) => console.error(error),
+        onError: (error) => {
+            toast.error("Failed to disable the room. Please try again.")
+        },
     })
 
     useEffect(() => {
@@ -121,10 +124,23 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
                                                     {tempRoom.latitude.toFixed(2)},{tempRoom.longitude.toFixed(2)}
                                                 </td>
                                                 <td className="px-4 py-2 text-right">
-                                                    {
-                                                        roomDataFinal && roomDataFinal?.bombCoordinates && calculDistancePosition({ latitude: tempRoom.latitude, longitude: tempRoom.longitude }, { latitude: roomDataFinal?.bombCoordinates.split(',')[0], longitude: roomDataFinal?.bombCoordinates.split(',')[1] }).toFixed(2) <= 300 &&
-                                                        <span className="text-error">BOOM !!! ({numberSeparator(calculDistancePosition({ latitude: tempRoom.latitude, longitude: tempRoom.longitude }, { latitude: roomDataFinal?.bombCoordinates.split(',')[0], longitude: roomDataFinal?.bombCoordinates.split(',')[1] }).toFixed(2))} km)</span>
-                                                    }
+                                                    {roomDataFinal &&
+                                                        roomDataFinal?.bombCoordinates &&
+                                                        calculDistancePosition(
+                                                            { latitude: tempRoom.latitude, longitude: tempRoom.longitude },
+                                                            { latitude: roomDataFinal?.bombCoordinates.split(",")[0], longitude: roomDataFinal?.bombCoordinates.split(",")[1] }
+                                                        ).toFixed(2) <= 300 && (
+                                                            <span className="text-error">
+                                                                BOOM !!! (
+                                                                {numberSeparator(
+                                                                    calculDistancePosition(
+                                                                        { latitude: tempRoom.latitude, longitude: tempRoom.longitude },
+                                                                        { latitude: roomDataFinal?.bombCoordinates.split(",")[0], longitude: roomDataFinal?.bombCoordinates.split(",")[1] }
+                                                                    ).toFixed(2)
+                                                                )}{" "}
+                                                                km)
+                                                            </span>
+                                                        )}
                                                 </td>
                                             </tr>
                                         ))

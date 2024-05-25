@@ -14,6 +14,7 @@ import * as Yup from "yup"
 import LastGames from "./LastGames"
 import dynamic from "next/dynamic"
 import { getAllCountry, getAllUser, syncUserScore } from "@/services/profil-service"
+import toast from "react-hot-toast"
 const SvgMedalNovice = dynamic(() => import("../misc/SvgMedalNovice"))
 const SvgMedalCasual = dynamic(() => import("../misc/SvgMedalCasual"))
 const SvgMedalPro = dynamic(() => import("../misc/SvgMedalPro"))
@@ -87,7 +88,7 @@ const PlayerProfil = () => {
             return await syncUserScore(user?.id)
         },
         onError: (error) => {
-            console.log(error)
+            toast.error("Failed to sync user score. Please try again.")
         },
         onSuccess: (data) => {
             console.log("User score updated successfully! ", data)
