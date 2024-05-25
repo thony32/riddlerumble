@@ -66,8 +66,9 @@ const Party = ({ params }: { params: { id: string } }) => {
 
         useEffect(() => {
             setShowTarget(true)
+            mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 15 })
+            console.log("Ref : ", mapRef)
             onOpen()
-            mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
         }, [setShowTarget, mapRef, onOpen])
 
         useEffect(() => {
