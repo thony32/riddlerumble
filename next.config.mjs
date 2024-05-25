@@ -21,10 +21,6 @@ const nextConfig = {
         SOCKETIO_URL: process.env.SOCKETIO_URL,
         SOCKETIO_UPDATE_URL: process.env.SOCKETIO_UPDATE_URL,
     },
-    // serverRuntimeConfig: {
-    //     socketIoUrl: process.env.SOCKETIO_URL,
-    //     socketIoUrl: 'https://full-ethelda-codeipsum-204d9720.koyeb.app'
-    // },
 }
 
 export default nextConfig

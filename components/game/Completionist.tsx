@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import React, { useEffect, forwardRef, MutableRefObject } from "react"
 import { Avatar, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
 import { useQuery, useMutation } from "@tanstack/react-query"
