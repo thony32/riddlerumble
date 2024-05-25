@@ -55,13 +55,25 @@ const updateUserScore = async (user_id: string, player_score: number) => {
     return await response.json()
 }
 
-const updateScoreBomb = async (temp_room: any, bombCoordonates: any) => {
+const updateUserStat = async (id_user: string, id_room: string, bomb_point: number) => {
+    const response = await fetch("/api/user/update-user-stat", {
+        body: JSON.stringify({ id_user, id_room, bomb_point }),
+        method: 'PUT',
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) throw new Error("Failed to update user score")
+    return await response.json()
+}
+
+const updateScoreBomb = async (temp_room: any, id_room: string, bombCoordonates: any) => {
     temp_room.forEach((player: any) => {
         const distance = calculDistancePosition({ latitude: player.latitude, longitude: player.longitude }, { latitude: bombCoordonates.split(',')[0], longitude: bombCoordonates.split(',')[1] })
         if (distance <= 300) {
             updateUserScore(player.User.id, -20)
+            updateUserStat(player.User.id, id_room, -20)
         }
     })
 }
+
 
 export { fetchRoom, create_temp_room, create_player_stat, getTempRoom, disableRoom, updateUserScore, updateScoreBomb }

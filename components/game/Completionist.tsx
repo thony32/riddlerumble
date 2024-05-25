@@ -38,7 +38,7 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
     })
 
     const updateScore = async (tempRoom: any, bombCoordinates: any) => {
-        await updateScoreBomb(tempRoom, bombCoordinates)
+        await updateScoreBomb(tempRoom, params.id, bombCoordinates)
     }
 
     useEffect(() => {
