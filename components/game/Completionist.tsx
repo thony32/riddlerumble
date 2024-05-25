@@ -12,6 +12,7 @@ import toast from "react-hot-toast"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
+// Interface for props received by the Completionist component
 interface CompletionistProps {
     params: { id: string }
     setBombSubmitted: (bomb: boolean) => void
@@ -22,27 +23,40 @@ interface CompletionistProps {
     targetMarker: { latitude: number; longitude: number }
 }
 
+// Completionist component to handle completion of party game
 const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBombSubmitted, setBombFinalMarker, setMarkerAllPlayers, setShowTarget, mapRef, targetMarker }, ref) => {
+
+    // Effect to clean up any previously stored party start time in local storage
     useEffect(() => {
         localStorage.removeItem(PARTY_START_TIME_KEY)
     }, [])
 
+
+    // Hooks for managing state of the modal
     const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
+
+    // Hooks for fetching temporary and final room data
     const { data: tempRoomData, isPending: isTempRoomPending } = useQuery({
         queryKey: ["tempRoomData", params.id],
         queryFn: () => getTempRoom(params.id),
     })
 
+
+    // Using the useQuery hook to fetch rommDataFinal
     const { data: roomDataFinal, isPending: isRoomDataFinalPending } = useQuery({
         queryKey: ["roomDataFinal", params.id],
         queryFn: () => fetchRoom(params.id),
     })
 
+
+    // Function to update the score based on bomb coordinates
     const updateScore = async (tempRoom: any, bombCoordinates: any) => {
         await updateScoreBomb(tempRoom, params.id, bombCoordinates)
     }
 
+
+    // useEffect to handle updates based on changes in tempRoomData, isRoomDataFinalPending, and roomDataFinal
     useEffect(() => {
         setMarkerAllPlayers(tempRoomData)
         setBombSubmitted(true)
@@ -55,6 +69,8 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
         }
     }, [tempRoomData, isRoomDataFinalPending, setMarkerAllPlayers, setBombSubmitted, setBombFinalMarker, roomDataFinal])
 
+
+    // Define a mutation to disable the room
     const disableRoomMutation = useMutation({
         mutationKey: ["disableRoom", params.id],
         mutationFn: async () => disableRoom(params.id),
@@ -63,6 +79,8 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
         },
     })
 
+
+    // useEffect to handle updates based on changes in setMarkerAllPlayers, setShowTarget, mapRef, targetMarker, and onOpen
     useEffect(() => {
         setShowTarget(true)
         mapRef.current?.flyTo({
@@ -74,12 +92,16 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
         onOpen()
     }, [setMarkerAllPlayers, setShowTarget, mapRef, targetMarker, onOpen])
 
+
+    // Effect to disable the room when the modal is opened and the disable mutation is not pending or successful
     useEffect(() => {
         if (isOpen && !disableRoomMutation.isPending && !disableRoomMutation.isSuccess) {
             disableRoomMutation.mutate()
         }
     }, [isOpen, disableRoomMutation])
 
+    
+    // Rendering of the completion modal
     return (
         <Modal size="2xl" className="-translate-x-[50%]" placement="bottom-center" isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
             <ModalContent>

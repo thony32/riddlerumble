@@ -9,10 +9,21 @@ import { createRoom } from "@/services/game-service"
 import introJs from "intro.js"
 import toast from "react-hot-toast"
 
+/**
+ * Button component for creating a room
+ * Renders different UI elements based on device size
+ */
+
 function BtnCreateRoom() {
+
+    // Get user data from custom hook
     const user = useUser((state) => state.user)
+    
+    // Get selected room state and setter from custom hook
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
+
+    // Use mutation hook for creating low-level room
     const createLowMutation = useMutation({
         mutationKey: ["createLow"],
         mutationFn: async () => {
@@ -25,6 +36,8 @@ function BtnCreateRoom() {
             setSelectedRoom(room.id)
         },
     })
+
+    // Use mutation hook for creating high-level room
     const createHighMutation = useMutation({
         mutationKey: ["createHigh"],
         mutationFn: async () => {
@@ -38,10 +51,14 @@ function BtnCreateRoom() {
         },
     })
 
+
+    // UseDisclosure hook for modal state management
     const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
+    // UseResponsive hook for handling responsive design
     const { isMobile, isTablet } = useResponsive()
 
+    // useEffect for initializing intro.js tour
     useEffect(() => {
         introJs()
             .setOptions({
@@ -65,6 +82,7 @@ function BtnCreateRoom() {
             .start()
     }, [])
 
+    // Render the component
     return (
         <div className="flex justify-between items-center">
             <div>

@@ -13,12 +13,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         nationality: true,
         created_at: true,
         modified_at: true,
+        // Order users by their score in descending order
         order_by: {
             expression: user.score,
             direction: e.DESC,
         },
         limit: limit ? limit : null
     }))
+
     const user = await getUserData.run(client)
+
     res.status(200).json(user)
 }
+

@@ -3,7 +3,12 @@ import { Button } from "@nextui-org/button"
 import { useQuery } from "@tanstack/react-query"
 import Link from "next/link"
 
+/**
+ * Button component for logging out
+ * Fetches logout URL using React Query and renders a button to log out
+ */
 const BtnLogout = () => {
+    // UseQuery hook to fetch logout URL
     const { isPending, data } = useQuery({
         queryKey: ["logout"],
         queryFn: async () => {
@@ -11,10 +16,12 @@ const BtnLogout = () => {
         },
     })
 
+    // Render loading state while fetching logout URL
     if (isPending) {
-        return <div>...</div>
+        return <div>...</div> // Loading indicator
     }
 
+    // Render logout button with fetched URL
     return (
         <Link href={data!}>
             <Button

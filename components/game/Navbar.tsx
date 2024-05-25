@@ -4,6 +4,8 @@ import Link from "next/link"
 import getInitial from "@/utils/getInitials"
 import BtnLogout from "./BtnLogout"
 import { usePathname } from "next/navigation"
+import dynamic from "next/dynamic"
+const Logo = dynamic(() => import("@/components/misc/Logo"))
 
 const Navbar = () => {
     const user = useUser((state) => state.user)
@@ -15,9 +17,13 @@ const Navbar = () => {
         <div className="flex justify-between items-center border-b-1 border-current pb-4">
             <div>
                 {isGameRoute ? (
-                    <h1 className="sm:text-2xl cursor-default">RR - The Map Quest</h1>
+                    <div className="flex items-center gap-4">
+                    <Logo/>
+                    <h1 className="sm:text-2xl">RR - The Map Quest</h1>
+                </div>
                 ) : (
-                    <Link href="/">
+                    <Link href="/" className="flex items-center gap-4">
+                        <Logo/>
                         <h1 className="sm:text-2xl">RR - The Map Quest</h1>
                     </Link>
                 )}

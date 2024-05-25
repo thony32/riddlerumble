@@ -23,25 +23,34 @@ import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 import { SubmitResultParams } from "@/types/submit-result-params"
 import { submitResult } from "@/utils/submitResult"
-import toast, { Toaster } from "react-hot-toast"
+import toast from "react-hot-toast"
 import { setBombCoordonate } from "@/services/game-service"
 import { socket } from "@/lib/socket-io"
 import numberSeparator from "@/utils/numberSeparator"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
+/**
+ * Component for handling party gameplay
+ * @param {Object} params - Parameters object containing party ID
+ */
 const Party = ({ params }: { params: { id: string } }) => {
     const { isPending: isRoomPending, data: roomData } = useQuery({
         queryKey: ["roomData"],
         queryFn: () => fetchRoom(params.id),
         staleTime: 1000 * 60 * 60 * 24,
-    })
+    }) // Query hook for fetching room data
+
     const [markerAllPlayers, setMarkerAllPlayers] = useState([])
     const [bombMarker, setBombMarker] = useState([]) as any
     const [bombSet, setBombSet] = useState(false)
     const [bombSubmitted, setBombSubmitted] = useState(false)
     const [bombFinalMarker, setBombFinalMarker] = useState([]) as any
 
+    /**
+     * Renderer function for countdown timer
+     * @param {Object} param0 - Countdown parameters
+     */
     const timerRender: CountdownRendererFn = ({ minutes, seconds, completed }) => {
         if (completed) {
             return (
@@ -73,7 +82,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         longitude: 0,
     })
 
-    const [showTarget, setShowTarget] = useState(false)
+    const [showTarget, setShowTarget] = useState(false) // State for showing target marker
     const [targetMarker, setTargetMarker] = useState({
         latitude: 0,
         longitude: 0,
@@ -86,7 +95,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                 longitude: roomData.longitude,
             })
         }
-    }, [roomData])
+    }, [roomData]) // Update target marker when room data changes
 
     const [startTime, setStartTime] = useState<number | null>(null)
     const [isFinished, setIsFinished] = useState<boolean>(false)
@@ -105,6 +114,10 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }, [])
 
+    /**
+     * Callback function for handling marker drag event
+     * @param {Object} event - Marker drag event object
+     */
     const onMarkerDrag = useCallback((event: MarkerDragEvent) => {
         setMarker({
             longitude: event.lngLat.lng,
@@ -112,6 +125,10 @@ const Party = ({ params }: { params: { id: string } }) => {
         })
     }, [])
 
+    /**
+     * Callback function for handling marker drag end event
+     * @param {Object} event - Marker drag end event object
+     */
     const onMarkerDragEnd = useCallback((event: MarkerDragEvent) => {
         var from = turf.point([event.lngLat.lng, event.lngLat.lat])
         var to = turf.point([targetMarker.longitude, targetMarker.latitude])
@@ -121,6 +138,10 @@ const Party = ({ params }: { params: { id: string } }) => {
         setDistance(distance)
     }, [])
 
+    /**
+     * Callback function for handling bomb marker drag end event
+     * @param {Object} event - Marker drag end event object
+     */
     const onBombMarkerDragEnd = useCallback((event: MarkerDragEvent) => {
         setBombMarker({
             longitude: event.lngLat.lng,
@@ -128,6 +149,10 @@ const Party = ({ params }: { params: { id: string } }) => {
         })
     }, [])
 
+    /**
+     * Function for handling click position event on map
+     * @param {Object} event - Map mouse event object
+     */
     const clickPostion = (event: MapMouseEvent) => {
         if (!showTarget) {
             setMarker({
@@ -159,6 +184,10 @@ const Party = ({ params }: { params: { id: string } }) => {
         },
     })
 
+    /**
+     * Hook for creating player statistics mutation.
+     * @type {Function}
+     */
     const createPlayerStat = useMutation({
         mutationKey: ["createPlayerStat"],
         mutationFn: async () => {
@@ -169,6 +198,10 @@ const Party = ({ params }: { params: { id: string } }) => {
         },
     })
 
+    /**
+     * Hook for updating the user's score mutation.
+     * @type {Function}
+     */
     const updateUserScoreMutation = useMutation({
         mutationKey: ["updateUserScoreMutatiom"],
         mutationFn: async () => {
@@ -180,6 +213,9 @@ const Party = ({ params }: { params: { id: string } }) => {
     })
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
 
+    /**
+     * Function for handling submit result event
+     */
     const handleSubmitResult = () => {
         const submitParams: SubmitResultParams = {
             startTime,
@@ -204,6 +240,9 @@ const Party = ({ params }: { params: { id: string } }) => {
     const [penalityPoints, setPenalityPoints] = useState(0)
 
     // NOTE: penalty points on Tab Change
+    // This effect listens for changes in the visibility state of the document, 
+    // incrementing the penalty points if the document is hidden and the target 
+    // location is not shown.
     useEffect(() => {
         const handleTabNavSwitch = () => {
             if (document.hidden && !showTarget) {
@@ -216,6 +255,9 @@ const Party = ({ params }: { params: { id: string } }) => {
             document.removeEventListener("visibilitychange", handleTabNavSwitch)
         }
     }, [])
+
+    // This effect listens for the "submit-count" event from the socket. If the 
+    // received data matches the current party id, it sets the party's finished state to true.
 
     useEffect(() => {
         socket.on("submit-count", (data) => {
@@ -231,6 +273,10 @@ const Party = ({ params }: { params: { id: string } }) => {
         )
     }
 
+    /**
+     * Checks if the user is unauthorized to access the party.
+     * @returns {boolean} Returns true if unauthorized, otherwise false.
+     */
     const checkUnauthorization = () => {
         if (roomData) {
             const pseudoArray = getUsersPseudo(roomData?.user_pseudo)
@@ -238,6 +284,9 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }
 
+    /**
+     * Function for placing bomb
+     */
     const placeBomb = () => {
         setBombSet(true)
         setBombSubmitted(false)
@@ -252,6 +301,9 @@ const Party = ({ params }: { params: { id: string } }) => {
         })
     }
 
+    /**
+     * Function for submitting bomb
+     */
     const submitBomb = () => {
         var from = turf.point([bombMarker.longitude, bombMarker.latitude])
         var to = turf.point([targetMarker.longitude, targetMarker.latitude])
@@ -268,10 +320,13 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }
 
+    // Redirects to the game page if unauthorized and in production environment
     if (checkUnauthorization() && process.env.NODE_ENV === "production") {
         redirect("/game/")
     }
 
+    // This section represents the layout and content structure of the Party component.
+    // It also displays dynamic content based on the room data and user interaction.
     return (
         <div className="w-full min-h-screen py-6 xl:overflow-hidden z-50 bg-base-100">
             <div className="flex flex-col xl:grid xl:grid-cols-12 gap-10">
