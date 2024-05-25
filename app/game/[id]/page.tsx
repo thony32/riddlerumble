@@ -69,14 +69,14 @@ const Party = ({ params }: { params: { id: string } }) => {
 
     const mapRef = useRef<MapRef>(null!)
     const [marker, setMarker] = useState({
-        latitude: 18,
-        longitude: 46,
+        latitude: 0,
+        longitude: 0,
     })
 
     const [showTarget, setShowTarget] = useState(false)
     const [targetMarker, setTargetMarker] = useState({
-        latitude: -18,
-        longitude: 46,
+        latitude: 0,
+        longitude: 0,
     })
 
     useEffect(() => {
@@ -242,11 +242,11 @@ const Party = ({ params }: { params: { id: string } }) => {
         setBombSet(true)
         setBombSubmitted(false)
         setBombMarker({
-            latitude: marker.latitude + 0.01,
-            longitude: marker.longitude - 0.2,
+            latitude: 0,
+            longitude: 0,
         })
         mapRef?.current.flyTo({
-            center: [marker.latitude + 0.01, marker.longitude - 0.2],
+            center: [0, 0],
             zoom: 10,
             essential: true,
         })

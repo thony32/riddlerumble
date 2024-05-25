@@ -63,7 +63,7 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
     useEffect(() => {
         setShowTarget(true)
         mapRef.current?.flyTo({
-            bearing: 90,
+            essential: true,
             center: [targetMarker.longitude, targetMarker.latitude],
             duration: 2000,
             zoom: 8,
