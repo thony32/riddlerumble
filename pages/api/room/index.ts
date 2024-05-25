@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import e from "@/dbschema/edgeql-js"
 import client from "@/lib/edgedb-client"
-import getUsersPseudo from "@/utils/getUsersPseudo"
-import { MAX_PLAYERS } from "@/utils/constants"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const roomsQuery = e.select(e.Room, (room) => ({
