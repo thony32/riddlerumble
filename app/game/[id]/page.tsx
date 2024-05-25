@@ -20,11 +20,11 @@ const SvgMarker = dynamic(() => import("@/components/misc/SvgMarker"))
 const SvgMarkerTarget = dynamic(() => import("@/components/misc/SvgMarkerTarget"))
 import { create_player_stat, create_temp_room, disableRoom, fetchRoom, getTempRoom, updateUserScore } from "@/services/party-service"
 //import Completionist from "@/components/game/Completionist"
-import { MAPBOX_TOKEN } from "@/env"
+// import { MAPBOX_TOKEN } from "@/env"
 import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
-import { SubmitResultParams } from "@/types/submit-result-params"
-import { submitResult } from "@/utils/submitResult"
+// import { SubmitResultParams } from "@/types/submit-result-params"
+// import { submitResult } from "@/utils/submitResult"
 import Image from "next/image"
 
 import getCountryCode from "@/utils/getCountryCode"
@@ -273,25 +273,61 @@ const Party = ({ params }: { params: { id: string } }) => {
     })
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
 
-    const handleSubmitResult = () => {
-        const submitParams: SubmitResultParams = {
-            startTime,
-            distance,
-            setElapsedTime,
-            setShowTarget,
-            setTotalScore,
-            penalityPoints,
-            roomData,
-            targetMarker,
-            mapRef,
-            createTempRoom,
-            createPlayerStat,
-            updateUserScoreMutation,
-            user,
-            setSelectedRoom: setSelectedRoom,
-            PARTY_START_TIME_KEY,
-        }
-        submitResult(submitParams)
+    // const handleSubmitResult = () => {
+    //     const submitParams: SubmitResultParams = {
+    //         startTime,
+    //         distance,
+    //         setElapsedTime,
+    //         setShowTarget,
+    //         setTotalScore,
+    //         penalityPoints,
+    //         roomData,
+    //         targetMarker,
+    //         mapRef,
+    //         createTempRoom,
+    //         createPlayerStat,
+    //         updateUserScoreMutation,
+    //         user,
+    //         setSelectedRoom: setSelectedRoom,
+    //         PARTY_START_TIME_KEY,
+    //     }
+    //     submitResult(submitParams)
+    // }
+
+    const calculateScoreDistance = (distance: number, maxDistance: number = 1750) => {
+        distance = Math.min(distance, maxDistance)
+        let score = 100 - (distance / maxDistance) * 100
+        score = Math.max(0, Math.min(100, score))
+
+        return Math.round(score)
+    }
+
+    const submitResult = () => {
+        const elapsedTime = Date.now() - (startTime || Date.now())
+        const elapsedMinutes = Math.floor(elapsedTime / 60000)
+        const elapsedSeconds = Math.floor((elapsedTime % 60000) / 1000)
+        const formattedElapsedTime = `${String(elapsedMinutes).padStart(2, "0")}:${String(elapsedSeconds).padStart(2, "0")}`
+        setElapsedTime(formattedElapsedTime)
+
+        const maxTime = 300000
+        const timePercentage = (elapsedTime / maxTime) * 100
+        const timeScore = Math.round(Math.max(0, 90 - timePercentage * 1.5))
+
+        const scoreDistance = calculateScoreDistance(distance)
+
+        const goldenRatio = (1 + Math.sqrt(5)) / 2
+        const distanceWeight = goldenRatio * 0.3
+        const timeWeight = 1 / goldenRatio
+
+        const totalScore = Math.round((scoreDistance * distanceWeight + timeScore * timeWeight) / (distanceWeight + timeWeight))
+        setShowTarget(true)
+        setTotalScore(roomData.level == "high-level" ? totalScore - penalityPoints : totalScore - penalityPoints + 10)
+        mapRef.current?.flyTo({ center: [targetMarker.longitude, targetMarker.latitude], duration: 2000, zoom: 5 })
+        createTempRoom.mutate()
+        createPlayerStat.mutate()
+        updateUserScoreMutation.mutate()
+        localStorage.removeItem(PARTY_START_TIME_KEY)
+        setSelectedRoom(null)
     }
 
     const [penalityPoints, setPenalityPoints] = useState(0)
@@ -406,7 +442,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                             )}
                             <div className="flex justify-center">
                                 {!showTarget ? (
-                                    <Button onClick={handleSubmitResult} className="bg-green-500 text-white font-semibold">
+                                    <Button onClick={submitResult} className="bg-green-500 text-white font-semibold">
                                         Submit
                                     </Button>
                                 ) : (
