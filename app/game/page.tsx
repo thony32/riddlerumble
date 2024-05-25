@@ -30,7 +30,7 @@ const Game = () => {
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
     const [countdown, setCountdown] = useState<number | null>(null)
-    const user = useUser((state) => state.user)
+    const user = useUser((state) => state.user!)
 
     // Mutation for setting joker
     const setJokerMutation = useMutation({
@@ -53,7 +53,7 @@ const Game = () => {
         queryFn: async () => {
             const data: Room[] = await getAllRoom()
             if (data) {
-                const findedRoom = data.find((r) => checkIfJoined(getUsersPseudo(r.user_pseudo), user?.pseudo))
+                const findedRoom = data.find((r) => checkIfJoined(getUsersPseudo(r.user_pseudo), user.pseudo!))
                 if (!findedRoom) {
                     setSelectedRoom(null) // If user has not joined any room, set selected room to null
                

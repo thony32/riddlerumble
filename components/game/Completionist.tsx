@@ -74,7 +74,7 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
     const disableRoomMutation = useMutation({
         mutationKey: ["disableRoom", params.id],
         mutationFn: async () => disableRoom(params.id),
-        onError: (error) => {
+        onError: () => {
             toast.error("Failed to disable the room. Please try again.")
         },
     })

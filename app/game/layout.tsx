@@ -16,7 +16,6 @@ export default function GameLayout({
         queryKey: ["session"],
         queryFn: async () => {
             const { user, isSignedIn } = await getData()
-
             setUser(user)
             return isSignedIn
         },

@@ -23,7 +23,7 @@ const StatsModal = () => {
                 placement="bottom"
                 onOpenChange={onOpenChange}>
                 <ModalContent>
-                    {(onClose) => (
+                    {() => (
                         <>
                             <ModalBody>
                                 <div className="">

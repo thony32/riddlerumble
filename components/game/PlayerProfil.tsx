@@ -28,7 +28,7 @@ const validationSchema = Yup.object({
 })
 
 const PlayerProfil = () => {
-    const user = useUser((state) => state.user)
+    const user = useUser((state) => state.user!)
     const setUser = useUser((state) => state.setUser)
 
     const { isPending: isAllUserPending, data: allUserData } = useQuery({
@@ -85,9 +85,9 @@ const PlayerProfil = () => {
     const syncUserScoreMutation = useMutation({
         mutationKey: ["syncUserScoreMutation"],
         mutationFn: async () => {
-            return await syncUserScore(user?.id)
+            return await syncUserScore(user.id!)
         },
-        onError: (error) => {
+        onError: () => {
             toast.error("Failed to sync user score. Please try again.")
         },
         onSuccess: (data) => {
@@ -105,15 +105,15 @@ const PlayerProfil = () => {
                     <div className="flex justify-between items-center">
                         <div className="relative max-md:space-y-5">
                             <div className="md:absolute md:-top-5 md:-left-3 flex justify-center">
-                                <Image className="w-7 md:w-10" src={`https://flagsapi.com/${getCountryCode(user.nationality)}/shiny/64.png`} width={64} height={64} alt="medal" />
+                                <Image className="w-7 md:w-10" src={`https://flagsapi.com/${getCountryCode(user.nationality!)}/shiny/64.png`} width={64} height={64} alt="medal" />
                             </div>
-                            <Avatar className="w-28 h-28 xl:w-36 xl:h-36 text-large shadow-xl" showFallback name={getInitial(user.full_name)} src={user.avatar!} />
+                            <Avatar className="w-28 h-28 xl:w-36 xl:h-36 text-large shadow-xl" showFallback name={getInitial(user.full_name!)} src={user.avatar!} />
                             <div className="my-5 flex justify-center">
-                                {user.score <= 50 && <SvgMedalNovice />}
-                                {user.score > 50 && user.score <= 100 && <SvgMedalCasual />}
-                                {user.score > 100 && user.score <= 200 && <SvgMedalPro />}
-                                {user.score > 200 && user.score <= 400 && <SvgMedalExpert />}
-                                {user.score > 400 && <SvgMedalAmiral />}
+                                {user.score! <= 50 && <SvgMedalNovice />}
+                                {user.score! > 50 && user.score! <= 100 && <SvgMedalCasual />}
+                                {user.score! > 100 && user.score! <= 200 && <SvgMedalPro />}
+                                {user.score! > 200 && user.score!<= 400 && <SvgMedalExpert />}
+                                {user.score! > 400 && <SvgMedalAmiral />}
                             </div>
                         </div>
                         <div className="text-center md:text-right md:w-1/2">
@@ -149,7 +149,7 @@ const PlayerProfil = () => {
                                                                 variant="underlined"
                                                                 label="Select country"
                                                                 className="w-full"
-                                                                value={formik.values.nationality}
+                                                                value={formik.values.nationality!}
                                                                 onChange={(e) => formik.setFieldValue("nationality", e.target.value)}
                                                             >
                                                                 {isCountryPending ? (
@@ -230,7 +230,7 @@ const PlayerProfil = () => {
                             </svg>
                         </div>
                         <div className="w-full">
-                            <LastGames id_user={user.id} />
+                            <LastGames id_user={user.id!} />
                         </div>
                     </div>
                 </div>
