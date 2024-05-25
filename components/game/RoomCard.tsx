@@ -98,10 +98,10 @@ function RoomCard({ room }: { room: Room }) {
                             )}
                         </h1>
                         <div className="flex gap-3 text-3xl items-center">
-                            <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                            <div className="absolute bottom-3 left-2 flex items-center gap-2">
                                 {
                                     getUsersPseudo(room.user_pseudo).map((pseudo, index) => (
-                                        <Chip key={index} color="primary">{pseudo}</Chip>
+                                        <Chip key={index} color="primary" className="text-xs">{pseudo}</Chip>
                                     ))
                                 }
                             </div>
