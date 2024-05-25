@@ -5,11 +5,10 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { useUser } from "@/store/useUser"
 import { ReactTyped } from "react-typed"
 import React, { useCallback, useState, useEffect, useRef } from "react"
-import { MapMouseEvent, MapRef, Marker, MarkerDragEvent } from "react-map-gl"
+import { Map, MapMouseEvent, MapRef, Marker, MarkerDragEvent } from "react-map-gl"
 import Countdown, { CountdownRendererFn } from "react-countdown"
 import Link from "next/link"
 import dynamic from "next/dynamic"
-const Map = dynamic(() => import("react-map-gl"))
 const SvgDecoEnigme = dynamic(() => import("@/components/misc/SvgDecoEnigme"))
 import * as turf from "@turf/turf"
 import "mapbox-gl/dist/mapbox-gl.css"
@@ -50,7 +49,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }
 
-    const mapRef = useRef<MapRef>(null!)
+    const mapRef = useRef(null) as any
     const [marker, setMarker] = useState({
         latitude: 18,
         longitude: 46,
@@ -217,7 +216,7 @@ const Party = ({ params }: { params: { id: string } }) => {
             </div>
         )
     }
-
+    
     const checkUnauthorization = () => {
         if (roomData) {
             const pseudoArray = getUsersPseudo(roomData?.user_pseudo)
@@ -306,7 +305,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                 <div className="xl:col-span-10 rounded-2xl relative">
                     <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime + roomData.delay} renderer={timerRender} />}</div>
                     <Map
-                        ref={mapRef as React.RefObject<MapRef>}
+                        ref={mapRef}
                         mapStyle="mapbox://styles/mapbox/streets-v12"
                         initialViewState={{
                             longitude: 46,
@@ -317,11 +316,9 @@ const Party = ({ params }: { params: { id: string } }) => {
                         mapboxAccessToken="pk.eyJ1IjoidGhvbnkzMiIsImEiOiJjbHc5azQ5bWQwNWhjMmtxa2Q5dTcyNWxhIn0.pXpGUWi_9wWY3zwfflmzSQ"
                         style={{ width: "100%", height: "85dvh", margin: 0, padding: 0, borderRadius: "1rem", overflow: "hidden" }}
                     >
-                        {!showTarget && (
-                            <Marker longitude={marker.longitude} latitude={marker.latitude} anchor="bottom" draggable={!showTarget ? true : false} onDrag={onMarkerDrag} onDragEnd={onMarkerDragEnd}>
-                                <SvgMarker />
-                            </Marker>
-                        )}
+                        <Marker longitude={marker.longitude} latitude={marker.latitude} anchor="bottom" draggable={!showTarget ? true : false} onDrag={onMarkerDrag} onDragEnd={onMarkerDragEnd}>
+                            <SvgMarker />
+                        </Marker>
                         {/* result marker */}
                         {showTarget && (
                             <Marker longitude={targetMarker.longitude} latitude={targetMarker.latitude} anchor="bottom">
