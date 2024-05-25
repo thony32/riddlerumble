@@ -1,5 +1,3 @@
-// page.tsx
-
 "use client"
 import dynamic from "next/dynamic"
 import { Room } from "@/types/room"
@@ -20,7 +18,6 @@ import getUsersPseudo from "@/utils/getUsersPseudo"
 import { useUser } from "@/store/useUser"
 import { MAX_PLAYERS } from "@/utils/constants"
 
-// NOTE:  Main Component
 const Game = () => {
     const router = useRouter()
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
