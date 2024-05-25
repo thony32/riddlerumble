@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
-import { Avatar, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
+import { Avatar, Button } from "@nextui-org/react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useUser } from "@/store/useUser"
 import { ReactTyped } from "react-typed"
@@ -24,9 +24,6 @@ import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 import { SubmitResultParams } from "@/types/submit-result-params"
 import { submitResult } from "@/utils/submitResult"
-import Image from "next/image"
-
-import getCountryCode from "@/utils/getCountryCode"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
