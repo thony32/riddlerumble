@@ -75,7 +75,7 @@ const Game = () => {
 
     // Sound effect for countdown
     const countdown_audio = new Howl({
-        src: ["/countdown-sound-effect.mp3"], // Audio source
+        src: ["/audio/coutdown-sound-effect.mp3"], // Audio source
     })
 
      // Effect for listening to room creation socket event
