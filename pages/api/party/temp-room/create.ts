@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const tempRoom = await selectQuery.run(client)
 
         if (tempRoom.length >= MAX_PLAYERS) {
-            socket.emit("completed", JSON.stringify({ id_room }))
+            socket.emit("completed", id_room)
         }
 
         res.status(200).json({ success: true, temp_room: result })
