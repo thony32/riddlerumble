@@ -62,8 +62,8 @@ function BtnCreateRoom() {
     useEffect(() => {
         introJs()
             .setOptions({
-                nextLabel: " Suivant ",
-                prevLabel: " Précédent ",
+                nextLabel: " Next ",
+                prevLabel: " Previews ",
                 doneLabel: " Done ",
                 dontShowAgain: true,
                 showBullets: false,
