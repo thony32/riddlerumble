@@ -188,7 +188,7 @@ const Party = ({ params }: { params: { id: string } }) => {
     }, [])
 
     useEffect(() => {
-        socket.on("completed", (data) => {
+        socket.on("submit-count", (data) => {
             if (data === roomData?.id) localStorage.removeItem(PARTY_START_TIME_KEY)
         })
     }, [])
