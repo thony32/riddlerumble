@@ -1,3 +1,4 @@
-import io from 'socket.io-client';
+import { SOCKETIO_URL } from "@/env"
+import io from "socket.io-client"
 
-export const socket = io('https://stuck-charis-icecold-c98c43b3.koyeb.app');
+export const socket = io(SOCKETIO_URL)

@@ -45,7 +45,7 @@ const nextConfig = {
         return config
     },
     serverRuntimeConfig: {
-        socketIoUrl: 'https://stuck-charis-icecold-c98c43b3.koyeb.app'
+        socketIoUrl: process.env.SOCKETIO_URL,
     },
 }
 

@@ -19,12 +19,11 @@ const SvgMarker = dynamic(() => import("@/components/misc/SvgMarker"))
 const SvgMarkerTarget = dynamic(() => import("@/components/misc/SvgMarkerTarget"))
 import { create_player_stat, create_temp_room, disableRoom, fetchRoom, getTempRoom, updateUserScore } from "@/services/party-service"
 import Completionist from "@/components/game/Completionist"
+import { MAPBOX_TOKEN } from "@/env"
 import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 import { SubmitResultParams } from "@/types/submit-result-params"
 import { submitResult } from "@/utils/submitResult"
-import { MAPBOX_TOKEN } from "@/env"
-
 const PARTY_START_TIME_KEY = "partyStartTime"
 
 const Party = ({ params }: { params: { id: string } }) => {
