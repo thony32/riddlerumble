@@ -2,14 +2,14 @@
     "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
     "rules": {
         "no-unused-vars": [
-            "warn",
+            "error",
             {
                 "vars": "all",
                 "args": "after-used",
                 "ignoreRestSiblings": false
             }
         ],
-        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-explicit-any": "warn",
         "react/display-name": "off",
         "react-hooks/exhaustive-deps": "off",
         "no-var": "off"
