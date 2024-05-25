@@ -67,7 +67,6 @@ function BtnCreateRoom() {
     return (
         <div className="flex justify-between items-center">
             <div>
-                {/* Eto izy refa desktop */}
                 {isMobile || isTablet ? (
                     <Dropdown className="-z-[999]">
                         <DropdownTrigger>
