@@ -26,6 +26,7 @@ import { submitResult } from "@/utils/submitResult"
 import toast, { Toaster } from "react-hot-toast"
 import { setBombCoordonate } from "@/services/game-service"
 import { socket } from "@/lib/socket-io"
+import numberSeparator from "@/utils/numberSeparator"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -340,7 +341,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                                                 </svg>
                                                 <span className="text-sm">Distance:</span>
                                             </div>
-                                            <p className="text-sm">{distance.toFixed(2)} km</p>
+                                            <p className="text-sm">{numberSeparator(distance.toFixed(2))} km</p>
                                         </div>
                                         <div className="flex items-center justify-between">
                                             <div className="flex gap-1 items-center">
