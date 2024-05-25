@@ -43,7 +43,7 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setMar
         setShowTarget(true)
         mapRef.current?.flyTo({
             center: [targetMarker.longitude, targetMarker.latitude],
-            duration: 3000,
+            duration: 2000,
             zoom: 6,
         })
         onOpen()
