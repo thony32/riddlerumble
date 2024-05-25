@@ -17,6 +17,8 @@ import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 import { useUser } from "@/store/useUser"
 import { MAX_PLAYERS } from "@/utils/constants"
+import "intro.js/introjs.css"
+import "intro.js/themes/introjs-flattener.css"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
