@@ -35,7 +35,7 @@ const Game = () => {
         mutationFn: async (user_pseudo: string) => {
             return await setJoker(selectedRoom as string, user_pseudo)
         },
-        onError: (error) => {
+        onError: () => {
             toast.error("Failed to set the joker. Please try again or check the user pseudo.")
         },
     })
