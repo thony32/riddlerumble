@@ -13,40 +13,13 @@ const nextConfig = {
     eslint: {
         ignoreDuringBuilds: true,
     },
-    webpack(config) {
-        if (config.name === 'server') config.optimization.concatenateModules = false
-        // Grab the existing rule that handles SVG imports
-        const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.(".svg"))
-
-        config.module.rules.push(
-            // Reapply the existing rule, but only for svg imports ending in ?url
-            {
-                ...fileLoaderRule,
-                test: /\.svg$/i,
-                resourceQuery: /url/, // *.svg?url
-            },
-            // Convert all other *.svg imports to React components
-            {
-                test: /\.svg$/i,
-                issuer: { not: /\.(css|scss|sass)$/ },
-                resourceQuery: { not: /url/ }, // exclude if *.svg?url
-                loader: "@svgr/webpack",
-                options: {
-                    dimensions: false,
-                    titleProp: true,
-                },
-            }
-        )
-
-        // Modify the file loader rule to ignore *.svg, since we have it handled now.
-        fileLoaderRule.exclude = /\.svg$/i
-
-
-        return config
-    },
-    serverRuntimeConfig: {
-        socketIoUrl: process.env.SOCKETIO_URL,
-        socketIoUrl: 'https://full-ethelda-codeipsum-204d9720.koyeb.app'
+    env: {
+        BASE_URL: process.env.BASE_URL,
+        EDGEDB_INSTANCE: process.env.EDGEDB_INSTANCE,
+        EDGEDB_SECRET_KEY: process.env.EDGEDB_SECRET_KEY,
+        MAPBOX_TOKEN: process.env.MAPBOX_TOKEN,
+        SOCKETIO_URL: process.env.SOCKETIO_URL,
+        SOCKETIO_UPDATE_URL: process.env.SOCKETIO_UPDATE_URL,
     },
 }
 

@@ -23,8 +23,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             })),
         })
 
-        const result = await insertQuery.run(client)
-        res.status(200).json({ success: true, temp_room: result })
+        await insertQuery.run(client)
+
+        const selectQuery = e.select(e.Temp_room, (temp_room) => ({
+            filter: e.op(temp_room.Room.id, "=", e.uuid(id_room as string)),
+        }))
+        const tempRoom = await selectQuery.run(client)
+
+        
+
+        res.status(200).json({ success: true, temp_room: tempRoom.length })
     } catch (error) {
         res.status(500).json({ success: false, error: error })
     }

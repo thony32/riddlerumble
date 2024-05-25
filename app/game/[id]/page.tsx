@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import { Avatar, Button } from "@nextui-org/react"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -26,6 +25,8 @@ import { SubmitResultParams } from "@/types/submit-result-params"
 import { submitResult } from "@/utils/submitResult"
 import toast, { Toaster } from 'react-hot-toast';
 import { setBombCoordonate } from "@/services/game-service"
+import { socket } from "@/lib/socket-io"
+
 const PARTY_START_TIME_KEY = "partyStartTime"
 
 const Party = ({ params }: { params: { id: string } }) => {
@@ -139,6 +140,11 @@ const Party = ({ params }: { params: { id: string } }) => {
         onError: (error) => {
             console.log(error)
         },
+        onSuccess: ({ temp_room }) => {
+            if (temp_room >= MAX_PLAYERS) {
+                socket.emit("player-submit", roomData.id)
+            }
+        },
     })
 
     const createPlayerStat = useMutation({
@@ -185,33 +191,24 @@ const Party = ({ params }: { params: { id: string } }) => {
 
     const [penalityPoints, setPenalityPoints] = useState(0)
 
-    // NOTE: prevent dev tools and context menus
+    // NOTE: penalty points on Tab Change
     useEffect(() => {
-        const handleContextMenu = (e: MouseEvent) => {
-            e.preventDefault()
-        }
-
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if ((e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.key === "u") || e.key === "F12") {
-                e.preventDefault()
-            }
-        }
-
         const handleTabNavSwitch = () => {
             if (document.hidden && !showTarget) {
                 setPenalityPoints(penalityPoints + 10)
             }
         }
-
-        document.addEventListener("contextmenu", handleContextMenu)
-        document.addEventListener("keydown", handleKeyDown)
         document.addEventListener("visibilitychange", handleTabNavSwitch)
 
         return () => {
-            document.removeEventListener("contextmenu", handleContextMenu)
-            document.removeEventListener("keydown", handleKeyDown)
             document.removeEventListener("visibilitychange", handleTabNavSwitch)
         }
+    }, [])
+
+    useEffect(() => {
+        socket.on("submit-count", (data) => {
+            if (data === params.id) localStorage.removeItem(PARTY_START_TIME_KEY)
+        })
     }, [])
 
     if (startTime === null) {
@@ -373,7 +370,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                             zoom: 4,
                         }}
                         onClick={clickPostion}
-                        mapboxAccessToken="pk.eyJ1IjoidGhvbnkzMiIsImEiOiJjbHc5azQ5bWQwNWhjMmtxa2Q5dTcyNWxhIn0.pXpGUWi_9wWY3zwfflmzSQ"
+                        mapboxAccessToken={MAPBOX_TOKEN}
                         style={{ width: "100%", height: "85dvh", margin: 0, padding: 0, borderRadius: "1rem", overflow: "hidden" }}
                     >
                         <Marker longitude={marker.longitude} latitude={marker.latitude} anchor="bottom" draggable={!showTarget ? true : false} onDrag={onMarkerDrag} onDragEnd={onMarkerDragEnd}>

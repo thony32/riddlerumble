@@ -1,4 +1,4 @@
-/* eslint-disable react/display-name */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as THREE from "three"
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react"
 import { useGLTF, useAnimations } from "@react-three/drei"

@@ -1,5 +1,5 @@
 const getCountryCode = (country: string) => {
-    return country.split(', ')[1];
+    return country.split(", ")[1]
 }
 
-export default getCountryCode;
+export default getCountryCode

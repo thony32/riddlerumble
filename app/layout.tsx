@@ -5,6 +5,7 @@ const Footer = dynamic(() => import("@/components/landing/Footer"))
 const ThemeHandler = dynamic(() => import("@/components/misc/ThemeHandler"))
 import ReactQueryProvider from "@/utils/ReactQueryProvider"
 import "./globals.css"
+import NoDevToolsProvider from "@/services/NoDevToolsProvider"
 
 export const metadata: Metadata = {
     title: "RR - The Map Quest",
@@ -21,7 +22,9 @@ export default function RootLayout({
             <body>
                 <NextUIProvider>
                     <main className="px-[2%] py-3">
-                        <ReactQueryProvider>{children}</ReactQueryProvider>
+                        <ReactQueryProvider>
+                            <NoDevToolsProvider>{children}</NoDevToolsProvider>
+                        </ReactQueryProvider>
                     </main>
                     <footer className="mt-20">
                         <Footer />

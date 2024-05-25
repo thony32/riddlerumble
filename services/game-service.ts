@@ -1,5 +1,4 @@
 import { Room } from "@/types/room"
-import getUsersPseudo from "@/utils/getUsersPseudo"
 
 export const getAllRoom = async () => {
     const res = await fetch("/api/room")
