@@ -128,7 +128,6 @@ const Party = ({ params }: { params: { id: string } }) => {
             console.log(error)
         },
         onSuccess: ({ temp_room }) => {
-            alert(temp_room)
             if (temp_room >= MAX_PLAYERS) {
                 socket.emit("player-submit", roomData.id)
             }
