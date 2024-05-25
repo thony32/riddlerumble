@@ -20,6 +20,7 @@ const nextConfig = {
         MAPBOX_TOKEN: process.env.MAPBOX_TOKEN,
         SOCKETIO_URL: process.env.SOCKETIO_URL,
         SOCKETIO_UPDATE_URL: process.env.SOCKETIO_UPDATE_URL,
+        AI_LINK: process.env.AI_LINK
     },
 }
 

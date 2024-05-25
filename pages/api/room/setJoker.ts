@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const user_array_filtered = user_array.filter(Boolean)
         const joker = user_array_filtered[Math.floor(Math.random() * user_array_filtered.length)]
 
-        const updateQuery = e.update(e.Room, (room) => ({
+        const updateQuery = e.update(e.Room, () => ({
             filter_single: { id: e.uuid(id) },
             set: {
                 joker: joker

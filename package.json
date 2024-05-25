@@ -1,6 +1,6 @@
 {
-  "name": "enigmap",
-  "version": "0.1.0",
+  "name": "riddlerumble",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -21,6 +21,7 @@
     "@nextui-org/dropdown": "^2.1.23",
     "@nextui-org/modal": "^2.0.33",
     "@nextui-org/react": "^2.3.6",
+    "@react-spring/three": "^9.7.3",
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.6",
     "@tanstack/react-query": "^5.36.2",

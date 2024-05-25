@@ -4,3 +4,4 @@ export const BASE_URL = process.env.NODE_ENV === "production" ? process.env.BASE
 export const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN!
 export const SOCKETIO_URL = process.env.SOCKETIO_URL!
 export const SOCKETIO_UPDATE_URL = process.env.SOCKETIO_UPDATE_URL!
+export const AI_LINK = process.env.AI_LINK!

@@ -2,14 +2,14 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import e from "@/dbschema/edgeql-js"
 import client from "@/lib/edgedb-client"
 import { socket } from "@/lib/socket-io"
-import { MAPBOX_TOKEN } from "@/env"
+import { AI_LINK, MAPBOX_TOKEN } from "@/env"
 
 const room_api = async (level: string) => {
     let url: string
     if (level === "normal-level") {
-        url = "https://ia-codeipsum.vercel.app"
+        url = AI_LINK
     } else {
-        url = `https://ia-codeipsum.vercel.app/${level}`
+        url = `${AI_LINK}/${level}`
     }
 
     const response = await fetch(url, {
