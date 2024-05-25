@@ -14,7 +14,7 @@ import useSelectedRoom from "@/store/useSelectedRoom"
 import { useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { getAllRoom, setJoker } from "@/services/game-service"
-import { socket } from "@/lib/socket-io"
+import { socket, socket_update } from "@/lib/socket-io"
 import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 import { useUser } from "@/store/useUser"
@@ -73,7 +73,7 @@ const Game = () => {
     }, [refetchRooms])
 
     useEffect(() => {
-        socket.on("room-updated", () => {
+        socket_update.on("room-updated", () => {
             refetchRooms()
         })
     }, [refetchRooms])

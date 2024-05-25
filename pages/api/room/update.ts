@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import e from "@/dbschema/edgeql-js"
 import client from "@/lib/edgedb-client"
-import { socket } from "@/lib/socket-io"
+import { socket_update } from "@/lib/socket-io"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "PUT") {
@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         await updateQuery.run(client)
 
-        socket.emit("room-update")
+        socket_update.emit("room-update")
 
         res.status(200).json({ success: true, message: "Room update" })
     } catch (error) {
