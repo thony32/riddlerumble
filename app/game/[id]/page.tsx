@@ -127,6 +127,11 @@ const Party = ({ params }: { params: { id: string } }) => {
         onError: (error) => {
             console.log(error)
         },
+        onSuccess: ({ temp_room }) => {
+            if (temp_room >= MAX_PLAYERS) {
+                socket.emit("player-submit", roomData.id)
+            }
+        },
     })
 
     const createPlayerStat = useMutation({

@@ -1,7 +1,5 @@
 import e from "@/dbschema/edgeql-js"
 import client from "@/lib/edgedb-client"
-import { socket } from "@/lib/socket-io"
-import { MAX_PLAYERS } from "@/utils/constants"
 import { NextApiRequest, NextApiResponse } from "next"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -32,11 +30,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }))
         const tempRoom = await selectQuery.run(client)
 
-        if (tempRoom.length >= MAX_PLAYERS) {
-            socket.emit("player-submit", id_room)
-        }
+        
 
-        res.status(200).json({ success: true, temp_room: result })
+        res.status(200).json({ success: true, temp_room: tempRoom.length })
     } catch (error) {
         res.status(500).json({ success: false, error: error })
     }
