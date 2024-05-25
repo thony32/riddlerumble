@@ -210,16 +210,16 @@ const Party = ({ params }: { params: { id: string } }) => {
         )
     }
 
-    // const checkUnauthorization = () => {
-    //     if (roomData) {
-    //         const pseudoArray = getUsersPseudo(roomData?.user_pseudo)
-    //         return !roomData.isActive || pseudoArray.length !== MAX_PLAYERS || !checkIfJoined(pseudoArray, user?.pseudo)
-    //     }
-    // }
+    const checkUnauthorization = () => {
+        if (roomData) {
+            const pseudoArray = getUsersPseudo(roomData?.user_pseudo)
+            return !roomData.isActive || pseudoArray.length !== MAX_PLAYERS || !checkIfJoined(pseudoArray, user?.pseudo)
+        }
+    }
 
-    // if (checkUnauthorization() && process.env.NODE_ENV === "production") {
-    //     redirect("/game/")
-    // }
+    if (checkUnauthorization() && process.env.NODE_ENV === "production") {
+        redirect("/game/")
+    }
 
     return (
         <div className="w-full min-h-screen py-6 xl:overflow-hidden z-50 bg-base-100">
