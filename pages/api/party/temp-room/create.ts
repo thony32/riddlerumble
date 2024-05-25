@@ -23,10 +23,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             })),
         })
 
-        const result = await insertQuery.run(client)
+        await insertQuery.run(client)
 
         const selectQuery = e.select(e.Temp_room, (temp_room) => ({
-            filter: e.op(temp_room.Room.id, "=", e.uuid("67cd03c8-1a8f-11ef-9253-537f68dd2da1" as string)),
+            filter: e.op(temp_room.Room.id, "=", e.uuid(id_room as string)),
         }))
         const tempRoom = await selectQuery.run(client)
 

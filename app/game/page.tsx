@@ -18,6 +18,8 @@ import getUsersPseudo from "@/utils/getUsersPseudo"
 import { useUser } from "@/store/useUser"
 import { MAX_PLAYERS } from "@/utils/constants"
 
+const PARTY_START_TIME_KEY = "partyStartTime"
+
 const Game = () => {
     const router = useRouter()
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
@@ -83,6 +85,7 @@ const Game = () => {
                 }, 1000)
                 return () => clearTimeout(timer)
             } else {
+                localStorage.removeItem(PARTY_START_TIME_KEY)
                 router.push(`/game/${selectedRoom}`)
             }
         }
