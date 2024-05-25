@@ -3,9 +3,11 @@ import { useUser } from "@/store/useUser"
 import { Button } from "@nextui-org/button"
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
 import { useMutation } from "@tanstack/react-query"
-import React from "react"
+import React, { useEffect } from "react"
 import useResponsive from "@/utils/useResponsive"
 import { createRoom } from "@/services/game-service"
+import introJs from "intro.js"
+
 
 function BtnCreateRoom() {
     const user = useUser((state) => state.user)
@@ -40,6 +42,32 @@ function BtnCreateRoom() {
 
     const { isMobile, isTablet } = useResponsive()
 
+    useEffect(() => {
+        introJs()
+          .setOptions({
+            nextLabel: " Suivant ",
+            prevLabel: " Précédent ",
+            doneLabel: " Done ",
+            dontShowAgain: true,
+            showBullets: false,
+            steps: [
+              {
+                title: "Hello! Welcome into the game!",
+                intro:
+                  "I would to take you on the page tour",
+              },
+              {
+                title: "The instructions and rules",
+                intro:
+                  "Click here to read the game rules and instructions for more amazing experience",
+                element: document.querySelector("#intro"),
+              },
+            ],
+          })
+          .start()
+      }, [])
+
+      
     return (
         <div className="flex justify-between items-center">
             <div>
@@ -120,7 +148,7 @@ function BtnCreateRoom() {
                 )}
             </div>
             <div>
-                <Button isIconOnly onPress={onOpen}>
+                <Button isIconOnly onPress={onOpen} id="intro">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path
                             strokeLinecap="round"
