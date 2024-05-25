@@ -21,10 +21,17 @@ const room_api = async (level: string) => {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { level, user_pseudo } = req.body
     const room_data = await room_api(level)
+
+    const q = room_data.response.city;
+    const access_token = 'pk.eyJ1IjoidGhvbnkzMiIsImEiOiJjbHc5azQ5bWQwNWhjMmtxa2Q5dTcyNWxhIn0.pXpGUWi_9wWY3zwfflmzSQ'
+
+    const response_api_geo = await fetch(`https://api.mapbox.com/search/geocode/v6/forward?q=${q}&access_token=${access_token}&limit=1`);
+    const api_geo = await response_api_geo.json();
+
     const delay_party = level == "high-level" ? 420000 : 300000
 
-    const latitude = parseFloat(room_data.response.lat)
-    const longitude = parseFloat(room_data.response.lng)
+    const latitude = parseFloat(api_geo.features[0].properties.coordinates.latitude)
+    const longitude = parseFloat(api_geo.features[0].properties.coordinates.longitude)
 
     const query = e.insert(e.Room, {
         delay: delay_party,
