@@ -50,7 +50,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }
 
-    const mapRef = useRef(null) as any
+    const mapRef = useRef<MapRef>(null) as any
     const [marker, setMarker] = useState({
         latitude: 18,
         longitude: 46,
@@ -136,7 +136,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         },
         onError: (error) => {
             console.log(error)
-        }
+        },
     })
 
     const updateUserScoreMutation = useMutation({
@@ -146,7 +146,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         },
         onError: (error) => {
             console.log(error)
-        }
+        },
     })
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
 
@@ -209,7 +209,7 @@ const Party = ({ params }: { params: { id: string } }) => {
             </div>
         )
     }
-    
+
     const checkUnauthorization = () => {
         if (roomData) {
             const pseudoArray = getUsersPseudo(roomData?.user_pseudo)
