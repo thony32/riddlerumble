@@ -127,9 +127,6 @@ const Party = ({ params }: { params: { id: string } }) => {
         onError: (error) => {
             console.log(error)
         },
-        onSuccess: (data) => {
-            console.log("Temp Room created successfully! ", data)
-        },
     })
 
     const createPlayerStat = useMutation({
@@ -139,10 +136,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         },
         onError: (error) => {
             console.log(error)
-        },
-        onSuccess: (data) => {
-            console.log("Player Stat created successfully! ", data)
-        },
+        }
     })
 
     const updateUserScoreMutation = useMutation({
@@ -152,10 +146,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         },
         onError: (error) => {
             console.log(error)
-        },
-        onSuccess: (data) => {
-            console.log("User score updated successfully! ", data)
-        },
+        }
     })
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
 

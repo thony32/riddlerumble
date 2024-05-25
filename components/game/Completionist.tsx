@@ -36,13 +36,9 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setMar
         mutationKey: ["disableRoom", params.id],
         mutationFn: async () => disableRoom(params.id),
         onError: (error) => console.error(error),
-        onSuccess: (data) => console.log("Room disabled!", data),
     })
 
     useEffect(() => {
-        console.log("useEffect triggered")
-        console.log("mapRef:", mapRef.current)
-        console.log("targetMarker:", targetMarker)
         setShowTarget(true)
         mapRef.current?.flyTo({
             bearing: 90,
