@@ -20,6 +20,7 @@ import { MAX_PLAYERS } from "@/utils/constants"
 import "intro.js/introjs.css"
 import "intro.js/themes/introjs-flattener.css"
 import toast from "react-hot-toast"
+import { Howl } from "howler"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -67,6 +68,10 @@ const Game = () => {
         staleTime: 100 * 60 * 60 * 24,
     })
 
+    const countdown_audio = new Howl({
+        src: ["/countdown-sound-effect.mp3"],
+    })
+
     useEffect(() => {
         socket.on("room-created", () => {
             refetchRooms()
@@ -88,6 +93,7 @@ const Game = () => {
                 return () => clearTimeout(timer)
             } else {
                 localStorage.removeItem(PARTY_START_TIME_KEY)
+                countdown_audio.play()
                 router.push(`/game/${selectedRoom}`)
             }
         }
