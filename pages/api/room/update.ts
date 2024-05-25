@@ -4,7 +4,6 @@ import client from "@/lib/edgedb-client"
 import { socket_update } from "@/lib/socket-io"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    socket_update.emit("room-update")
     if (req.method !== "PUT") {
         res.status(405).json({ success: false, error: "Method not allowed" })
         return
@@ -29,7 +28,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }))
 
     await updateQuery.run(client)
-
-    socket_update.emit("room-update")
     res.status(200).json({ success: true, message: "Room update" })
 }
