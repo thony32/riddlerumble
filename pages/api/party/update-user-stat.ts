@@ -4,23 +4,12 @@ import { NextApiRequest, NextApiResponse } from "next"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { id_user, id_room, bomb_point } = req.body
+        const { id_user, id_room } = req.body
 
-        const currentScoreQuery = e.select(e.Player_stats, (player_stats) => ({
-            id: true,
-            score: true,
-            filter: e.op(e.op(player_stats.User.id, "=", e.uuid(id_user)), 'and', e.op(player_stats.Room.id, "=", e.uuid(id_room))
-            ),
-        }));
-
-        const currentScore = await currentScoreQuery.run(client)
-
-        const newScore = currentScore[0]?.score + parseInt(bomb_point)
-
-        const userScoreUpdateQuery = e.update(e.Player_stats, () => ({
-            filter_single: { id: currentScore[0]?.id },
+        const userScoreUpdateQuery = e.update(e.Player_stats, (player_stats) => ({
+            filter: e.op(e.op(player_stats.User.id, "=", e.uuid(id_user)), 'and', e.op(player_stats.Room.id, "=", e.uuid(id_room))),
             set: {
-                score: newScore,
+                score: 0,
             },
         }))
 
