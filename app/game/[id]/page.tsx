@@ -304,7 +304,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                     </div>
                 </div>
                 <div className="xl:col-span-10 rounded-2xl relative">
-                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime + roomData.delay} renderer={timerRender} />}</div>
+                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime + 50000} renderer={timerRender} />}</div>
                     <Map
                         ref={mapRef as React.RefObject<MapRef>}
                         mapStyle="mapbox://styles/mapbox/streets-v12"
