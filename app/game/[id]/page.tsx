@@ -50,7 +50,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }
 
-    const mapRef = useRef<MapRef>(null) as any
+    const mapRef = useRef<MapRef>(null!)
     const [marker, setMarker] = useState({
         latitude: 18,
         longitude: 46,
