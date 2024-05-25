@@ -63,7 +63,7 @@ function BtnCreateRoom() {
         introJs()
             .setOptions({
                 nextLabel: " Next ",
-                prevLabel: " Previews ",
+                prevLabel: " Previous ",
                 doneLabel: " Done ",
                 dontShowAgain: true,
                 showBullets: false,
