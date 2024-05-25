@@ -66,10 +66,10 @@ const updateUserStat = async (id_user: string, id_room: string, bomb_point: numb
 }
 
 const updateScoreBomb = async (temp_room: any, id_room: string, bombCoordonates: any) => {
+    var distance = 0;
     temp_room.forEach((player: any) => {
-        const distance = calculDistancePosition({ latitude: player.latitude, longitude: player.longitude }, { latitude: bombCoordonates.split(',')[0], longitude: bombCoordonates.split(',')[1] })
+        distance = calculDistancePosition({ latitude: player.latitude, longitude: player.longitude }, { latitude: bombCoordonates.split(',')[0], longitude: bombCoordonates.split(',')[1] })
         if (distance <= 300) {
-            updateUserScore(player.User.id, -20)
             updateUserStat(player.User.id, id_room, -20)
         }
     })
