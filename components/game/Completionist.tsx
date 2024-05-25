@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, forwardRef } from "react"
+import React, { useEffect, forwardRef, MutableRefObject } from "react"
 import { Avatar, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
 import { useQuery, useMutation } from "@tanstack/react-query"
 import Link from "next/link"
@@ -14,7 +14,7 @@ interface CompletionistProps {
     params: { id: string }
     setMarkerAllPlayers: (data: any) => void
     setShowTarget: (show: boolean) => void
-    mapRef: React.RefObject<MapRef>
+    mapRef: MutableRefObject<MapRef | null>
     targetMarker: { latitude: number; longitude: number }
 }
 
@@ -43,8 +43,8 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setMar
         setShowTarget(true)
         mapRef.current?.flyTo({
             center: [targetMarker.longitude, targetMarker.latitude],
-            duration: 2000,
-            zoom: 5,
+            duration: 3000,
+            zoom: 6,
         })
         onOpen()
     }, [setMarkerAllPlayers, setShowTarget, mapRef, targetMarker, onOpen])
