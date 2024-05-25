@@ -20,6 +20,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" data-theme="light">
+            <head>
+                <link rel="icon" href="/public/images/favico.ico" />
+            </head>
             <body>
                 <NextUIProvider>
                     <Toaster />
