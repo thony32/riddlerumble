@@ -60,7 +60,9 @@ const Game = () => {
                     }
                 }
             }
-            return data
+            const room_filtered = data.filter((r) => getUsersPseudo(r.user_pseudo).length != MAX_PLAYERS)
+
+            return room_filtered
         },
         staleTime: 100 * 60 * 60 * 24,
     })

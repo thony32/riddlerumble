@@ -23,6 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         filter: e.op(room.isActive, "=", true),
     }))
     const rooms = await roomsQuery.run(client)
-    const room_filtered = rooms.map(r => getUsersPseudo(r.user_pseudo).length != MAX_PLAYERS)
-    res.status(200).json(room_filtered)
+    
+
+    res.status(200).json(rooms)
 }
