@@ -7,6 +7,7 @@ import React, { useEffect } from "react"
 import useResponsive from "@/utils/useResponsive"
 import { createRoom } from "@/services/game-service"
 import introJs from "intro.js"
+import toast from "react-hot-toast"
 
 function BtnCreateRoom() {
     const user = useUser((state) => state.user)
@@ -18,7 +19,7 @@ function BtnCreateRoom() {
             return await createRoom("normal-level", user?.pseudo || "")
         },
         onError: (error) => {
-            console.log(error)
+            toast.error("Failed to create low level room. Please try again.")
         },
         onSuccess: ({ room }) => {
             setSelectedRoom(room.id)
@@ -30,7 +31,7 @@ function BtnCreateRoom() {
             return await createRoom("high-level", user?.pseudo || "")
         },
         onError: (error) => {
-            console.log(error)
+            toast.error("Failed to create high level room. Please try again.")
         },
         onSuccess: ({ room }) => {
             setSelectedRoom(room.id)

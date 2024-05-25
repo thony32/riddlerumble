@@ -87,7 +87,7 @@ const PlayerProfil = () => {
             return await syncUserScore(user?.id)
         },
         onError: (error) => {
-            console.log(error)
+            toast.error("Failed to sync user score. Please try again.")
         },
         onSuccess: (data) => {
             console.log("User score updated successfully! ", data)

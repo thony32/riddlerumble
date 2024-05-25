@@ -16,6 +16,7 @@ import { MAX_PLAYERS } from "@/utils/constants"
 import { updateRoom } from "@/services/game-service"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 import { socket_update } from "@/lib/socket-io"
+import toast from "react-hot-toast"
 
 function RoomCard({ room }: { room: Room }) {
     const user = useUser((state) => state.user)
@@ -35,7 +36,7 @@ function RoomCard({ room }: { room: Room }) {
             return await updateRoom(room)
         },
         onError: (error) => {
-            console.log(error)
+            toast.error("Failed to update the room. Please try again.")
         },
         onSuccess: () => {
             socket_update.emit("room-update")

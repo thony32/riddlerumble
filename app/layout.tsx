@@ -6,6 +6,7 @@ const ThemeHandler = dynamic(() => import("@/components/misc/ThemeHandler"))
 import ReactQueryProvider from "@/utils/ReactQueryProvider"
 import "./globals.css"
 import NoDevToolsProvider from "@/services/NoDevToolsProvider"
+import { Toaster } from "react-hot-toast"
 
 export const metadata: Metadata = {
     title: "RR - The Map Quest",
@@ -21,6 +22,7 @@ export default function RootLayout({
         <html lang="en" data-theme="light">
             <body>
                 <NextUIProvider>
+                    <Toaster />
                     <main className="px-[2%] py-3">
                         <ReactQueryProvider>
                             <NoDevToolsProvider>{children}</NoDevToolsProvider>

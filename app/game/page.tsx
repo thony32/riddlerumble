@@ -19,6 +19,7 @@ import { useUser } from "@/store/useUser"
 import { MAX_PLAYERS } from "@/utils/constants"
 import "intro.js/introjs.css"
 import "intro.js/themes/introjs-flattener.css"
+import toast from "react-hot-toast"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -35,10 +36,7 @@ const Game = () => {
             return await setJoker(selectedRoom as string, user_pseudo)
         },
         onError: (error) => {
-            console.log(error)
-        },
-        onSuccess: (data) => {
-            console.log("Joker set created successfully! ", data)
+            toast.error("Failed to set the joker. Please try again or check the user pseudo.")
         },
     })
 
