@@ -49,7 +49,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }
 
-    const mapRef = useRef(null) as any
+    const mapRef = useRef<MapRef>(null!)
     const [marker, setMarker] = useState({
         latitude: 18,
         longitude: 46,
@@ -135,7 +135,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         },
         onError: (error) => {
             console.log(error)
-        }
+        },
     })
 
     const updateUserScoreMutation = useMutation({
@@ -145,7 +145,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         },
         onError: (error) => {
             console.log(error)
-        }
+        },
     })
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
 
@@ -208,7 +208,7 @@ const Party = ({ params }: { params: { id: string } }) => {
             </div>
         )
     }
-    
+
     const checkUnauthorization = () => {
         if (roomData) {
             const pseudoArray = getUsersPseudo(roomData?.user_pseudo)
@@ -295,7 +295,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                     </div>
                 </div>
                 <div className="xl:col-span-10 rounded-2xl relative">
-                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime + 50000} renderer={timerRender} />}</div>
+                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime + roomData.delay} renderer={timerRender} />}</div>
                     <Map
                         ref={mapRef}
                         mapStyle="mapbox://styles/mapbox/streets-v12"
