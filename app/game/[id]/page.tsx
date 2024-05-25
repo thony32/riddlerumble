@@ -19,7 +19,7 @@ const SvgMarker = dynamic(() => import("@/components/misc/SvgMarker"))
 const SvgMarkerTarget = dynamic(() => import("@/components/misc/SvgMarkerTarget"))
 import { create_player_stat, create_temp_room, disableRoom, fetchRoom, getTempRoom, updateUserScore } from "@/services/party-service"
 import Completionist from "@/components/game/Completionist"
-import { MAPBOX_TOKEN } from "@/env"
+// import { MAPBOX_TOKEN } from "@/env"
 import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 import { SubmitResultParams } from "@/types/submit-result-params"
@@ -34,6 +34,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         staleTime: 1000 * 60 * 60 * 24,
     })
     const [markerAllPlayers, setMarkerAllPlayers] = useState([])
+
     const timerRender: CountdownRendererFn = ({ minutes, seconds, completed }) => {
         if (completed) {
             return <Completionist params={params} setMarkerAllPlayers={setMarkerAllPlayers} setShowTarget={setShowTarget} mapRef={mapRef} targetMarker={targetMarker} />
@@ -60,6 +61,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         latitude: -18,
         longitude: 46,
     })
+
     useEffect(() => {
         if (roomData) {
             setTargetMarker({
@@ -125,9 +127,6 @@ const Party = ({ params }: { params: { id: string } }) => {
         onError: (error) => {
             console.log(error)
         },
-        onSuccess: (data) => {
-            console.log("Temp Room created successfully! ", data)
-        },
     })
 
     const createPlayerStat = useMutation({
@@ -137,10 +136,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         },
         onError: (error) => {
             console.log(error)
-        },
-        onSuccess: (data) => {
-            console.log("Player Stat created successfully! ", data)
-        },
+        }
     })
 
     const updateUserScoreMutation = useMutation({
@@ -150,10 +146,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         },
         onError: (error) => {
             console.log(error)
-        },
-        onSuccess: (data) => {
-            console.log("User score updated successfully! ", data)
-        },
+        }
     })
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
 
@@ -303,7 +296,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                     </div>
                 </div>
                 <div className="xl:col-span-10 rounded-2xl relative">
-                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime + roomData.delay} renderer={timerRender} />}</div>
+                    <div className="xl:absolute z-50 xl:top-3 xl:left-3">{roomData && <Countdown date={startTime + 50000} renderer={timerRender} />}</div>
                     <Map
                         ref={mapRef}
                         mapStyle="mapbox://styles/mapbox/streets-v12"

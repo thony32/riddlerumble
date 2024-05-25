@@ -36,15 +36,16 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setMar
         mutationKey: ["disableRoom", params.id],
         mutationFn: async () => disableRoom(params.id),
         onError: (error) => console.error(error),
-        onSuccess: (data) => console.log("Room disabled!", data),
     })
 
     useEffect(() => {
         setShowTarget(true)
         mapRef.current?.flyTo({
+            bearing: 90,
             center: [targetMarker.longitude, targetMarker.latitude],
-            duration: 3000,
-            zoom: 6,
+            duration: 2000,
+            zoom: 8,
+            pitch: 20,
         })
         onOpen()
     }, [setMarkerAllPlayers, setShowTarget, mapRef, targetMarker, onOpen])
