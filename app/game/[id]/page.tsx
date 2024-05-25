@@ -194,7 +194,7 @@ const Party = ({ params }: { params: { id: string } }) => {
 
     useEffect(() => {
         socket.on("submit-count", (data) => {
-            if (data === roomData?.id) alert("true")
+            if (data === params.id) alert("true")
         })
     }, [])
 
