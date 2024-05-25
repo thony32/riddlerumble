@@ -25,7 +25,7 @@ import toast from "react-hot-toast"
  */
 function RoomCard({ room }: { room: Room }) {
 
-    const user = useUser((state) => state.user)// Get user data from store
+    const user = useUser((state) => state.user!)// Get user data from store
 
     const selectedRoom = useSelectedRoom((state) => state.selectedRoom)  // Get selected room from store
 
@@ -41,18 +41,18 @@ function RoomCard({ room }: { room: Room }) {
             // If action is join, add user to room
             if (given_action == "join") {
 
-                room.user_pseudo += ", " + user.pseudo // Concatenate user pseudonym to room
+                room.user_pseudo += ", " + user.pseudo! // Concatenate user pseudonym to room
 
             } else {
 
                 // If action is leave, remove user from room
                 room.user_pseudo = getUsersPseudo(room.user_pseudo)
-                    .filter((p) => p !== user.pseudo)
+                    .filter((p) => p !== user.pseudo!)
                     .join(", ")
             }
             return await updateRoom(room)
         },
-        onError: (error) => {
+        onError: () => {
             toast.error("Failed to update the room. Please try again.")
         },
         onSuccess: () => {

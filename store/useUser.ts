@@ -1,17 +1,17 @@
 import { create } from "zustand"
 
 export type User = {
-    id: string | null 
+    id: string | null
     email: string | null
     full_name: string | null
     nationality: string | null
-    pseudo: string | null 
+    pseudo: string  | null
     avatar: string | null
     score: number | null
 } | null
 
 type UserState = {
-    user: any
+    user: User
     setUser: (user: User) => void
 }
 

@@ -32,7 +32,7 @@ const Navbar = () => {
                 <div className="flex items-center gap-2 relative">
                     {user != null && (
                         <>
-                            <Avatar isBordered color="primary" showFallback name={getInitial(user.full_name)} src={user.avatar!} />
+                            <Avatar isBordered color="primary" showFallback name={getInitial(user.full_name!)} src={user.avatar!} />
                             <div className="flex flex-col text-right">
                                 <span className="text-sm sm:text-base">{user.full_name}</span>
                                 <span className="font-sans text-xs font-semibold">{user.pseudo}</span>

@@ -168,13 +168,13 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }
 
-    const user = useUser((state) => state.user)
+    const user = useUser((state) => state.user!)
     const createTempRoom = useMutation({
         mutationKey: ["createTempRoom"],
         mutationFn: async () => {
-            return await create_temp_room(marker.latitude, marker.longitude, elapsedTime, user?.id, roomData && roomData.id)
+            return await create_temp_room(marker.latitude, marker.longitude, elapsedTime, user.id!, roomData && roomData.id)
         },
-        onError: (error) => {
+        onError: () => {
             toast.error("Failed to create temporary room. Please try again or check your input.")
         },
         onSuccess: ({ temp_room }) => {
@@ -191,9 +191,9 @@ const Party = ({ params }: { params: { id: string } }) => {
     const createPlayerStat = useMutation({
         mutationKey: ["createPlayerStat"],
         mutationFn: async () => {
-            return await create_player_stat(totalScore, user?.id, roomData && roomData.id)
+            return await create_player_stat(totalScore, user.id!, roomData && roomData.id)
         },
-        onError: (error) => {
+        onError: () => {
             toast.error("Failed to create player statistics. Please try again.")
         },
     })
@@ -205,9 +205,9 @@ const Party = ({ params }: { params: { id: string } }) => {
     const updateUserScoreMutation = useMutation({
         mutationKey: ["updateUserScoreMutatiom"],
         mutationFn: async () => {
-            return await updateUserScore(user?.id, totalScore)
+            return await updateUserScore(user.id!, totalScore)
         },
-        onError: (error) => {
+        onError: () => {
             toast.error("Failed to update user score. Please try again.")
         },
     })
@@ -280,7 +280,7 @@ const Party = ({ params }: { params: { id: string } }) => {
     const checkUnauthorization = () => {
         if (roomData) {
             const pseudoArray = getUsersPseudo(roomData?.user_pseudo)
-            return !roomData.isActive || pseudoArray.length !== MAX_PLAYERS || !checkIfJoined(pseudoArray, user?.pseudo)
+            return !roomData.isActive || pseudoArray.length !== MAX_PLAYERS || !checkIfJoined(pseudoArray, user.pseudo!)
         }
     }
 
