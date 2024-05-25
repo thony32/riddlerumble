@@ -60,13 +60,13 @@ const Heading = () => {
 
     return (
         <div className="h-screen flex justify-center items-center relative">
-            <div className="fixed top-5 left-5 w-full h-full flex justify-start items-start">
+            <div className="fixed top-5 left-5 w-full h-full flex justify-start items-start -z-50">
                 <SvgMapOne />
             </div>
-            <div className="fixed bottom-5 right-10 w-full h-full flex justify-end items-end">
+            <div className="fixed bottom-5 right-10 w-full h-full flex justify-end items-end -z-50">
                 <SvgCompass />
             </div>
-            <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
+            <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center -z-50">
                 <SvgMapDraw />
             </div>
             <div className="w-[80%] xl:w-1/2 text-center space-y-8">

@@ -19,6 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 expression: player_stats.created_at,
                 direction: e.DESC,
             },
+            limit: 7
         }))
 
         const response = await userGamesQuery.run(client)

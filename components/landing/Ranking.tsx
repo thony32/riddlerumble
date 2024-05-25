@@ -5,6 +5,7 @@ import getCountryCode from "@/utils/getCountryCode"
 import getInitial from "@/utils/getInitials"
 import Image from "next/image"
 import { getAllUser } from "@/services/profil-service"
+import numberSeparator from "@/utils/numberSeparator"
 
 type Player = {
     avatar: string
@@ -22,7 +23,7 @@ const Ranking = () => {
         data: allUserData,
     } = useQuery({
         queryKey: ["allUser"],
-        queryFn: () => getAllUser(),
+        queryFn: () => getAllUser(5),
         staleTime: 1000 * 60 * 60 * 24,
     })
 
@@ -92,7 +93,7 @@ const Ranking = () => {
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-4 py-2 text-right">{player.score}</td>
+                                    <td className="px-4 py-2 text-right">{numberSeparator(player.score)} pts</td>
                                 </tr>
                             ))
                         )}
@@ -110,7 +111,7 @@ const Ranking = () => {
             </div>
             <div className='flex items-center relative order-1 sm:order-2'>
                 <h1 className='sm:text-right text-4xl md:text-6xl xl:text-8xl font-title-bold text-center'>
-                    Player Rankings: Discover <span className='text-primary font-title-bold'>the top</span> scores in real time!
+                    Player Rankings: Discover <span className='text-primary font-title-bold'>the top 5</span> scores in real time!
                 </h1>
             </div>
         </div>

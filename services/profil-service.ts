@@ -1,5 +1,9 @@
-const getAllUser = async () => {
-    const response = await fetch("/api/user")
+const getAllUser = async (limit?: any) => {
+    const response = await fetch("/api/user", {
+        body: JSON.stringify({ limit }),
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+    })
     if (!response.ok) {
         throw new Error("Failed to fetch IP info")
     }

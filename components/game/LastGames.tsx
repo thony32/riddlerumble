@@ -54,7 +54,7 @@ const LastGames = ({ id_user }: { id_user: string }) => {
                             </td>
                         </tr>
                     ) : (
-                        userGamesData?.map((game: any, index: number) => (
+                        userGamesData.map((game: any, index: number) => (
                             <tr key={game.id} className="border-b border-current w-full">
                                 <td className="py-2 px-3 text-center">{index + 1}</td>
                                 <td className="py-2 px-3 text-right flex max-sm:flex-col justify-between items-center gap-2">

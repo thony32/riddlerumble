@@ -1,4 +1,5 @@
 "use client"
+import { Avatar, AvatarGroup } from "@nextui-org/avatar"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 const SvgDecoEnigme = dynamic(() => import("../misc/SvgDecoEnigme"))
@@ -45,7 +46,21 @@ const Footer = () => {
                         </svg>
                     </div>
                 </div>
-                <div className="flex justify-center items-end">© 2024 CodeIpsum. All rights reserved</div>
+                <div className="flex justify-center items-end">
+                    <div className="space-y-2">
+                        <div>
+                            <AvatarGroup isBordered>
+                                <Avatar showFallback name="RR" src="/images/i.jpeg" />
+                                <Avatar showFallback name="RR" src="/images/ii.jpg" />
+                                <Avatar showFallback name="RR" src="/images/iii.jpg" />
+                                <Avatar showFallback name="RR" src="/images/iiii.jpg" />
+                            </AvatarGroup>
+                        </div>
+                        <div>
+                            © {new Date().getFullYear()} CodeIpsum. All rights reserved
+                        </div>
+                    </div>
+                </div>
                 <div className="flex justify-center sm:justify-end items-center">
                     <Image width={50} height={50} src="/images/pegi.png" alt="logo" />
                 </div>
