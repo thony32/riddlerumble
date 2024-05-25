@@ -93,15 +93,17 @@ const Party = ({ params }: { params: { id: string } }) => {
     const [totalScore, setTotalScore] = useState(0)
 
     useEffect(() => {
-        const savedStartTime = localStorage.getItem(PARTY_START_TIME_KEY)
-        if (savedStartTime) {
-            setStartTime(parseInt(savedStartTime, 10))
-        } else {
-            const newStartTime = Date.now()
-            setStartTime(newStartTime + roomData.delay)
-            localStorage.setItem(PARTY_START_TIME_KEY, newStartTime.toString())
+        if (roomData && !isRoomPending) {
+            const savedStartTime = localStorage.getItem(PARTY_START_TIME_KEY)
+            if (savedStartTime) {
+                setStartTime(parseInt(savedStartTime, 10))
+            } else {
+                const newStartTime = Date.now() + roomData.delay
+                setStartTime(newStartTime)
+                localStorage.setItem(PARTY_START_TIME_KEY, newStartTime.toString())
+            }
         }
-    }, [])
+    }, [roomData, isRoomPending])
 
     const onMarkerDrag = useCallback((event: MarkerDragEvent) => {
         setMarker({
