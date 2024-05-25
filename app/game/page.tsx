@@ -27,7 +27,7 @@ const Game = () => {
 
     const setJokerMutation = useMutation({
         mutationKey: ["setJokerMutation"],
-        mutationFn: async (user_pseudo: any) => {
+        mutationFn: async (user_pseudo: string) => {
             return await setJoker(selectedRoom as string, user_pseudo)
         },
         onError: (error) => {
