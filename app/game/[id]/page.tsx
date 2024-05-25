@@ -356,7 +356,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                             )}
                             <div className="flex justify-center">
                                 {!showTarget ? (
-                                    <Button onClick={handleSubmitResult} className="bg-green-500 text-white font-semibold">
+                                    <Button disabled={distance == 0} onClick={handleSubmitResult} className="bg-green-500 text-white font-semibold">
                                         Submit
                                     </Button>
                                 ) : (
