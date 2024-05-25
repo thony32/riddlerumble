@@ -123,7 +123,7 @@ const Completionist: React.FC<CompletionistProps> = forwardRef(({ params, setBom
                                                 <td className="px-4 py-2 text-right">
                                                     {
                                                         roomDataFinal && roomDataFinal?.bombCoordinates && calculDistancePosition({ latitude: tempRoom.latitude, longitude: tempRoom.longitude }, { latitude: roomDataFinal?.bombCoordinates.split(',')[0], longitude: roomDataFinal?.bombCoordinates.split(',')[1] }).toFixed(2) <= 300 &&
-                                                        <span className="text-error">BOOM! -20 pts ({numberSeparator(calculDistancePosition({ latitude: tempRoom.latitude, longitude: tempRoom.longitude }, { latitude: roomDataFinal?.bombCoordinates.split(',')[0], longitude: roomDataFinal?.bombCoordinates.split(',')[1] }).toFixed(2))} km)</span>
+                                                        <span className="text-error">BOOM !!! ({numberSeparator(calculDistancePosition({ latitude: tempRoom.latitude, longitude: tempRoom.longitude }, { latitude: roomDataFinal?.bombCoordinates.split(',')[0], longitude: roomDataFinal?.bombCoordinates.split(',')[1] }).toFixed(2))} km)</span>
                                                     }
                                                 </td>
                                             </tr>
