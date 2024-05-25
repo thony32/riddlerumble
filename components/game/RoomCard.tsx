@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/button"
-import { Card, Chip } from "@nextui-org/react"
+import { Avatar, AvatarGroup, Card, Chip } from "@nextui-org/react"
 import { useUser } from "@/store/useUser"
 import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
@@ -58,7 +58,7 @@ function RoomCard({ room }: { room: Room }) {
         onSuccess: () => {
             // Success handler for mutation
             socket_update.emit("room-update") // Emit socket event for room update
-            
+
             if (action == "join") {
                 setSelectedRoom(room.id) // Set selected room to current room
             } else {
@@ -98,7 +98,13 @@ function RoomCard({ room }: { room: Room }) {
                             )}
                         </h1>
                         <div className="flex gap-3 text-3xl items-center">
-                            <UsersSVG className="size-16" />{" "}
+                            <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                                {
+                                    getUsersPseudo(room.user_pseudo).map((pseudo, index) => (
+                                        <Chip key={index} color="primary">{pseudo}</Chip>
+                                    ))
+                                }
+                            </div>
                             <span>
                                 {getUsersPseudo(room.user_pseudo).length} / {MAX_PLAYERS}
                             </span>
