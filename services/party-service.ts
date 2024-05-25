@@ -56,7 +56,7 @@ const updateUserScore = async (user_id: string, player_score: number) => {
 }
 
 const updateUserStat = async (id_user: string, id_room: string, bomb_point: number) => {
-    const response = await fetch("/api/user/update-user-stat", {
+    const response = await fetch("/api/party/update-user-stat", {
         body: JSON.stringify({ id_user, id_room, bomb_point }),
         method: 'PUT',
         headers: { "Content-Type": "application/json" },

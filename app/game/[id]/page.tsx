@@ -243,11 +243,11 @@ const Party = ({ params }: { params: { id: string } }) => {
         setBombSet(true)
         setBombSubmitted(false)
         setBombMarker({
-            latitude: targetMarker.latitude + 0.01,
-            longitude: targetMarker.longitude - 0.2,
+            latitude: marker.latitude + 0.01,
+            longitude: marker.longitude - 0.2,
         })
         mapRef?.current.flyTo({
-            center: [targetMarker.latitude + 0.01, targetMarker.longitude - 0.2],
+            center: [marker.latitude + 0.01, marker.longitude - 0.2],
             zoom: 10,
             essential: true,
         })
