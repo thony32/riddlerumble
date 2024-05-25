@@ -13,9 +13,10 @@ import dynamic from "next/dynamic"
 const UsersSVG = dynamic(() => import("../misc/UsersSVG"))
 const SvgHighLevel = dynamic(() => import("../misc/SvgHighLevel"))
 const SvgLowLevel = dynamic(() => import("../misc/SvgLowLevel"))
+const SvgLocked = dynamic(() => import("../misc/SvgLocked"))
 import useSelectedRoom from "@/store/useSelectedRoom"
 import { MAX_PLAYERS } from "@/utils/constants"
-import { leaveRoom, joinRoom } from "@/services/game-service"
+import { updateRoom } from "@/services/game-service"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 
 function RoomCard({ room }: { room: Room }) {
@@ -26,8 +27,14 @@ function RoomCard({ room }: { room: Room }) {
     const updateRoomMutation = useMutation({
         mutationKey: ["updateRoom"],
         mutationFn: async ({ room, given_action }: { room: Room; given_action: "join" | "leave" }) => {
-            if (given_action == "join") return await joinRoom(room, user?.pseudo || "")
-            else return await leaveRoom(room, user?.pseudo || "")
+            if (given_action == "join") {
+                room.user_pseudo += ", " + user.pseudo
+            } else {
+                room.user_pseudo = getUsersPseudo(room.user_pseudo)
+                    .filter((p) => p !== user.pseudo)
+                    .join(", ")
+            }
+            return await updateRoom(room)
         },
         onError: (error) => {
             console.log(error)
@@ -43,7 +50,7 @@ function RoomCard({ room }: { room: Room }) {
 
     const handleClick = (room: Room, given_action: "join" | "leave") => {
         setAction(given_action)
-        updateRoomMutation.mutate({ room, given_action }) 
+        updateRoomMutation.mutate({ room, given_action })
     }
 
     return (
@@ -72,17 +79,19 @@ function RoomCard({ room }: { room: Room }) {
                             </span>
                         </div>
                     </div>
-                    {!selectedRoom ? (
-                        <Button size="lg" variant="shadow" color="primary" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "join")}>
-                            Join
-                        </Button>
-                    ) : room.id != selectedRoom || getUsersPseudo(room.user_pseudo).length == MAX_PLAYERS ? (
-                        <span className="w-20" />
-                    ) : (
-                        <Button size="lg" variant="shadow" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "leave")}>
-                            Leave
-                        </Button>
-                    )}
+                    <div className="absolute right-10 top-1/2 -translate-y-1/2">
+                        {!selectedRoom ? (
+                            <Button size="lg" variant="shadow" color="primary" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "join")}>
+                                Join
+                            </Button>
+                        ) : room.id != selectedRoom || getUsersPseudo(room.user_pseudo).length == MAX_PLAYERS ? (
+                            <SvgLocked />
+                        ) : (
+                            <Button size="lg" variant="shadow" isLoading={updateRoomMutation.isPending} onClick={() => handleClick(room, "leave")}>
+                                Leave
+                            </Button>
+                        )}
+                    </div>
                 </div>
 
                 <Chip variant="faded" color="primary" className="absolute top-1 left-1" size="sm">

@@ -20,32 +20,14 @@ export const createRoom = async (level: string, pseudo: string) => {
     return await response.json()
 }
 
-export const joinRoom = async (room: Room, pseudo: string) => {
+export const updateRoom = async (room: Room) => {
     const response = await fetch("/api/room/update", {
-        body: JSON.stringify({ ...room, user_pseudo: `${room.user_pseudo}, ${pseudo}` }),
+        body: JSON.stringify(room),
         method: "PUT",
         headers: { "Content-Type": "application/json" },
     })
     if (!response.ok) {
         throw new Error("Failed to join the room")
-    }
-
-    const data = await response.json()
-    return data
-}
-
-export const leaveRoom = async (room: Room, pseudo: string) => {
-    const user_pseudo = getUsersPseudo(room.user_pseudo)
-        .filter((p) => p !== pseudo)
-        .join(", ")
-
-    const response = await fetch("/api/room/update", {
-        body: JSON.stringify({ ...room, user_pseudo }),
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-    })
-    if (!response.ok) {
-        throw new Error("Failed to leave the room")
     }
 
     const data = await response.json()
