@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import e from "@/dbschema/edgeql-js"
 import client from "@/lib/edgedb-client"
 import { socket } from "@/lib/socket-io"
+import { MAPBOX_TOKEN } from "@/env"
 
 const room_api = async (level: string) => {
     let url: string
@@ -22,11 +23,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { level, user_pseudo } = req.body
     const room_data = await room_api(level)
 
-    const q = room_data.response.city;
-    const access_token = 'pk.eyJ1IjoidGhvbnkzMiIsImEiOiJjbHc5azQ5bWQwNWhjMmtxa2Q5dTcyNWxhIn0.pXpGUWi_9wWY3zwfflmzSQ'
+    const q = room_data.response.city
+    const access_token = MAPBOX_TOKEN
 
-    const response_api_geo = await fetch(`https://api.mapbox.com/search/geocode/v6/forward?q=${q}&access_token=${access_token}&limit=1`);
-    const api_geo = await response_api_geo.json();
+    const response_api_geo = await fetch(`https://api.mapbox.com/search/geocode/v6/forward?q=${q}&access_token=${access_token}&limit=1`)
+    const api_geo = await response_api_geo.json()
 
     const delay_party = level == "high-level" ? 420000 : 300000
 
@@ -55,7 +56,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }))
         .run(client)
 
-    socket.emit('room-create')
+    socket.emit("room-create")
 
     res.status(200).json({ success: true, room })
 }

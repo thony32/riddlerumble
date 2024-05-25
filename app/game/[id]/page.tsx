@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import { Avatar, Button } from "@nextui-org/react"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -24,6 +23,7 @@ import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 import { SubmitResultParams } from "@/types/submit-result-params"
 import { submitResult } from "@/utils/submitResult"
+import { socket } from "@/lib/socket-io"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -173,33 +173,24 @@ const Party = ({ params }: { params: { id: string } }) => {
 
     const [penalityPoints, setPenalityPoints] = useState(0)
 
-    // NOTE: prevent dev tools and context menus
+    // NOTE: penalty points on Tab Change
     useEffect(() => {
-        const handleContextMenu = (e: MouseEvent) => {
-            e.preventDefault()
-        }
-
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if ((e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.key === "u") || e.key === "F12") {
-                e.preventDefault()
-            }
-        }
-
         const handleTabNavSwitch = () => {
             if (document.hidden && !showTarget) {
                 setPenalityPoints(penalityPoints + 10)
             }
         }
-
-        document.addEventListener("contextmenu", handleContextMenu)
-        document.addEventListener("keydown", handleKeyDown)
         document.addEventListener("visibilitychange", handleTabNavSwitch)
 
         return () => {
-            document.removeEventListener("contextmenu", handleContextMenu)
-            document.removeEventListener("keydown", handleKeyDown)
             document.removeEventListener("visibilitychange", handleTabNavSwitch)
         }
+    }, [])
+
+    useEffect(() => {
+        socket.on("completed", (data) => {
+            if (data === roomData?.id) localStorage.removeItem(PARTY_START_TIME_KEY)
+        })
     }, [])
 
     if (startTime === null) {

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import { useUser } from "@/store/useUser"
 import { Avatar } from "@nextui-org/avatar"
