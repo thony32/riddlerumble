@@ -47,6 +47,6 @@ export const submitResult = ({
     updateUserScoreMutation.mutate();
     localStorage.removeItem(PARTY_START_TIME_KEY);
     setSelectedRoom(null);
-    const id_room = roomData.id;
-    socket.emit('player-submit', { id_room, roomData })
+    console.log("Data e : " + JSON.stringify(roomData) + " zani ny id : " + roomData.id)
+    socket.emit('player-submit', JSON.stringify(roomData) )
 };
