@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import e from "@/dbschema/edgeql-js"
 import client from "@/lib/edgedb-client"
+import getUsersPseudo from "@/utils/getUsersPseudo"
+import { MAX_PLAYERS } from "@/utils/constants"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const roomsQuery = e.select(e.Room, (room) => ({
@@ -21,6 +23,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         filter: e.op(room.isActive, "=", true),
     }))
     const rooms = await roomsQuery.run(client)
-
-    res.status(200).json(rooms)
+    const room_filtered = rooms.map(r => getUsersPseudo(r.user_pseudo).length != MAX_PLAYERS)
+    res.status(200).json(room_filtered)
 }
