@@ -24,7 +24,6 @@ import checkIfJoined from "@/utils/checkIfJoined"
 import getUsersPseudo from "@/utils/getUsersPseudo"
 import { SubmitResultParams } from "@/types/submit-result-params"
 import { submitResult } from "@/utils/submitResult"
-import { socket } from "@/lib/socket-io"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -71,12 +70,6 @@ const Party = ({ params }: { params: { id: string } }) => {
             })
         }
     }, [roomData])
-
-    useEffect(() => {
-        socket.on("submit-count", () => {
-            console.log("mandeh e!")
-        })
-    }, [])
 
     const [startTime, setStartTime] = useState<number | null>(null)
     const [distance, setDistance] = useState(0)
