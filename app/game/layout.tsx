@@ -4,6 +4,7 @@ import { getData } from "@/services/user-action"
 import { useUser } from "@/store/useUser"
 import { useQuery } from "@tanstack/react-query"
 import Navbar from "@/components/game/Navbar"
+import Logo from "@/components/misc/Logo"
 
 export default function GameLayout({
     children,
@@ -24,7 +25,12 @@ export default function GameLayout({
     if (isPending) {
         return (
             <div className="h-screen flex justify-center items-center">
-                <span className="loading loading-ring loading-lg"></span>
+                <div className="gap-8 flex flex-col items-center">
+                    <div className="scale-[200%] sm:scale-[300%] animate-pulse">
+                        <Logo />
+                    </div>
+                    <span className="loading loading-ring loading-lg"></span>
+                </div>
             </div>
         )
     }
