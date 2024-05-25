@@ -105,7 +105,7 @@ const Game = () => {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="text-[70dvh]"
+                            className="text-[50dvh]"
                         >
                             {countdown == 0 ? "GO!" : countdown}
                         </motion.span>
