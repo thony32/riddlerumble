@@ -52,6 +52,7 @@ module default {
     required property level -> str;
     required property isActive -> bool;
     property joker -> str;
+    property bombCoordinates -> str;
     created_at: datetime {
       rewrite insert using (datetime_of_statement())
     }

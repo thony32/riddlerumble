@@ -5,7 +5,6 @@ import { NextApiRequest, NextApiResponse } from "next"
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const { user_id, player_score } = req.body
-
         const currentScoreQuery = e.select(e.Users, () => ({
             score: true,
             filter_single: { id: user_id },

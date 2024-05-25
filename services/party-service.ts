@@ -1,3 +1,5 @@
+import calculDistancePosition from "@/utils/calculDistancePostion"
+
 const fetchRoom = async (roomId: string) => {
     const response = await fetch(`/api/room/${roomId}`)
     if (!response.ok) {
@@ -53,4 +55,13 @@ const updateUserScore = async (user_id: string, player_score: number) => {
     return await response.json()
 }
 
-export { fetchRoom, create_temp_room, create_player_stat, getTempRoom, disableRoom, updateUserScore }
+const updateScoreBomb = async (temp_room: any, bombCoordonates: any) => {
+    temp_room.forEach((player: any) => {
+        const distance = calculDistancePosition({ latitude: player.latitude, longitude: player.longitude }, { latitude: bombCoordonates.split(',')[0], longitude: bombCoordonates.split(',')[1] })
+        if (distance <= 300) {
+            updateUserScore(player.User.id, -20)
+        }
+    })
+}
+
+export { fetchRoom, create_temp_room, create_player_stat, getTempRoom, disableRoom, updateUserScore, updateScoreBomb }
