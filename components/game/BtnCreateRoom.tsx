@@ -8,7 +8,6 @@ import useResponsive from "@/utils/useResponsive"
 import { createRoom } from "@/services/game-service"
 import introJs from "intro.js"
 
-
 function BtnCreateRoom() {
     const user = useUser((state) => state.user)
     const setSelectedRoom = useSelectedRoom((state) => state.setSelectedRoom)
@@ -44,30 +43,27 @@ function BtnCreateRoom() {
 
     useEffect(() => {
         introJs()
-          .setOptions({
-            nextLabel: " Suivant ",
-            prevLabel: " Précédent ",
-            doneLabel: " Done ",
-            dontShowAgain: true,
-            showBullets: false,
-            steps: [
-              {
-                title: "Hello! Welcome into the game!",
-                intro:
-                  "I would to take you on the page tour",
-              },
-              {
-                title: "The instructions and rules",
-                intro:
-                  "Click here to read the game rules and instructions for more amazing experience",
-                element: document.querySelector("#intro"),
-              },
-            ],
-          })
-          .start()
-      }, [])
+            .setOptions({
+                nextLabel: " Suivant ",
+                prevLabel: " Précédent ",
+                doneLabel: " Done ",
+                dontShowAgain: true,
+                showBullets: false,
+                steps: [
+                    {
+                        title: "Hello! Welcome into the game!",
+                        intro: "I would to take you on the page tour",
+                    },
+                    {
+                        title: "The instructions and rules",
+                        intro: "Click here to read the game rules and instructions for more amazing experience",
+                        element: document.querySelector("#intro") as HTMLElement,
+                    },
+                ],
+            })
+            .start()
+    }, [])
 
-      
     return (
         <div className="flex justify-between items-center">
             <div>
