@@ -5,7 +5,7 @@ export type User = {
     email: string | null
     full_name: string | null
     nationality: string | null
-    pseudo: string | null
+    pseudo: string | null 
     avatar: string | null
     score: number | null
 } | null

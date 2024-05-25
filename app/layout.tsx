@@ -5,7 +5,7 @@ const Footer = dynamic(() => import("@/components/landing/Footer"))
 const ThemeHandler = dynamic(() => import("@/components/misc/ThemeHandler"))
 import ReactQueryProvider from "@/utils/ReactQueryProvider"
 import "./globals.css"
-import NoDevToolsProvider from "@/services/NoDevToolsProvider"
+import NoDevToolsProvider from "@/utils/NoDevToolsProvider"
 import { Toaster } from "react-hot-toast"
 
 export const metadata: Metadata = {
