@@ -40,7 +40,7 @@ function RoomCard({ room }: { room: Room }) {
 
             // If action is join, add user to room
             if (given_action == "join") {
-                
+
                 room.user_pseudo += ", " + user.pseudo // Concatenate user pseudonym to room
 
             } else {
@@ -56,9 +56,11 @@ function RoomCard({ room }: { room: Room }) {
             toast.error("Failed to update the room. Please try again.")
         },
         onSuccess: () => {
-            socket_update.emit("room-update")
+            // Success handler for mutation
+            socket_update.emit("room-update") // Emit socket event for room update
+            
             if (action == "join") {
-                setSelectedRoom(room.id)
+                setSelectedRoom(room.id) // Set selected room to current room
             } else {
                 setSelectedRoom(null)
             }
