@@ -242,7 +242,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                     </div>
                     <div className="w-full py-2">
                         <div className="space-y-4">
-                            {penalityPoints != 0 && (
+                            {!showTarget && penalityPoints != 0 && (
                                 <div className="text-center translate-y-2">
                                     <label className="text-red-500">Penality Points : - {penalityPoints} pts</label>
                                 </div>
@@ -305,7 +305,7 @@ const Party = ({ params }: { params: { id: string } }) => {
                             zoom: 4,
                         }}
                         onClick={clickPostion}
-                        mapboxAccessToken={MAPBOX_TOKEN}
+                        mapboxAccessToken="pk.eyJ1IjoidGhvbnkzMiIsImEiOiJjbHc5azQ5bWQwNWhjMmtxa2Q5dTcyNWxhIn0.pXpGUWi_9wWY3zwfflmzSQ"
                         style={{ width: "100%", height: "85dvh", margin: 0, padding: 0, borderRadius: "1rem", overflow: "hidden" }}
                     >
                         <Marker longitude={marker.longitude} latitude={marker.latitude} anchor="bottom" draggable={!showTarget ? true : false} onDrag={onMarkerDrag} onDragEnd={onMarkerDragEnd}>
