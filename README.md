@@ -52,7 +52,7 @@ or
 bun install
 ```
 
-2-Start the development server:
+2- Start the development server:
 ```sh
 pnpm dev
 ```
@@ -61,21 +61,33 @@ or
 bun dev
 ```
 
-3. Open your browser and visit `http://localhost:3000` to play RiddleRumble!
+3- Login into edgedb cloud:
+```sh
+edgedb cloud login
+```
+
+4- Run this command:
+```sh
+pnpm migrate:all
+```
+
+NOTE: Replace "codeipsum/enigmap" with your current instance name.
+
+5- Open your browser and visit `http://localhost:3000` to play RiddleRumble!
 
 ## Technologies Used
 
 - Next.js
-- React
+- EdgeDB Cloud
 - TypeScript
 - Socket.io
-- Leaflet (for the interactive map)
+- Mapbox (for the interactive map)
 
 ## Tutorial
 
 Check out our tutorial video to learn more about how to play RiddleRumble:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
+https://youtube.com
 
 ## Contributing
 
