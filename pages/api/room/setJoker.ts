@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const updateQuery = e.update(e.Room, () => ({
             filter_single: { id: e.uuid(id) }, // Filter the room by its id
             set: {
-                joker: "thony32" // Update the joker
+                joker: joker // Update the joker
             },
         }))
 

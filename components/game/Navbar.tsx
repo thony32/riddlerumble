@@ -13,7 +13,6 @@ const Navbar = () => {
     const pathname = usePathname() as string
 
     const isGameRoute = pathname.startsWith("/game/")
-    const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
 
     return (
         <div className="flex justify-between items-center border-b-1 border-current pb-4">
@@ -21,7 +20,7 @@ const Navbar = () => {
                 {isGameRoute ? (
                     <div className="flex items-center gap-4">
                     <Logo/>
-                    <h1 className="sm:text-2xl">RR - The Map Quest / ${selectedRoom}</h1>
+                    <h1 className="sm:text-2xl">RR - The Map Quest / {isGameRoute && 'In Game' }</h1>
                 </div>
                 ) : (
                     <Link href="/" className="flex items-center gap-4">
