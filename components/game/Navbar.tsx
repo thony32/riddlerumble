@@ -4,6 +4,7 @@ import Link from "next/link"
 import getInitial from "@/utils/getInitials"
 import BtnLogout from "./BtnLogout"
 import { usePathname } from "next/navigation"
+import useSelectedRoom from "@/store/useSelectedRoom"
 import dynamic from "next/dynamic"
 const Logo = dynamic(() => import("@/components/misc/Logo"))
 
@@ -12,6 +13,7 @@ const Navbar = () => {
     const pathname = usePathname() as string
 
     const isGameRoute = pathname.startsWith("/game/")
+    const selectedRoom = useSelectedRoom((state) => state.selectedRoom)
 
     return (
         <div className="flex justify-between items-center border-b-1 border-current pb-4">
@@ -19,12 +21,12 @@ const Navbar = () => {
                 {isGameRoute ? (
                     <div className="flex items-center gap-4">
                     <Logo/>
-                    <h1 className="sm:text-2xl">RR - The Map Quest</h1>
+                    <h1 className="sm:text-2xl">RR - The Map Quest / ${selectedRoom}</h1>
                 </div>
                 ) : (
                     <Link href="/" className="flex items-center gap-4">
                         <Logo/>
-                        <h1 className="sm:text-2xl">RR - The Map Quest</h1>
+                        <h1 className="sm:text-2xl">RR - The Map Quest / Lobby</h1>
                     </Link>
                 )}
             </div>
