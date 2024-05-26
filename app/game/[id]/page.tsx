@@ -38,13 +38,7 @@ const Party = ({ params }: { params: { id: string } }) => {
     const user = useUser((state) => state.user!)
     const { isPending: isRoomPending, data: roomData } = useQuery({
         queryKey: ["roomData"],
-        queryFn: async () => {
-            const response = await fetchRoom(params.id)
-            if (response.temp_rooms.some((t: any) => t.User.id! == user.id!)) {
-                redirect("/game")
-            }
-            return response
-        },
+        queryFn: () => fetchRoom(params.id),
         staleTime: 1000 * 60 * 60 * 24,
     }) // Query hook for fetching room data
 
