@@ -35,9 +35,16 @@ const PARTY_START_TIME_KEY = "partyStartTime"
  * @param {Object} params - Parameters object containing party ID
  */
 const Party = ({ params }: { params: { id: string } }) => {
+    const user = useUser((state) => state.user!)
     const { isPending: isRoomPending, data: roomData } = useQuery({
         queryKey: ["roomData"],
-        queryFn: () => fetchRoom(params.id),
+        queryFn: async () => {
+            const response = await fetchRoom(params.id)
+            if(response.some(t => t.User.id == user.id!) {
+                redirect("/game")
+            } 
+            return response
+        },
         staleTime: 1000 * 60 * 60 * 24,
     }) // Query hook for fetching room data
 
@@ -168,7 +175,6 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }
 
-    const user = useUser((state) => state.user!)
     const createTempRoom = useMutation({
         mutationKey: ["createTempRoom"],
         mutationFn: async () => {
