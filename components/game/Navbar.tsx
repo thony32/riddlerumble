@@ -4,7 +4,6 @@ import Link from "next/link"
 import getInitial from "@/utils/getInitials"
 import BtnLogout from "./BtnLogout"
 import { usePathname } from "next/navigation"
-import useSelectedRoom from "@/store/useSelectedRoom"
 import dynamic from "next/dynamic"
 const Logo = dynamic(() => import("@/components/misc/Logo"))
 
