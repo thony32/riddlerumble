@@ -16,7 +16,7 @@ const room_api = async (level: string) => {
         method: "POST",
     })
     const data = await response.json()
-    return data
+    return data;
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
