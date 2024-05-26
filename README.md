@@ -87,7 +87,7 @@ NOTE: Replace "codeipsum/enigmap" with your current instance name.
 
 Check out our tutorial video to learn more about how to play RiddleRumble:
 
-https://youtube.com
+https://youtu.be/sEfqTadihzg
 
 ## Contributing
 
