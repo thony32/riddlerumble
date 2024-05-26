@@ -6,15 +6,7 @@ const fetchRoom = async (roomId: string) => {
     if (!response.ok) {
         throw new Error("Failed to fetch room data")
     }
-    const room = response.json()
-
-    const responseTemp = await fetch(`/api/party/temp-room/${roomId}`)
-    if (!responseTemp.ok) {
-        throw new Error("Failed to fetch temp room data")
-    }
-    const temp_rooms= response.json()
-
-    return { ...room, temp_rooms}
+    return response.json()
 }
 
 // Function to create a temporary room with provided details
