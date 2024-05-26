@@ -40,9 +40,9 @@ const Party = ({ params }: { params: { id: string } }) => {
         queryKey: ["roomData"],
         queryFn: async () => {
             const response = await fetchRoom(params.id)
-            if(response.some(t => t.User.id == user.id!) {
+            if (response.temp_rooms.some((t: any) => t.User.id! == user.id!)) {
                 redirect("/game")
-            } 
+            }
             return response
         },
         staleTime: 1000 * 60 * 60 * 24,
@@ -246,8 +246,8 @@ const Party = ({ params }: { params: { id: string } }) => {
     const [penalityPoints, setPenalityPoints] = useState(0)
 
     // NOTE: penalty points on Tab Change
-    // This effect listens for changes in the visibility state of the document, 
-    // incrementing the penalty points if the document is hidden and the target 
+    // This effect listens for changes in the visibility state of the document,
+    // incrementing the penalty points if the document is hidden and the target
     // location is not shown.
     useEffect(() => {
         const handleTabNavSwitch = () => {
@@ -262,7 +262,7 @@ const Party = ({ params }: { params: { id: string } }) => {
         }
     }, [])
 
-    // This effect listens for the "submit-count" event from the socket. If the 
+    // This effect listens for the "submit-count" event from the socket. If the
     // received data matches the current party id, it sets the party's finished state to true.
 
     useEffect(() => {
