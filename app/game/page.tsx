@@ -20,7 +20,6 @@ import { MAX_PLAYERS } from "@/utils/constants"
 import "intro.js/introjs.css"
 import "intro.js/themes/introjs-flattener.css"
 import toast from "react-hot-toast"
-import { Howl } from "howler"
 
 const PARTY_START_TIME_KEY = "partyStartTime"
 
@@ -56,7 +55,7 @@ const Game = () => {
                 const findedRoom = data.find((r) => checkIfJoined(getUsersPseudo(r.user_pseudo), user.pseudo!))
                 if (!findedRoom) {
                     setSelectedRoom(null) // If user has not joined any room, set selected room to null
-               
+
                 } else {
                     setJokerMutation.mutate(findedRoom.user_pseudo)
                     setSelectedRoom(findedRoom.id)
@@ -73,12 +72,7 @@ const Game = () => {
         staleTime: 100 * 60 * 60 * 24,
     })
 
-    // Sound effect for countdown
-    const countdown_audio = new Howl({
-        src: ["/audio/coutdown-sound-effect.mp3"], // Audio source
-    })
-
-     // Effect for listening to room creation socket event
+    // Effect for listening to room creation socket event
     useEffect(() => {
         socket.on("room-created", () => {
             refetchRooms()
@@ -86,7 +80,7 @@ const Game = () => {
     }, [refetchRooms])
 
 
-     // Effect for listening to room update socket event
+    // Effect for listening to room update socket event
     useEffect(() => {
         socket_update.on("room-updated", () => {
             refetchRooms()
@@ -105,7 +99,6 @@ const Game = () => {
 
                 // Remove party start time from local storage and play countdown audio
                 localStorage.removeItem(PARTY_START_TIME_KEY)
-                countdown_audio.play()
                 // Redirect to game room page
                 router.push(`/game/${selectedRoom}`)
             }
