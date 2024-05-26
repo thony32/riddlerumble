@@ -217,7 +217,7 @@ function BtnCreateRoom() {
                                                 </svg>
                                             </div>
                                             <p>
-                                                Each room can accommodate a <span className="text-info">maximum of 4 players</span>.
+                                                Each room can accommodate a <span className="text-info">maximum of 3 players</span>.
                                             </p>
                                         </div>
                                         <div>
